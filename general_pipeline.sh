@@ -35,7 +35,7 @@ done
 # TODO: copy reference sequence from /data/projects/Michal/CoV2019/data/Eritreas/refs # already indexed, may skip index
 
 # (3) Map reads to corona virus (REF_NC_045512.2)
-# index reference # TODO should be in the pipeline or in a different script for first use?
+# index reference
 # export?
 bwa index refs/REF_NC_045512.2.fasta
 # map reads to reference -> PE
