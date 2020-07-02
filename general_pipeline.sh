@@ -14,14 +14,22 @@ chmod 755 $new_fastqc
 $new_fastqc fastq/raw/*.fastq.gz --outdir=QC/fastqc # NOTICE: EXPECTING fastq.gz POSTFIX
 # multiqc
 # export export PATH=$PATH:/data/software/multiqc/MultiQC/multiqc
-multiqc QC/fastqc
+multiqc QC/fastqc -o QC/
 
 # trimmomatic
 # export PATH=$PATH:/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
 trimmomatic_path=/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
-for file in fastq/raw/*.fastq.gz; do
-  java -jar $trimmomatic_path PE -phred33 -threads 32 $file fastq/interleaved_trimmed/`basename $file` TRAILING:28
+for r1 in fastq/raw/*R1*; do
+	r2=${r1/R1/R2}
+	r1_base=$(basename -s .fastq.gz $r1)
+	r2_base=$(basename -s .fastq.gz $r2)
+	singles1=fastq/trimmed/"$r1_base".unpaired.fastq.gz
+	singles2=fastq/trimmed/"$r2_base".unpaired.fastq.gz
+	paired1=fastq/trimmed/"$r1_base".paired.fastq.gz
+	paired2=fastq/trimmed/"$r2_base".paired.fastq.gz
+	java -jar $trimmomatic_path PE -phred33 -threads 32 $r1 $r2 $paired1 $singles1 $paired2 $singles2 TRAILING:28
 done
+########################################################################################################################
 
 # TODO: Maybe instead of running all samples together, for each sample create a pipe for better runtime?
 # (3) Map reads to corona virus (REF_NC_045512.2)
