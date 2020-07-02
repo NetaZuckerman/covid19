@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# prepare directories!!!! #TODO
+# TODO prepare directories
 # !assuming in working directory!
-# mkdir alignment BAM CNS fastq fastq/raw fastq/interleaved QC QC/fastqc refs SAM test Trees
+# mkdir alignment BAM CNS fastq fastq/raw fastq/trimmed QC QC/fastqc refs SAM test Trees
 # mkdir QC/fastqc
+# TODO: Maybe instead of running all samples together, for each sample create a pipe for better runtime?
 # (1) merge / sort reads ?
 
 # (2) QC (fastqc & multiqc) + trim (trimmomatic)
@@ -18,6 +19,7 @@ multiqc QC/fastqc -o QC/
 
 # trimmomatic
 # export PATH=$PATH:/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
+# trimmomatic expect existing output folder
 trimmomatic_path=/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
 for r1 in fastq/raw/*R1*; do
 	r2=${r1/R1/R2}
@@ -30,15 +32,18 @@ for r1 in fastq/raw/*R1*; do
 	java -jar $trimmomatic_path PE -phred33 -threads 32 $r1 $r2 $paired1 $singles1 $paired2 $singles2 TRAILING:28
 done
 ########################################################################################################################
+# TODO: copy reference sequence from /data/projects/Michal/CoV2019/data/Eritreas/refs # already indexed, may skip index
 
-# TODO: Maybe instead of running all samples together, for each sample create a pipe for better runtime?
 # (3) Map reads to corona virus (REF_NC_045512.2)
 # index reference # TODO should be in the pipeline or in a different script for first use?
 # export?
 bwa index refs/REF_NC_045512.2.fasta
-# map reads to reference
-for file in fastq/interleaved/*fastq.gz; do
-  bwa mem refs/REF_NC_045512.2.fasta $file > SAM/`basename $file fastq.gz`.sam
+# map reads to reference -> PE
+for r1 in fastq/trimmed/*R1*.paired.fastq.gz; do
+  r2=${r1/R1/R2} # ${var/find/replace}
+  output=${r1/_R1/}
+  output=${output/.paired/}
+  bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta $r1 $r2 > SAM/`basename $output fastq.gz`.sam
 done
 
 # (4) sam to bam
