@@ -42,8 +42,7 @@ bwa index refs/REF_NC_045512.2.fasta
 for r1 in fastq/trimmed/*R1*.paired.fastq.gz; do
   r2=${r1/R1/R2} # ${var/find/replace}
   output=${r1/_R1/}
-  output=${output/.paired/}
-  bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta $r1 $r2 > SAM/`basename $output fastq.gz`.sam
+  bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta $r1 $r2 > SAM/`basename $output .paired.fastq.gz`.sam
 done
 
 # (4) sam to bam
@@ -52,15 +51,16 @@ for file in SAM/*.sam; do
 done
 
 new_samtools=/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools
+new_bcftools=/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools
 # (5) keep only mapped reads
 for file in BAM*/.bam; do
-   $new_samtools view -b -F 260 $file > BAM/`basename $file bam`.mapped.bam
+   $new_samtools view -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam
 done
 
 # (6) sort and index bam files
 # sort
 for file in BAM/*.mapped.bam; do
-  samtools sort $file BAM/`basename $file mapped.bam`.mapped.sorted
+  samtools sort $file BAM/`basename $file .mapped.bam`.mapped.sorted
 done
 # index
 for file in BAM/*.mapped.sorted.bam; do
@@ -68,7 +68,6 @@ for file in BAM/*.mapped.sorted.bam; do
 done
 
 # (7) create concensus sequence
-new_bcftools=/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools
 # https://github.com/samtools/bcftools/wiki/HOWTOs#consensus-calling
 # http://samtools.github.io/bcftools/howtos/consensus-sequence.html
 for file in BAM/*.mapped.sorted.bam; do
