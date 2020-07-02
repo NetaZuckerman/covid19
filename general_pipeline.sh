@@ -1,18 +1,17 @@
 #!/bin/bash
 
 # prepare directories!!!! #TODO
-# assuming in working directory
-mkdir alignment BAM CNS fastq fastq/raw fastq/interleaved QC QC/fastqc refs SAM test Trees
-cd fastq/raw # location of raw fastq files
-
+# !assuming in working directory!
+# mkdir alignment BAM CNS fastq fastq/raw fastq/interleaved QC QC/fastqc refs SAM test Trees
+# mkdir QC/fastqc
 # (1) merge / sort reads ?
 
 # (2) QC (fastqc & multiqc) + trim (trimmomatic)
 # fastqc
 # export PATH=$PATH:/data/software/FastQC/fastqc ## not realy working
-fastqc_new=/data/software/FastQC/fastqc
-chmod 755 /data/software/FastQC/fastqc
-$fastqc_new ./*.fastq.gz --outdir=QC/fastqc # NOTICE: EXPECTING fastq.gz POSTFIX
+# new_fastqc=/data/software/FastQC/fastqc <- gives error. 'fastqc' command works.
+chmod 755 $new_fastqc
+$new_fastqc fastq/raw/*.fastq.gz --outdir=QC/fastqc # NOTICE: EXPECTING fastq.gz POSTFIX
 # multiqc
 # export export PATH=$PATH:/data/software/multiqc/MultiQC/multiqc
 multiqc QC/fastqc
@@ -20,7 +19,7 @@ multiqc QC/fastqc
 # trimmomatic
 # export PATH=$PATH:/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
 trimmomatic_path=/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
-for file in fastq/interleaved/*.fastq.gz; do
+for file in fastq/raw/*.fastq.gz; do
   java -jar $trimmomatic_path PE -phred33 -threads 32 $file fastq/interleaved_trimmed/`basename $file` TRAILING:28
 done
 
@@ -47,7 +46,7 @@ done
 
 # (6) sort and index bam files
 # sort
-for $file in BAM/*.mapped.bam; do
+for file in BAM/*.mapped.bam; do
   samtools sort $file BAM/`basename $file mapped.bam`.mapped.sorted
 done
 # index
