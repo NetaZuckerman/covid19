@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# how to get input files??
 # !assuming in working directory!
 mkdir -p alignment BAM CNS fastq/{raw, trimmed} QC/fastqc refs SAM test Trees
 # TODO: for each sample create a pipe for better runtime
@@ -72,7 +73,7 @@ done
 #/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools mpileup -uf refs/REF_NC_045512.2.fasta BAM/last/s11.mapped.sorted.bam | /data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools call -mv -Oz -o CNS/last/calls.vcf.gz
 #/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools index CNS/last/calls.vcf.gz
 #cat refs/REF_NC_045512.2.fasta | /data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools consensus CNS/last/calls.vcf.gz > CNS/last/s11.fastq
-
+# runs now:
 for file in BAM/*.mapped.sorted.bam; do
   $new_samtools mpileup -uf refs/REF_NC_045512.2.fasta $file | $new_bcftools call -mv -Oz --threads 8 -o CNS/calls.vcf.gz # change to bcftools mpileup??
   $new_bcftools index --threads 8 CNS/calls.vcf.gz
@@ -92,11 +93,17 @@ rm CNS/calls.vcf.gz CNS/calls.vcf.gz.csi
 #for file in CNS/*.fastq; do
 #  seqtk seq -a $file > CNS/`basename $file .fastq`.fasta
 #done
-
+# TODO: change fasta header to file name. CHECK ON SMALL BATCH! fasta files making  WAS LONG!!
+for file in CNS/*.fasta; do
+  awk '/^>/ {gsub(/.fa(sta)?$/,"",FILENAME);printf(">%s\n",FILENAME);next;} {print}' $file > CNS/${file}
+done
 ### EXTRA:
 
 # align with MAFFT
 # dana, before aligning all consensus sequences against the reference, you have to gather all .fasta CNS files into one file, along with the reference. that’s the input.
+# TODO - concat all CNS .fasta files to one - need check!
+cat CNS/*.fasta refs/REF_NC_045512.s.fasta> alignment/all_not_aligned.fasta
 #https://towardsdatascience.com/how-to-perform-sequence-alignment-on-2019-ncov-with-mafft-96c1944da8c6
-mafft --clustalout notAligned.fasta > aligned.clustalout
-mafft notAligned.fasta > aligned.fasta
+mafft --clustalout alignment/all_notAligned.fasta > alignment/all_aligned.clustalout
+mafft alignment/all_notAligned.fasta > alignment/all_aligned.fasta
+
