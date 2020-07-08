@@ -93,16 +93,19 @@ rm CNS/calls.vcf.gz CNS/calls.vcf.gz.csi
 #for file in CNS/*.fastq; do
 #  seqtk seq -a $file > CNS/`basename $file .fastq`.fasta
 #done
-# TODO: change fasta header to file name. CHECK ON SMALL BATCH! fasta files making  WAS LONG!!
+
 for file in CNS/*.fasta; do
-  awk '/^>/ {gsub(/.fa(sta)?$/,"",FILENAME);printf(">%s\n",FILENAME);next;} {print}' $file > CNS/${file}
+  # -i edits file in place
+  name=${file/CNS\//} # ${var/find/replace} => remove 'CNS/' prefix
+  sed -i "s/>.*/>${name%%.*}/" "$file"
 done
+
 ### EXTRA:
 
 # align with MAFFT
 # dana, before aligning all consensus sequences against the reference, you have to gather all .fasta CNS files into one file, along with the reference. that’s the input.
-# TODO - concat all CNS .fasta files to one - need check!
-cat CNS/*.fasta refs/REF_NC_045512.s.fasta> alignment/all_not_aligned.fasta
+# preper input file:
+cat CNS/*.fasta refs/REF_NC_045512.s.fasta > alignment/all_not_aligned.fasta
 #https://towardsdatascience.com/how-to-perform-sequence-alignment-on-2019-ncov-with-mafft-96c1944da8c6
 mafft --clustalout alignment/all_notAligned.fasta > alignment/all_aligned.clustalout
 mafft alignment/all_notAligned.fasta > alignment/all_aligned.fasta
