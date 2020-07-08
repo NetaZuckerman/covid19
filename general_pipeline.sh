@@ -2,7 +2,7 @@
 
 # how to get input files??
 # !assuming in working directory!
-mkdir -p alignment BAM CNS fastq/{raw, trimmed} QC/fastqc refs SAM test Trees
+mkdir -p alignment BAM/mapped CNS fastq/{raw, trimmed} QC/fastqc refs SAM test Trees
 # TODO: for each sample create a pipe for better runtime
 # (1) merge / sort reads ?
 
@@ -110,3 +110,14 @@ cat CNS/*.fasta refs/REF_NC_045512.s.fasta > alignment/all_not_aligned.fasta
 mafft --clustalout alignment/all_notAligned.fasta > alignment/all_aligned.clustalout
 mafft alignment/all_notAligned.fasta > alignment/all_aligned.fasta
 
+# TODO: create report
+# make sure report files are empty
+''>TotalNumReads.txt
+''>BAM/TotalMappedReads.txt
+for file in BAM/*.bam; do
+  if [[ $file == *.mapped*.bam ]]; then
+    continue
+  fi
+  samtools view -c $file >> BAM/TotalNumReads.txt # total num of reads
+  samtools view -c -F 260 $file >> BAM/TotalMappedReads.txt
+done
