@@ -40,10 +40,10 @@ def parse_flags_from_csv(flags_file):
             if ends == 'PE':  # paired ends
                 in_f = 'fastq/raw/' + line['input_forward']
                 in_r = 'fastq/raw/' + line['input_reverse']
-                out_f = 'fastq/trimmed/' + in_f.rstrip('.fastq.gz')  # remove only from the end
+                out_f = 'fastq/trimmed/' + line['input_forward'].rstrip('.fastq.gz')  # remove only from the end
                 out_f_paired = out_f + '_paired.fastq.gz'
                 out_f_unpaired = out_f + '_unpaired.fastq.gz'
-                out_r = 'fastq/trimmed/' + in_r.rstrip('.fastq.gz')  # remove only from the end
+                out_r = 'fastq/trimmed/' + line['input_forward'].rstrip('.fastq.gz')  # remove only from the end
                 out_r_paired = out_r + '_paired.fastq.gz'
                 out_r_unpaired = out_r + '_unpaired.fastq.gz'
 
@@ -67,7 +67,7 @@ def parse_flags_from_csv(flags_file):
                 command += [key+val]
 
             print(command)
-            subprocess.call(command)  # run trimmomatic command.
+            #subprocess.call(command)  # run trimmomatic command.
 
 
 
