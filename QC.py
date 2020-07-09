@@ -70,11 +70,18 @@ def parse_flags_from_csv(flags_file):
             subprocess.call(command)  # run trimmomatic command.
 
 
+def template_csv():
+    with open('template.csv', 'w') as output:
+        headers = ['ends', 'input_forward', 'input_reverse', 'phred', 'threads', 'ILLUMINACLIP:', 'SLIDINGWINDOW:',
+                   'LEADING:', 'TRAILING:', 'CROP:', 'HEADCROP:', 'MINLEN:']
+        csv_writer = csv.writer(output)
+        csv_writer.writerow(headers)
+
 
 parser = argparse.ArgumentParser()
 group = parser.add_mutually_exclusive_group()
 group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns", type=str)
-group.add_argument("--template_file", help="Produce trimmomatic template csv file", action='store_true')
+group.add_argument("--template", help="Produce trimmomatic template csv file", action='store_true')
 group.add_argument("-r", "--reports",  help="Produce fastqc reports of all fastq.gz files in input directory",
                    action='store_true')
 
@@ -83,13 +90,15 @@ args = parser.parse_args()
 if args.trim:
     print('trim')
     print(args.trim)
-
     parse_flags_from_csv(args.trim)
+    print('finished trimming. results are found in fastq/trimmed directory')
 
 elif args.reports:
     print('reports')
 
-elif args.template_flie:
-    print('template')
+elif args.template:
+    print('producing template file')
+    template_csv()
+
 
 
