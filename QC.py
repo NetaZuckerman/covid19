@@ -43,7 +43,7 @@ def parse_flags_from_csv(flags_file):
                 out_f = 'fastq/trimmed/' + line['input_forward'].rstrip('.fastq.gz')  # remove only from the end
                 out_f_paired = out_f + '_paired.fastq.gz'
                 out_f_unpaired = out_f + '_unpaired.fastq.gz'
-                out_r = 'fastq/trimmed/' + line['input_forward'].rstrip('.fastq.gz')  # remove only from the end
+                out_r = 'fastq/trimmed/' + line['input_reverse'].rstrip('.fastq.gz')  # remove only from the end
                 out_r_paired = out_r + '_paired.fastq.gz'
                 out_r_unpaired = out_r + '_unpaired.fastq.gz'
 
