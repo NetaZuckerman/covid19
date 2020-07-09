@@ -30,19 +30,20 @@ def check_trim_input(line_dict):
 
 def parse_flags_from_csv(flags_file):
     global trimm_path
-    with csv.DictReader(open(flags_file)) as file:
+    with open(flags_file, 'r') as csv_file:
+        file = csv.DictReader(csv_file)
         for line in file:
             check_trim_input(line)
             ends = line['ends']
-            command = ['java', 'jar', trimm_path, ends]
+            command = ['java', '-jar', trimm_path, ends]
 
             if ends == 'PE':  # paired ends
                 in_f = line['input_forward']
                 in_r = line['input_reverse']
-                out_f = in_f.strip('.fastq.gz')
+                out_f = in_f.rstrip('.fastq.gz')  # remove only from the end
                 out_f_paired = out_f + '_paired.fastq.gz'
                 out_f_unpaired = out_f + '_unpaired.fastq.gz'
-                out_r = in_r.strip('.fastq.gz')
+                out_r = in_r.rstrip('.fastq.gz')  # remove only from the end
                 out_r_paired = out_r + '_paired.fastq.gz'
                 out_r_unpaired = out_r + '_unpaired.fastq.gz'
 
@@ -58,10 +59,10 @@ def parse_flags_from_csv(flags_file):
                 command += ['-threads', line['threads']]
 
             if line['phred']:
-                command.append('-phread'+line['phred'])
+                command.append('-phred'+line['phred'])
 
-            for key, val in line:
-                if (key in ['phread','threads', 'input', 'input_forward', 'input_reverse', 'ends']) or not val:
+            for key, val in line.items():
+                if (key in ['phred', 'threads', 'input', 'input_forward', 'input_reverse', 'ends']) or not val:
                     continue
                 command += [key+val]
 
@@ -80,6 +81,8 @@ args = parser.parse_args()
 
 if args.trim:
     print('trim')
+    print(args.trim)
+
     parse_flags_from_csv(args.trim)
 
 elif args.reports:
