@@ -38,12 +38,12 @@ def parse_flags_from_csv(flags_file):
             command = ['java', '-jar', trimm_path, ends]
 
             if ends == 'PE':  # paired ends
-                in_f = line['input_forward']
-                in_r = line['input_reverse']
-                out_f = in_f.rstrip('.fastq.gz')  # remove only from the end
+                in_f = 'fastq/raw/' + line['input_forward']
+                in_r = 'fastq/raw/' + line['input_reverse']
+                out_f = 'fastq/trimmed/' + in_f.rstrip('.fastq.gz')  # remove only from the end
                 out_f_paired = out_f + '_paired.fastq.gz'
                 out_f_unpaired = out_f + '_unpaired.fastq.gz'
-                out_r = in_r.rstrip('.fastq.gz')  # remove only from the end
+                out_r = 'fastq/trimmed/' + in_r.rstrip('.fastq.gz')  # remove only from the end
                 out_r_paired = out_r + '_paired.fastq.gz'
                 out_r_unpaired = out_r + '_unpaired.fastq.gz'
 
