@@ -66,8 +66,9 @@ def parse_flags_from_csv(flags_file):
                     continue
                 command += [key+val]
 
-            # subprocess.call(command)  # run trimmomatic command.
             print(command)
+            subprocess.call(command)  # run trimmomatic command.
+
 
 
 parser = argparse.ArgumentParser()
