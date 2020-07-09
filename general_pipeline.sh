@@ -2,7 +2,7 @@
 
 # how to get input files??
 # !assuming in working directory!
-mkdir -p alignment BAM/mapped CNS fastq/{raw, trimmed} QC/fastqc refs SAM test Trees
+# mkdir -p alignment BAM/mapped CNS fastq/{raw, trimmed} QC/fastqc refs SAM test Trees
 # TODO: for each sample create a pipe for better runtime
 # (1) merge / sort reads ?
 
@@ -11,31 +11,32 @@ mkdir -p alignment BAM/mapped CNS fastq/{raw, trimmed} QC/fastqc refs SAM test T
 # export PATH=$PATH:/data/software/FastQC/fastqc ## not realy working
 # new_fastqc=/data/software/FastQC/fastqc <- gives error. 'fastqc' command works.
 # chmod 755 $new_fastqc
-fastqc fastq/raw/*.fastq.gz --outdir=QC/fastqc # NOTICE: EXPECTING fastq.gz POSTFIX
+# fastqc fastq/raw/*.fastq.gz --outdir=QC/fastqc # NOTICE: EXPECTING fastq.gz POSTFIX
 # multiqc
 # export export PATH=$PATH:/data/software/multiqc/MultiQC/multiqc
-multiqc QC/fastqc -o QC/
+# multiqc QC/fastqc -o QC/
 
 # trimmomatic
 # export PATH=$PATH:/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
 # trimmomatic expect existing output folder
-trimmomatic_path=/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
-for r1 in fastq/raw/*R1*; do
-	r2=${r1/R1/R2}
-	r1_base=$(basename -s .fastq.gz $r1)
-	r2_base=$(basename -s .fastq.gz $r2)
-	singles1=fastq/trimmed/"$r1_base".unpaired.fastq.gz
-	singles2=fastq/trimmed/"$r2_base".unpaired.fastq.gz
-	paired1=fastq/trimmed/"$r1_base".paired.fastq.gz
-	paired2=fastq/trimmed/"$r2_base".paired.fastq.gz
-	java -jar $trimmomatic_path PE -phred33 -threads 32 $r1 $r2 $paired1 $singles1 $paired2 $singles2 TRAILING:28
-done
+#trimmomatic_path=/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
+#for r1 in fastq/raw/*R1*; do
+#	r2=${r1/R1/R2}
+#	r1_base=$(basename -s .fastq.gz $r1)
+#	r2_base=$(basename -s .fastq.gz $r2)
+#	singles1=fastq/trimmed/"$r1_base".unpaired.fastq.gz
+#	singles2=fastq/trimmed/"$r2_base".unpaired.fastq.gz
+#	paired1=fastq/trimmed/"$r1_base".paired.fastq.gz
+#	paired2=fastq/trimmed/"$r2_base".paired.fastq.gz
+#	java -jar $trimmomatic_path PE -phred33 -threads 32 $r1 $r2 $paired1 $singles1 $paired2 $singles2 TRAILING:28
+#done
 
 # (3) Map reads to corona virus (REF_NC_045512.2)
 # index reference
 # export?
 bwa index refs/REF_NC_045512.2.fasta
 # map reads to reference -> PE
+# TODO: May be ran on trimmed or on raw. get wanter option form user!!
 for r1 in fastq/trimmed/*R1*.paired.fastq.gz; do
   r2=${r1/R1/R2} # ${var/find/replace}
   output=${r1/_R1/}
@@ -110,7 +111,7 @@ cat CNS/*.fasta refs/REF_NC_045512.s.fasta > alignment/all_not_aligned.fasta
 mafft --clustalout alignment/all_notAligned.fasta > alignment/all_aligned.clustalout
 mafft alignment/all_notAligned.fasta > alignment/all_aligned.fasta
 
-# TODO: create report
+# TODO: create report!!!
 # make sure report files are empty
 ''>TotalNumReads.txt
 ''>BAM/TotalMappedReads.txt
