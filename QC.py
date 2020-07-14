@@ -81,9 +81,9 @@ def fastqc_reports():  # TODO: maybe allow user to specify input and output
     # TODO: add first/second qc options, to produce reports after trimming as well
     try:
         with open('fastqc_error.log', 'w') as log:
-            subprocess.call(['fastqc', 'fastq/raw/*.fastq.gz', '--outdir=QC/fastqc'], stderr=log)
+            subprocess.call(['/home/dana/covid19/auto_QC.sh'], stderr=log)
     except:
-        print('{Problem executing fastqc, please check fastqc_error.log for more info')
+        print('Problem executing fastqc')
 
 
 if __name__ == '__main__':
