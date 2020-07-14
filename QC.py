@@ -145,7 +145,7 @@ if __name__ == '__main__':
     group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns", type=str,
                        metavar="[CSV]")
     group.add_argument("--template", help="Produce trimmomatic auto-trimmig template csv file with default values",
-                       action='store', type=str, default="fastq/raw/", dest='fq_path')
+                       type=str, default="fastq/raw/", dest='fq_path')
     group.add_argument("-r", "--reports",  help="Produce fastqc and multifastqc reports of all fastq.gz files in input"
                                                 "directory", action='store_true')
 
