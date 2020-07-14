@@ -97,8 +97,8 @@ def template_csv(fq_path):
     create template file with default arguments for trimmomatic
     :param path: path for all fastq.gz files.
     """
-    for file in os.listdir(fq_path):
-        fq_R1 = fnmatch.filter(file,"*R1*.fastq.gz")
+
+    fq_R1 = fnmatch.filter(os.listdir(fq_path), "*R1*.fastq.gz")  # Assuming reads are marked as "R1" and "R2"!!
 
     with open('template.csv', 'w') as output:
         headers = ['ends', 'input_forward', 'input_reverse', 'phred', 'threads', 'ILLUMINACLIP:', 'SLIDINGWINDOW:',
