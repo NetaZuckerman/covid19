@@ -78,9 +78,10 @@ def template_csv():
 
 
 def fastqc_reports():  # TODO: maybe allow user to specify input and output
+    # TODO: add first/second qc options, to produce reports after trimming as well
     try:
         with open('fastqc_error.log', 'w') as log:
-            subprocess.call(['fastqc', 'fastqc/raw/*.fastq.gz', '--outdir=QC/fastqc'], stderr=log)
+            subprocess.call(['fastqc', 'fastq/raw/*.fastq.gz', '--outdir=QC/fastqc'], stderr=log)
     except:
         print('{Problem executing fastqc, please check fastqc_error.log for more info')
 
@@ -106,5 +107,8 @@ if __name__ == '__main__':
         fastqc_reports()
 
     elif args.template:
+        # TODO: add PE SE options to create the right template
+        # TODO: check SE as well
         print('producing template file')
         template_csv()
+
