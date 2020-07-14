@@ -1,6 +1,7 @@
 import argparse
 import csv
 import subprocess
+import os
 trimm_path='/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar'
 
 class InputError(Exception):
@@ -80,6 +81,8 @@ def template_csv():
 def fastqc_reports():  # TODO: maybe allow user to specify input and output
     # TODO: add first/second qc options, to produce reports after trimming as well
     try:
+        fastqc_script_path='/home/dana/covid19/auto_QC.sh'
+        os.chmod(fastqc_script_path, 755)
         with open('fastqc_error.log', 'w') as log:
             subprocess.call(['/home/dana/covid19/auto_QC.sh'], stderr=log)
     except:
