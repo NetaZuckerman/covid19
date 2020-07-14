@@ -81,10 +81,10 @@ def template_csv():
 def fastqc_reports():  # TODO: maybe allow user to specify input and output
     # TODO: add first/second qc options, to produce reports after trimming as well
     try:
-        fastqc_script_path='/home/dana/covid19/auto_QC.sh'
+        fastqc_script_path='/home/dana/covid19/fastqc_all.sh'
         os.chmod(fastqc_script_path, 755)
         with open('fastqc_error.log', 'w') as log:
-            subprocess.call(['bash', '/home/dana/covid19/auto_QC.sh'], stderr=log)
+            subprocess.call(['bash', fastqc_script_path], stderr=log)
     except Exception:
         pass
         print('Problem executing fastqc')
