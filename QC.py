@@ -92,6 +92,11 @@ def fastqc_reports():  # TODO: maybe allow user to specify input and output
         print('finished producing reports')
 
 
+def multiqc_report():
+    subprocess.call(['multiqc', 'QC/fastqc', '-o', 'QC/'])
+    print('finished multiqqc')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
@@ -112,6 +117,7 @@ if __name__ == '__main__':
     elif args.reports:
         print('reports')
         fastqc_reports()
+        multiqc_report()
 
     elif args.template:
         # TODO: add PE SE options to create the right template
