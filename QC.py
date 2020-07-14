@@ -46,13 +46,12 @@ def parse_flags_from_csv(flags_file):
                 out_r = 'fastq/trimmed/' + line['input_reverse'].rstrip('.fastq.gz')  # remove only from the end
                 out_r_paired = out_r + '_paired.fastq.gz'
                 out_r_unpaired = out_r + '_unpaired.fastq.gz'
-
                 command += [in_f, in_r, out_f_paired, out_f_unpaired, out_r_paired, out_r_unpaired]
             else:  # single ends
-                inp = line['input']
-                out = inp.strip('fastq.gz')
-                out_paired = out + 'paired.fastq.gz'
-                out_unpaired = out + 'unpaired.fastq.gz'
+                inp = 'fastq/raw/' + line['input']
+                out = 'fastq/trimmed/' + line['input'].rstrip('.fastq.gz')
+                out_paired = out + '_paired.fastq.gz'
+                out_unpaired = out + '_unpaired.fastq.gz'
                 command += [inp, out_paired, out_unpaired]
 
             if line['threads']:
@@ -78,27 +77,34 @@ def template_csv():
         csv_writer.writerow(headers)
 
 
-parser = argparse.ArgumentParser()
-group = parser.add_mutually_exclusive_group()
-group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns", type=str)
-group.add_argument("--template", help="Produce trimmomatic auto-trimmig template csv file", action='store_true')
-group.add_argument("-r", "--reports",  help="Produce fastqc reports of all fastq.gz files in input directory",
-                   action='store_true')
-
-args = parser.parse_args()
-
-if args.trim:
-    print('trim')
-    print(args.trim)
-    parse_flags_from_csv(args.trim)
-    print('finished trimming. results are found in fastq/trimmed directory')
-
-elif args.reports:
-    print('reports')
-
-elif args.template:
-    print('producing template file')
-    template_csv()
+def fastqc_reports():  # TODO: maybe allow user to specify input and output
+    try:
+        with open('fastqc_error.log', 'w') as log:
+            subprocess.call(['fastqc', 'fastqc/raw/*.fastq.gz', '--outdir=QC/fastqc'], stderr=log)
+    except:
+        print('{Problem executing fastqc, please check fastqc_error.log for more info')
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns", type=str)
+    group.add_argument("--template", help="Produce trimmomatic auto-trimmig template csv file", action='store_true')
+    group.add_argument("-r", "--reports",  help="Produce fastqc reports of all fastq.gz files in input directory",
+                       action='store_true')
 
+    args = parser.parse_args()
+
+    if args.trim:
+        print('trim')
+        print(args.trim)
+        parse_flags_from_csv(args.trim)
+        print('finished trimming. results are found in fastq/trimmed directory')
+
+    elif args.reports:
+        print('reports')
+        fastqc_reports()
+
+    elif args.template:
+        print('producing template file')
+        template_csv()
