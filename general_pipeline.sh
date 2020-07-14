@@ -113,12 +113,17 @@ mafft alignment/all_notAligned.fasta > alignment/all_aligned.fasta
 
 # TODO: create report!!!
 # make sure report files are empty
-''>TotalNumReads.txt
-''>BAM/TotalMappedReads.txt
+"">stats.txt
+"">coverage.txt
 for file in BAM/*.bam; do
   if [[ $file == *.mapped*.bam ]]; then
     continue
   fi
-  samtools view -c $file >> BAM/TotalNumReads.txt # total num of reads
-  samtools view -c -F 260 $file >> BAM/TotalMappedReads.txt
+  tot_reads=$(samtools view -c $file)
+  mapped_reads=$(samtools view -c -F 260 $file)
+  echo -e "$file\t$tot_reads\t$mapped_reads\t$((mapped_reads / tot_reads))" >> stats.txt
 done
+
+for file in BAM/*.mapped.sorted.bam; do
+  echo -e "#rname\tstartpos\tendpos\tnumreads\tcovbases\tcoverage\tmeandepth\tmeanbaseq\tmeanmapq" > $coverage.txt
+  $new_samtools coverage $file -H
