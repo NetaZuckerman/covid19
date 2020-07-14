@@ -88,6 +88,8 @@ def fastqc_reports():  # TODO: maybe allow user to specify input and output
     except Exception:
         pass
         print('Problem executing fastqc')
+    finally:
+        print('finished producing reports')
 
 
 if __name__ == '__main__':
