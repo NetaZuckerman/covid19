@@ -84,7 +84,7 @@ def fastqc_reports():  # TODO: maybe allow user to specify input and output
         fastqc_script_path='/home/dana/covid19/auto_QC.sh'
         os.chmod(fastqc_script_path, 755)
         with open('fastqc_error.log', 'w') as log:
-            subprocess.call(['/home/dana/covid19/auto_QC.sh'], stderr=log)
+            subprocess.call(['bash', '/home/dana/covid19/auto_QC.sh'], stderr=log)
     except Exception:
         pass
         print('Problem executing fastqc')
