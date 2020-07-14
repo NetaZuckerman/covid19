@@ -38,12 +38,14 @@ def validate_input(line_dict):
     return
 
 
-def trim(flags_file):
+def trim(flags_file, path=''):
     """
     construct the trimmomatic command and execute it
     :param flags_file: csv input file
     """
     global trimm_path
+    prefix_fq = path + "fastq/raw/"
+    prefix_out = path + "fastq/trimmed/"
     with open(flags_file, 'r') as csv_file:
         file = csv.DictReader(csv_file)  # reads csv as dict. header is keys. each line is a dict.
         #  iterate over all lines(dicts) and gather all parameters to one command.
@@ -54,20 +56,20 @@ def trim(flags_file):
 
             if ends == 'PE':  # paired ends
                 # create input and output files
-                in_f = 'fastq/raw/' + line['input_forward']
-                in_r = 'fastq/raw/' + line['input_reverse']
-                out_f = 'fastq/trimmed/' + line['input_forward'].rstrip('.fastq.gz')
+                in_f = prefix_fq + line['input_forward']
+                in_r = prefix_fq + line['input_reverse']
+                out_f = prefix_out + line['input_forward'].rstrip('.fastq.gz')
                 out_f_paired = out_f + '_paired.fastq.gz'
                 out_f_unpaired = out_f + '_unpaired.fastq.gz'
-                out_r = 'fastq/trimmed/' + line['input_reverse'].rstrip('.fastq.gz')
+                out_r = prefix_out + line['input_reverse'].rstrip('.fastq.gz')
                 out_r_paired = out_r + '_paired.fastq.gz'
                 out_r_unpaired = out_r + '_unpaired.fastq.gz'
                 # add input and output files to final command
                 command += [in_f, in_r, out_f_paired, out_f_unpaired, out_r_paired, out_r_unpaired]
             else:  # single ends
                 # create input and output files
-                inp = 'fastq/raw/' + line['input_forward']
-                out = 'fastq/trimmed/' + line['input_forward'].rstrip('.fastq.gz')
+                inp = prefix_fq + line['input_forward']
+                out = prefix_out + line['input_forward'].rstrip('.fastq.gz')
                 out_paired = out + '_paired.fastq.gz'
                 out_unpaired = out + '_unpaired.fastq.gz'
                 # add input and output files to final command
@@ -123,7 +125,7 @@ def fastqc_reports():  # TODO: maybe allow user to specify input and output
     try:
         fastqc_script_path='/home/dana/covid19/fastqc_all.sh'
         os.chmod(fastqc_script_path, 755)
-        with open('fastqc_error.log', 'w') as log:
+        with open('fastqc.log', 'w') as log:
             subprocess.call(['bash', fastqc_script_path], stderr=log)
     except Exception:
         pass
@@ -142,8 +144,9 @@ def multiqc_report():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns", type=str,
-                       metavar="[CSV]")
+    group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns. "
+                                            "base_path: path to base directory, where fastq/ and QC/ dirs are found.",
+                       type=str, metavar="CSV, base_path", nargs="+")
     group.add_argument("--template", help="Produce trimmomatic auto-trimmig template csv file with default values",
                        dest='fq_path', const="fastq/raw/", nargs="?")
     group.add_argument("-r", "--reports",  help="Produce fastqc and multifastqc reports of all fastq.gz files in input"
@@ -154,7 +157,13 @@ if __name__ == '__main__':
     if args.trim:
         print('trim')
         print(args.trim)
-        trim(args.trim)
+        if len(args.trim) == 1:
+            trim(args.trim[0])
+        elif len(args.trim) == 2:
+            trim(args.trim[0], args.trim[1])
+        else:
+            print("too many arguments for trim option. see -h for help.")
+            exit(1)
         print('finished trimming. results are found in fastq/trimmed directory')
 
     elif args.reports:
