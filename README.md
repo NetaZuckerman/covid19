@@ -21,21 +21,21 @@ Template csv header:
 * ends: `PE` or `SE` only. If you choose `PE` (paired end) -> be sure to include both input_forward **and**  input_reverse! \
 **Optional fields**: 
 Do not remove unwanted fields, just leave them empty and they will be ignored.\
-> -phred[33 | 64] -  -phred33 or -phred64 specifies the base quality encoding. If no quality encoding is specified,
+* -phred[33 | 64] -  -phred33 or -phred64 specifies the base quality encoding. If no quality encoding is specified,
 it will be determined automatically \
->threads<int>: indicates the number of threads to use, which improves performance on multi-core
+* threads<int>: indicates the number of threads to use, which improves performance on multi-core
 computers. If not specified, it will be chosen automatically. \
-> ILLUMINACLIP:<fastaWithAdaptersEtc>:<seed mismatches>:<palindrome clip
+* ILLUMINACLIP:<fastaWithAdaptersEtc>:<seed mismatches>:<palindrome clip
 threshold>:<simple clip threshold> - Cut adapter and other illumina-specific sequences from the read. 
->SLIDINGWINDOW:<windowSize>:<requiredQuality>  -  Perform a sliding window trimming, cutting once the average quality within the window falls below a 
->threshold. \
->LEADING:/TRAILING:<quality> - Cut bases off the start/end of a read respectively, if below a threshold quality. \
->quality: Specifies the minimum quality required to keep a base.
->CROP:<length>  - Removes bases regardless of quality from the end of the read, so that the read has maximally
+* SLIDINGWINDOW:<windowSize>:<requiredQuality>  -  Perform a sliding window trimming, cutting once the average quality 
+within the window falls below a threshold. \
+* LEADING:/TRAILING:<quality> - Cut bases off the start/end of a read respectively, if below a threshold quality. \
+quality: Specifies the minimum quality required to keep a base.
+* CROP:<length>  - Removes bases regardless of quality from the end of the read, so that the read has maximally
 the specified length after this step has been performed. length: The number of bases to keep, from the start of the read.
->HEADCROP:<length> - Removes the specified number of bases, regardless of quality, from the beginning of the read.\
->length: The number of bases to remove from the start of the read
->MINLEN:<length> - Removes reads that fall below the specified minimal length.  If required, it should
+* HEADCROP:<length> - Removes the specified number of bases, regardless of quality, from the beginning of the read.\
+length: The number of bases to remove from the start of the read
+* MINLEN:<length> - Removes reads that fall below the specified minimal length.  If required, it should
 normally be after all other processing steps. 
 
 >For more info about Trimmomatic's arguments, see Trimmomatic documentation:
