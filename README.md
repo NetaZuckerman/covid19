@@ -62,7 +62,7 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
  including symbols like '-', ':', etc. 
  
 >For more info about Trimmomatic's arguments, see Trimmomatic documentations:
->http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
+>http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf,
 >http://www.usadellab.org/cms/?page=trimmomatic
 
 
