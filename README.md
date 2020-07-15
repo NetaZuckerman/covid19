@@ -7,18 +7,33 @@
 #### Template:
 To produce template of csv file to later serve as trimming input, use --template.\
 If no path provided, will automatically use default path of "fastq/raw/".If your fastq files are in a different 
-location, please provide a path.  
+location, please provide a path.  \
+The csv produced will include some default arguments, feel free to change them as you wish. 
 `python3 QC.py --template`\
 `python3 QC.py --template /some/path/to/fastq/location/`\
 The output: _template.csv_ file in your working directory.
 
+
+#### Trimming:
+To trim run the following command:\
+`python3 QC.py -t path/to/file.csv ` or
+`python3 QC.py --trim path/to/file.csv`\
+To trim with the template csv as input, simply run `python3 QC.py -t template.csv`. Make sure you are in the base
+directory of the project so the program could access fastq/raw, fastq/trim etc.
+If you prefer running the program from another location, please add the path to the base location, like so:
+`python3 QC.py -t path/to/file.csv path/to/base/dir`\
+
+
+## The CSV file:
 Template csv header:
 >ends   |	input_forward   |	input_reverse   |	phred   |	threads |   ILLUMINACLIP:   |	SLIDINGWINDOW:  
 >|   LEADING:    |	TRAILING:   |	CROP:   |	HEADCROP:   |	MINLEN: 
 
+Each line will represent a fastq file.
+
 **Required fields**: ends, input_forward. Make sure those fields are filled in the csv file \
 trimmomatic requires output files as well, but those are given automatically in the script. Don't include them in the csv.
-* ends: `PE` or `SE` only. If you choose `PE` (paired end) -> be sure to include both input_forward **and**  input_reverse! \
+* ends: `PE` or `SE` only. If you choose `PE` (paired end) -> be sure to include both input_forward **and**  input_reverse! 
 
 **Optional fields**: 
 Do not remove unwanted fields, just leave them empty and they will be ignored.
@@ -39,22 +54,14 @@ length: The number of bases to remove from the start of the read
 * _MINLEN:<length>_ - Removes reads that fall below the specified minimal length.  If required, it should
 normally be after all other processing steps. 
 
->For more info about Trimmomatic's arguments, see Trimmomatic documentation:
->Trimmomatic 0.39 manual: http://www.usadellab.org/cms/?page=trimmomatic
+NOTE: When adding new arguments to csv, add the argument as it will appear in the Trimmomatic command,
+ including symbols like '-', ':', etc. 
+ 
+>For more info about Trimmomatic's arguments, see Trimmomatic documentations:
 >http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
-
-
-#### Trimming:
-To trim run the following command:\
-`python3 QC.py -t path/to/file.csv ` or
-`python3 QC.py --trim path/to/file.csv`\
-To trim with the template csv as input, simply run `python3 QC.py -t template.csv`. Make sure you are in the base
-directory of the project so the program could access fastq/raw, fastq/trim etc.
-If you prefer running the program from another location, please add the path to the base location, like so:
-`python3 QC.py -t path/to/file.csv path/to/base/dir`
-
+>http://www.usadellab.org/cms/?page=trimmomatic
 
 
 Dana Bar-Ilan.
 
-last modified: 09.07.2020
+last modified: 15.07.2020
