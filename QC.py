@@ -89,8 +89,8 @@ def trim(flags_file, path=''):
                 command += [key+val]
 
             print(command)
-            with open('trimmomatic.log') as trim_log:
-                subprocess.call(command, stderr=trim_log)  # run trimmomatic command. errors will be kept at trim_log
+
+            subprocess.call(command)  # run trimmomatic command. errors will be kept at trim_log
 
 
 # produce a template csv file used in trimming
