@@ -3,7 +3,7 @@
 `usage: QC.py [-h] [-t CSV, base_path [CSV, base_path ...] | --template
              [FQ_PATH] | -r]`
 
-### Examples:
+### Usage:
 #### Template:
 To produce template of csv file to later serve as trimming input, use --template.\
 If no path provided, will automatically use default path of "fastq/raw/".If your fastq files are in a different 
@@ -24,7 +24,7 @@ If you prefer running the program from another location, please add the path to 
 `python3 QC.py -t path/to/file.csv path/to/base/dir`\
 
 
-## The CSV file:
+### The CSV file:
 Template csv header:
 >ends   |	input_forward   |	input_reverse   |	phred   |	threads |   ILLUMINACLIP:   |	SLIDINGWINDOW:  
 >|   LEADING:    |	TRAILING:   |	CROP:   |	HEADCROP:   |	MINLEN: 
