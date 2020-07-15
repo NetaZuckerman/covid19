@@ -37,21 +37,21 @@ trimmomatic requires output files as well, but those are given automatically in 
 
 **Optional fields**: 
 Do not remove unwanted fields, just leave them empty and they will be ignored.
-* _-phred[33 | 64]_ -  -phred33 or -phred64 specifies the base quality encoding. If no quality encoding is specified,
+* -phred`[33 | 64]` -  -phred33 or -phred64 specifies the base quality encoding. If no quality encoding is specified,
 it will be determined automatically 
 * threads<int>: indicates the number of threads to use, which improves performance on multi-core
 computers. If not specified, it will be chosen automatically. 
-* _ILLUMINACLIP:<fastaWithAdaptersEtc>:<seed mismatches>:<palindrome clip
-threshold>:<simple clip threshold>_ - Cut adapter and other illumina-specific sequences from the read. 
-* _SLIDINGWINDOW:<windowSize>:<requiredQuality>_ -  Perform a sliding window trimming, cutting once the average quality 
+* ILLUMINACLIP:`<fastaWithAdaptersEtc>:<seed mismatches>:<palindrome clip
+threshold>:<simple clip threshold>` - Cut adapter and other illumina-specific sequences from the read. 
+* SLIDINGWINDOW:`<windowSize>:<requiredQuality>` -  Perform a sliding window trimming, cutting once the average quality 
 within the window falls below a threshold. 
-* _LEADING:/TRAILING:<quality>_ - Cut bases off the start/end of a read respectively, if below a threshold quality. 
+* LEADING:/TRAILING:`<quality>` - Cut bases off the start/end of a read respectively, if below a threshold quality. 
 quality: Specifies the minimum quality required to keep a base.
-* _CROP:<length>_  - Removes bases regardless of quality from the end of the read, so that the read has maximally
+* CROP:`<length>`  - Removes bases regardless of quality from the end of the read, so that the read has maximally
 the specified length after this step has been performed. length: The number of bases to keep, from the start of the read.
-* _HEADCROP:<length>_ - Removes the specified number of bases, regardless of quality, from the beginning of the read.
+* HEADCROP:`<length>` - Removes the specified number of bases, regardless of quality, from the beginning of the read.
 length: The number of bases to remove from the start of the read
-* _MINLEN:<length>_ - Removes reads that fall below the specified minimal length.  If required, it should
+* MINLEN:`<length>` - Removes reads that fall below the specified minimal length.  If required, it should
 normally be after all other processing steps. 
 
 NOTE: When adding new arguments to csv, add the argument as it will appear in the Trimmomatic command,
