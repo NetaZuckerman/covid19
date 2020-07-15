@@ -45,8 +45,8 @@ def trim(flags_file, path=''):
     :param path: path to base project directory
     """
     global trimm_path
-    if not os.path.exists("fastq/trimmed"):
-        os.mkdir("fastq/trimmed")
+    if not os.path.exists("fastq/trimmed/"):
+        os.mkdir("fastq/trimmed/")
 
     prefix_fq = path + "fastq/raw/"
     prefix_out = path + "fastq/trimmed/"
