@@ -4,11 +4,14 @@
              [FQ_PATH] | -r]`
 
 ### Usage:
+
 #### Template:
-To produce template of csv file to later serve as trimming input, use --template.\
-If no path provided, will automatically use default path of "fastq/raw/".If your fastq files are in a different 
+##### --template <optional-path/to/fqs>
+Produces template of csv file, which is the input file for --trim.\
+If no input provided, uses "fastq/raw/" as default path to fastq files. If your fastq files are in a different 
 location, please provide a path.  \
-The csv produced will include some default arguments, feel free to change them as you wish. 
+The csv produced will include some default arguments, feel free to change their values and add more arguments as you 
+wish. \
 `python3 QC.py --template`\
 `python3 QC.py --template /some/path/to/fastq/location/`\
 The output: _template.csv_ file in your working directory.
