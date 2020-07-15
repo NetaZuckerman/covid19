@@ -18,7 +18,7 @@ The output: _template.csv_ file in your working directory.
 
 
 #### Trimming:
-##### -t|--template <path/to/csv> <optional-path/to/base/dir>
+##### -t|--trim <path/to/csv> <optional-path/to/base/dir>
 To trim run the following command:\
 `python3 QC.py -t path/to/file.csv ` or
 `python3 QC.py --trim path/to/file.csv`\
