@@ -37,7 +37,9 @@ Each line will represent a fastq file.
 
 **Required fields**: ends, input_forward. Make sure those fields are filled in the csv file \
 trimmomatic requires output files as well, but those are given automatically in the script. Don't include them in the csv.
-* ends: `PE` or `SE` only. If you choose `PE` (paired end) -> be sure to include both input_forward **and**  input_reverse! 
+* ends`[PE|SE]` - PE:paired end, SE: single end. If you choose `PE`, be sure to include both input_forward **and**  input_reverse! 
+* input_forward `<sample_R1.fastq.gz>`: sample name
+* input_reverse `<sample_R2.fastq.gz>`: sample name
 
 **Optional fields**: 
 Do not remove unwanted fields, just leave them empty and they will be ignored.
@@ -59,7 +61,7 @@ length: The number of bases to remove from the start of the read
 normally be after all other processing steps. 
 
 NOTE: When adding new arguments to csv, add the argument as it will appear in the Trimmomatic command,
- including symbols like '-', ':', etc. 
+ including symbols like -, :, etc. 
  
 >For more info about Trimmomatic's arguments, see Trimmomatic documentations:
 >http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf,
