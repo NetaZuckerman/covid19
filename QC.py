@@ -42,10 +42,15 @@ def trim(flags_file, path=''):
     """
     construct the trimmomatic command and execute it
     :param flags_file: csv input file
+    :param path: path to base project directory
     """
     global trimm_path
+    if not os.path.exists("fastq/trimmed"):
+        os.mkdir("fastq/trimmed")
+
     prefix_fq = path + "fastq/raw/"
     prefix_out = path + "fastq/trimmed/"
+
     with open(flags_file, 'r') as csv_file:
         file = csv.DictReader(csv_file)  # reads csv as dict. header is keys. each line is a dict.
         #  iterate over all lines(dicts) and gather all parameters to one command.
