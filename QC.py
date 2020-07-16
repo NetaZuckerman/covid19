@@ -125,22 +125,23 @@ def template_csv(fq_path):
     print('finished template file. check it out at template.csv in your working directory.')
 
 
-def fastqc_reports(out_dir):
+def fastqc_reports(out_dir, in_dir=""):
     # TODO: add first/second qc options, to produce reports after trimming as well
     try:
         fastqc_script_path = '/home/dana/covid19/fastqc_all.sh'
         os.chmod(fastqc_script_path, 755)
+        in_dir += "fastq/raw/*.fastq.gz"
         with open('fastqc.log', 'w') as log:
-            subprocess.call(['bash', fastqc_script_path, out_dir], stderr=log)
+            subprocess.call(['bash', fastqc_script_path, in_dir, out_dir], stderr=log)
     except Exception:
         pass
         print('Problem executing fastqc')
     print('finished producing reports')
 
 
-def multiqc_report(out_dir):
+def multiqc_report(out_dir, wd):
     try:
-        subprocess.call(['multiqc', out_dir, '-o', out_dir])
+        subprocess.call(['multiqc', wd, '-o', out_dir])
     except:
         print("Problem executing multiqc")
     print('finished multiqc')
@@ -151,38 +152,49 @@ if __name__ == '__main__':
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns. "
                                             "base_path: path to base directory, where fastq/ and QC/ dirs are found.",
-                       type=str, metavar="CSV, base_path", nargs="+")
+                       type=str, metavar="CSV", nargs=1)
     group.add_argument("--template", help="Produce trimmomatic auto-trimmig template csv file with default values",
                        dest='template_fqpath', const="fastq/raw/", nargs="?")
     group.add_argument("-r", "--reports",  help="Produce fastqc and multifastqc reports of all fastq.gz files in input"
                                                 "directory",
                        type=str, dest='reports_outdir', nargs="?", const='QC/fastqc')
+    parser.add_argument("-w", "--working_dir", help="Working directory of the program. The base directory of project, "
+                                                    "where QC directory is. Default is current directory",
+                        nargs=1, type=str, dest='wd')
 
     args = parser.parse_args()
 
     if args.trim:
         print('trim')
-        print(args.trim)
-        if len(args.trim) == 1:
-            trim(args.trim[0])
-        elif len(args.trim) == 2:
-            trim(args.trim[0], args.trim[1])
+        print(args.trim[0])
+        if args.wd:
+            print(args.wd[0])
+            trim(args.trim[0], args.wd[0])
         else:
-            print("too many arguments for trim option. see -h for help.")
-            exit(1)
+            print("not args wd")
+            trim(args.trim[0])
         print('finished trimming. results are found in fastq/trimmed directory')
 
     elif args.reports_outdir:  # reports
         print('reports')
-        fastqc_reports(args.reports_outdir)
-        multiqc_report(args.reports_outdir)
+
+        if args.wd:  # wd provided
+            fastqc_reports(args.reports_outdir, args.wd[0])
+            multiqc_report(args.reports_outdir, args.wd[0])
+        else:
+            fastqc_reports(args.reports_outdir)
+            cwd = os.getcwd()
+            multiqc_report(args.reports_outdir, cwd)
 
     elif args.template_fqpath:
+        if args.wd:
+            print('No need to specify working directory when creating template. Exiting.')
+            exit(1)
         # TODO: add PE SE options to create the right template
         # TODO: check SE as well
         print('producing template file')
         print(args.template_fqpath)
         template_csv(args.template_fqpath)
 
-    else: # if user did not choose an option -> print help
+    else:  # if user did not choose an option -> print help
         parser.print_usage()
