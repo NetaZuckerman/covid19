@@ -177,7 +177,6 @@ if __name__ == '__main__':
 
     elif args.reports_outdir:  # reports
         print('reports')
-
         if args.wd:  # wd provided
             fastqc_reports(args.reports_outdir, args.wd[0])
             multiqc_report(args.reports_outdir, args.wd[0])
