@@ -10,14 +10,15 @@ bwa index refs/REF_NC_045512.2.fasta
 for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
   r2=${r1/R1/R2} # ${var/find/replace}
   output=${r1/_R1/}
-  bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta $r1 $r2 > SAM/`basename $output _paired.fastq.gz`.sam
+  # old:   bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta $r1 $r2 > SAM/`basename $output _paired.fastq.gz`.sam
+  bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 8 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
 done
 
-# samtools <command> -@: number of threads (default 1)
-# (4) sam to bam
-for file in SAM/*.sam; do
-  samtools view -@ 8 -Sb $file > BAM/`basename $file .sam`.bam
-done
+## samtools <command> -@: number of threads (default 1)
+## (4) sam to bam
+#for file in SAM/*.sam; do
+#  samtools view -@ 8 -Sb $file > BAM/`basename $file .sam`.bam
+#done
 
 new_samtools=/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools
 new_bcftools=/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools
@@ -29,13 +30,15 @@ done
 # (6) sort and index bam files
 # sort
 for file in BAM/*.mapped.bam; do
+  sorted=${file/.mapped.bam/mapped.sorted.bam}
   samtools sort -@ 8 $file BAM/`basename $file .mapped.bam`.mapped.sorted
+  samtools index "$sorted"
 done
 
-# index
-for file in BAM/*.mapped.sorted.bam; do
-  samtools index $file
-done
+## index
+#for file in BAM/*.mapped.sorted.bam; do
+#  samtools index $file
+#done
 
 # (7) create concensus sequence
 # https://github.com/samtools/bcftools/wiki/HOWTOs#consensus-calling
@@ -48,8 +51,8 @@ done
 for file in BAM/*.mapped.sorted.bam; do
   $new_samtools mpileup -uf refs/REF_NC_045512.2.fasta $file | $new_bcftools call -mv -Oz --threads 8 -o CNS/calls.vcf.gz # change to bcftools mpileup??
   $new_bcftools index --threads 8 CNS/calls.vcf.gz
-  # cat refs/REF_NC_045512.2.fasta | $new_bcftools consensus CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fastq # output in fasta format already
-  cat refs/REF_NC_045512.2.fasta | $new_bcftools consensus CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
+  # cat refs/REF_NC_045512.2.fasta | $new_bcftools consensus CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
+  $new_bcftools consensus -f refs/REF_NC_045512.2.fastq CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
 done
 
 rm CNS/calls.vcf.gz CNS/calls.vcf.gz.csi
@@ -78,8 +81,8 @@ done
 # preper input file:
 cat CNS/*.fasta refs/REF_NC_045512.2.fasta > alignment/all_not_aligned.fasta
 #https://towardsdatascience.com/how-to-perform-sequence-alignment-on-2019-ncov-with-mafft-96c1944da8c6
-mafft --clustalout alignment/all_notAligned.fasta > alignment/all_aligned.clustalout
-mafft alignment/all_notAligned.fasta > alignment/all_aligned.fasta
+mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout
+mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta
 
 # TODO: create report!!!
 # make sure report files are empty
