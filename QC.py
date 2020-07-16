@@ -153,10 +153,10 @@ if __name__ == '__main__':
                                             "base_path: path to base directory, where fastq/ and QC/ dirs are found.",
                        type=str, metavar="CSV, base_path", nargs="+")
     group.add_argument("--template", help="Produce trimmomatic auto-trimmig template csv file with default values",
-                       dest='fq_path', const="fastq/raw/", nargs="?")
+                       dest='template_fqpath', const="fastq/raw/", nargs="?")
     group.add_argument("-r", "--reports",  help="Produce fastqc and multifastqc reports of all fastq.gz files in input"
                                                 "directory",
-                       type=int, metavar='out_dir', nargs="?")
+                       type=str, dest='reports_outdir', nargs="?", const='QC/fastqc')
 
     args = parser.parse_args()
 
@@ -172,22 +172,17 @@ if __name__ == '__main__':
             exit(1)
         print('finished trimming. results are found in fastq/trimmed directory')
 
-    elif args.reports:
+    elif args.reports_outdir:  # reports
         print('reports')
-        if args.out_dir:
-            fastqc_reports(args.out_dir)
-            multiqc_report(args.out_dir)
-        else:
-            fastqc_reports('QC/fastqc')
-            multiqc_report('QC/fastqc')
+        fastqc_reports(args.reports_outdir)
+        multiqc_report(args.reports_outdir)
 
-
-    elif args.fq_path:
+    elif args.template_fqpath:
         # TODO: add PE SE options to create the right template
         # TODO: check SE as well
         print('producing template file')
-        print(args.fq_path)
-        template_csv(args.fq_path)
+        print(args.template_fqpath)
+        template_csv(args.template_fqpath)
 
     else: # if user did not choose an option -> print help
         parser.print_usage()
