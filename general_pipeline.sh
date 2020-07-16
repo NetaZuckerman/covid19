@@ -52,7 +52,7 @@ done
 new_samtools=/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools
 new_bcftools=/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools
 # (5) keep only mapped reads
-for file in BAM*/.bam; do
+for file in BAM/*.bam; do
    $new_samtools view -@ 8 -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam
 done
 
