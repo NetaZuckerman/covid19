@@ -1,4 +1,4 @@
 #!/bin/bash
-
-fastqc fastq/raw/*.fastq.gz --outdir=QC/fastqc
+out=$1
+fastqc fastq/raw/*.fastq.gz --outdir="$out"
 

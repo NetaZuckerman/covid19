@@ -2,7 +2,7 @@
 # TODO manage output during run. errors for error log and standart output to output log
 # Echo to screen the pipeline's stage currently working
 # !assuming in working directory!
-mkdir -p alignment BAM CNS fastq/{raw, trimmed} QC/fastqc refs test Trees
+# mkdir -p alignment BAM CNS fastq/{raw, trimmed} QC/fastqc refs test Trees
 # (1) merge / sort reads ?
 
 ############ so far as general pipeline

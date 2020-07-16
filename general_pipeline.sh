@@ -76,7 +76,7 @@ done
 # align with MAFFT
 # dana, before aligning all consensus sequences against the reference, you have to gather all .fasta CNS files into one file, along with the reference. that’s the input.
 # preper input file:
-cat CNS/*.fasta refs/REF_NC_045512.s.fasta > alignment/all_not_aligned.fasta
+cat CNS/*.fasta refs/REF_NC_045512.2.fasta > alignment/all_not_aligned.fasta
 #https://towardsdatascience.com/how-to-perform-sequence-alignment-on-2019-ncov-with-mafft-96c1944da8c6
 mafft --clustalout alignment/all_notAligned.fasta > alignment/all_aligned.clustalout
 mafft alignment/all_notAligned.fasta > alignment/all_aligned.fasta

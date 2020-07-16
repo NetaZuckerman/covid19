@@ -125,22 +125,22 @@ def template_csv(fq_path):
     print('finished template file. check it out at template.csv in your working directory.')
 
 
-def fastqc_reports():  # TODO: maybe allow user to specify input and output
+def fastqc_reports(out_dir):
     # TODO: add first/second qc options, to produce reports after trimming as well
     try:
-        fastqc_script_path='/home/dana/covid19/fastqc_all.sh'
+        fastqc_script_path = '/home/dana/covid19/fastqc_all.sh'
         os.chmod(fastqc_script_path, 755)
         with open('fastqc.log', 'w') as log:
-            subprocess.call(['bash', fastqc_script_path], stderr=log)
+            subprocess.call(['bash', fastqc_script_path, out_dir], stderr=log)
     except Exception:
         pass
         print('Problem executing fastqc')
     print('finished producing reports')
 
 
-def multiqc_report():
+def multiqc_report(out_dir):
     try:
-        subprocess.call(['multiqc', 'QC/fastqc', '-o', 'QC/'])
+        subprocess.call(['multiqc', out_dir, '-o', out_dir])
     except:
         print("Problem executing multiqc")
     print('finished multiqc')
@@ -155,7 +155,8 @@ if __name__ == '__main__':
     group.add_argument("--template", help="Produce trimmomatic auto-trimmig template csv file with default values",
                        dest='fq_path', const="fastq/raw/", nargs="?")
     group.add_argument("-r", "--reports",  help="Produce fastqc and multifastqc reports of all fastq.gz files in input"
-                                                "directory", action='store_true')
+                                                "directory",
+                       type=int, metavar='out_dir', nargs="?")
 
     args = parser.parse_args()
 
@@ -173,8 +174,13 @@ if __name__ == '__main__':
 
     elif args.reports:
         print('reports')
-        fastqc_reports()
-        multiqc_report()
+        if args.out_dir:
+            fastqc_reports(args.out_dir)
+            multiqc_report(args.out_dir)
+        else:
+            fastqc_reports('QC/fastqc')
+            multiqc_report('QC/fastqc')
+
 
     elif args.fq_path:
         # TODO: add PE SE options to create the right template
