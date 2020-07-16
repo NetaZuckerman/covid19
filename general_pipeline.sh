@@ -7,7 +7,7 @@
 bwa index refs/REF_NC_045512.2.fasta
 # map reads to reference -> PE
 # TODO: May be ran on trimmed or on raw. get wanter option form user!!
-for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
+for r1 in fastq/trimmed/*R1*.paired.fastq.gz; do
   r2=${r1/R1/R2} # ${var/find/replace}
   output=${r1/_R1/}
   # old:   bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta $r1 $r2 > SAM/`basename $output _paired.fastq.gz`.sam
