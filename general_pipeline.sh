@@ -114,16 +114,28 @@ mafft alignment/all_notAligned.fasta > alignment/all_aligned.fasta
 # TODO: create report!!!
 # make sure report files are empty
 "">stats.txt
-"">coverage.txt
-for file in BAM/*.bam; do
-  if [[ $file == *.mapped*.bam ]]; then
-    continue
-  fi
-  tot_reads=$(samtools view -c $file)
-  mapped_reads=$(samtools view -c -F 260 $file)
-  echo -e "$file\t$tot_reads\t$mapped_reads\t$((mapped_reads / tot_reads))" >> stats.txt
+
+#for file in BAM/*.bam; do
+#  if [[ $file == *.mapped*.bam ]]; then
+#    continue
+#    #TODO: coverage - move here?
+#  fi
+#  tot_reads=$(samtools view -c $file)
+#  mapped_reads=$(samtools view -c -F 260 $file)
+#  echo -e "$file\t$tot_reads\t$mapped_reads\t$((mapped_reads / tot_reads))" >> stats.txt
+#done
+# coverage headers: 1#rname  2startpos  3endpos    4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
+echo -e "sample\tmappedreads\tcovbases\tcoverage\%\tmeandepth\tmaxdepth\tmindepth\ttot_reads" > report.txt
+for file in BAM/*.mapped.sorted.bam; do
+  sample_name=${file/BAM\//}
+  original_bam=${file/.mapped.sorted.bam/.bam} #{var/find/replae}
+  tot_reads=$(samtools view -c "$original_bam")
+  line=$($new_samtools coverage -H "$file" | cut -f4,5,6)
+  $new_samtools depth -a "$file" > depth.txt
+  max_depth=$(awk 'BEGIN{max=0} {if ($3>max) max=$3} END {print max}' depth.txt) # calculate max depth
+  min_depth=$(awk 'BEGIN {min=0} {if ($3<min) min=$3} END {print min}' depth.txt) # calculate min depth
+  mean_depth=$(awk '{c++;s+=$3}END{print s/c}' depth.txt)
+  line="${sample_name}\t${line}\t${mean_depth}\t${max_depth}\t${min_depth}\t${tot_reads}"
+  echo -e "$line" >> report.txt
 done
 
-for file in BAM/*.mapped.sorted.bam; do
-  echo -e "#rname\tstartpos\tendpos\tnumreads\tcovbases\tcoverage\tmeandepth\tmeanbaseq\tmeanmapq" > $coverage.txt
-  $new_samtools coverage $file -H

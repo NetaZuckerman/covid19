@@ -1,10 +1,8 @@
 # covid19
-
+# QC.py
 `usage: QC.py [-h] [-t CSV, base_path [CSV, base_path ...] | --template
              [FQ_PATH] | -r]`
-
 ### Usage:
-
 #### Template:
 ##### --template <optional-path/to/fqs>
 Produces template of csv file, which is the input file for --trim.\
@@ -16,7 +14,6 @@ wish. \
 `python3 QC.py --template /some/path/to/fastq/location/`\
 The output: _template.csv_ file in your working directory.
 
-
 #### Trimming:
 ##### -t|--trim <path/to/csv> <optional-path/to/base/dir>
 To trim run the following command:\
@@ -26,7 +23,6 @@ To trim with the template csv as input, simply run `python3 QC.py -t template.cs
 directory of the project so the program could access fastq/raw, fastq/trim etc.
 If you prefer running the program from another location, please add the path to the base location, like so:
 `python3 QC.py -t path/to/file.csv path/to/base/dir`\
-
 
 ### The CSV file:
 Template csv header:
@@ -66,8 +62,9 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 >For more info about Trimmomatic's arguments, see Trimmomatic documentations:
 >http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf,
 >http://www.usadellab.org/cms/?page=trimmomatic
-
-
+---------------
+# general_pipeline.sh
+---------------
 Dana Bar-Ilan.
 
 last modified: 15.07.2020

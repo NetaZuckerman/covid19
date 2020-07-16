@@ -5,32 +5,6 @@
 mkdir -p alignment BAM CNS fastq/{raw, trimmed} QC/fastqc refs test Trees
 # (1) merge / sort reads ?
 
-# (2) QC (fastqc & multiqc) + trim (trimmomatic)
-# fastqc
-# export PATH=$PATH:/data/software/FastQC/fastqc ## not realy working
-# new_fastqc=/data/software/FastQC/fastqc <- gives error. 'fastqc' command works.
-# chmod 755 $new_fastqc
-fastqc fastq/raw/*.fastq.gz --outdir=QC/fastqc # NOTICE: EXPECTING fastq.gz POSTFIX
-# multiqc
-# export export PATH=$PATH:/data/software/multiqc/MultiQC/multiqc
-multiqc QC/fastqc -o QC/
-
-
-# trimmomatic
-# export PATH=$PATH:/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
-# trimmomatic expect existing output folder
-trimmomatic_path=/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar
-for r1 in fastq/raw/*R1*; do
-	r2=${r1/R1/R2}
-	r1_base=$(basename -s .fastq.gz $r1)
-	r2_base=$(basename -s .fastq.gz $r2)
-	singles1=fastq/trimmed/"$r1_base".unpaired.fastq.gz
-	singles2=fastq/trimmed/"$r2_base".unpaired.fastq.gz
-	paired1=fastq/trimmed/"$r1_base".paired.fastq.gz
-	paired2=fastq/trimmed/"$r2_base".paired.fastq.gz
-	java -jar $trimmomatic_path PE -phred33 -threads 32 $r1 $r2 $paired1 $singles1 $paired2 $singles2 TRAILING:28
-done
-
 ############ so far as general pipeline
 # start pipe
 
