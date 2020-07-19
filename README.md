@@ -6,7 +6,7 @@
 #### QC Reports:
 ##### -r <reports/output/path>
 Produces fastqc and multiqc reports. \
-* <eports/output/path> - Optional. Default is QC/fastqc/. The fastqc and multiqc reports will be found there.
+* <reports/output/path> - Optional. Default is QC/fastqc/. The fastqc and multiqc reports will be found there.
 #### Template:
 ##### --template <optional-path/to/fqs>
 Produces template of csv file, which is the input file for --trim.\
