@@ -136,7 +136,7 @@ def fastqc_reports(out_dir, in_dir=""):
     print('finished producing reports')
 
 
-def multiqc_report(out_dir, wd):
+def multiqc_report(out_dir):
     try:
         subprocess.call(['multiqc', 'QC/fastqc', '-o', out_dir])
     except:
@@ -174,13 +174,8 @@ if __name__ == '__main__':
 
     elif args.reports_outdir:  # reports
         print('reports')
-        if args.wd:  # wd provided
-            fastqc_reports(args.reports_outdir)
-            multiqc_report(args.reports_outdir, args.wd[0])
-        else:
-            fastqc_reports(args.reports_outdir)
-            cwd = os.getcwd()
-            multiqc_report(args.reports_outdir, cwd)
+        fastqc_reports(args.reports_outdir)
+        multiqc_report(args.reports_outdir)
 
     elif args.template_fqpath:
         if args.wd:
