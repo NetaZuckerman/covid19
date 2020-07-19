@@ -127,21 +127,18 @@ def template_csv(fq_path):
 
 def fastqc_reports(out_dir, in_dir=""):
     # TODO: add first/second qc options, to produce reports after trimming as well
-    try:
-        fastqc_script_path = '/home/dana/covid19/fastqc_all.sh'
-        os.chmod(fastqc_script_path, 755)
-        in_dir += "fastq/raw/*.fastq.gz"
-        with open('fastqc.log', 'w') as log:
-            subprocess.call(['bash', fastqc_script_path, in_dir, out_dir], stderr=log)
-    except Exception:
-        pass
-        print('Problem executing fastqc')
+    fastqc_script_path = '/home/dana/covid19/fastqc_all.sh'
+    os.chmod(fastqc_script_path, 755)
+    #in_dir += "fastq/raw/*.fastq.gz"
+    with open('fastqc.log', 'w') as log:
+        subprocess.call(['bash', fastqc_script_path, out_dir], stderr=log)
+
     print('finished producing reports')
 
 
 def multiqc_report(out_dir, wd):
     try:
-        subprocess.call(['multiqc', wd, '-o', out_dir])
+        subprocess.call(['multiqc', 'QC/fastqc', '-o', out_dir])
     except:
         print("Problem executing multiqc")
     print('finished multiqc')
@@ -157,7 +154,7 @@ if __name__ == '__main__':
                        dest='template_fqpath', const="fastq/raw/", nargs="?")
     group.add_argument("-r", "--reports",  help="Produce fastqc and multifastqc reports of all fastq.gz files in input"
                                                 "directory",
-                       type=str, dest='reports_outdir', nargs="?", const='QC/fastqc')
+                       type=str, dest='reports_outdir', nargs="?", const='QC/fastqc/')
     parser.add_argument("-w", "--working_dir", help="Working directory of the program. The base directory of project, "
                                                     "where QC directory is. Default is current directory",
                         nargs=1, type=str, dest='wd')
@@ -178,7 +175,7 @@ if __name__ == '__main__':
     elif args.reports_outdir:  # reports
         print('reports')
         if args.wd:  # wd provided
-            fastqc_reports(args.reports_outdir, args.wd[0])
+            fastqc_reports(args.reports_outdir)
             multiqc_report(args.reports_outdir, args.wd[0])
         else:
             fastqc_reports(args.reports_outdir)
