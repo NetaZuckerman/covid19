@@ -125,22 +125,24 @@ def template_csv(fq_path):
     print('finished template file. check it out at template.csv in your working directory.')
 
 
-def fastqc_reports(out_dir, in_dir=""):
+def fastqc_reports(out_dir, working_dir='fastq/raw/'):
     # TODO: add first/second qc options, to produce reports after trimming as well
-    fastqc_script_path = '/home/dana/covid19/fastqc_all.sh'
-    os.chmod(fastqc_script_path, 755)
-    #in_dir += "fastq/raw/*.fastq.gz"
-    with open('fastqc.log', 'w') as log:
-        subprocess.call(['bash', fastqc_script_path, out_dir], stderr=log)
+    # fastqc_script_path = '/home/dana/covid19/fastqc_all.sh'
+    # os.chmod(fastqc_script_path, 755)
+    # with open('fastqc.log', 'w') as log:
+    #     subprocess.call(['bash', fastqc_script_path, out_dir], stderr=log)
+
+    for fqfile in os.listdir(working_dir):
+        if not fqfile.endswith(".fastq.gz"):
+            continue  # step over files that are not fastq.gz format
+        subprocess.call(['fastqc', working_dir+fqfile, "--outdir=%s" % out_dir])
 
     print('finished producing reports')
+    return out_dir
 
 
-def multiqc_report(out_dir):
-    try:
-        subprocess.call(['multiqc', 'QC/fastqc', '-o', out_dir])
-    except:
-        print("Problem executing multiqc")
+def multiqc_report(fq_out_dir, working_dir):
+    subprocess.call(['multiqc', fq_out_dir, '-o', working_dir])
     print('finished multiqc')
 
 
@@ -155,11 +157,15 @@ if __name__ == '__main__':
     group.add_argument("-r", "--reports",  help="Produce fastqc and multifastqc reports of all fastq.gz files in input"
                                                 "directory. Reports output path is optional, default is QC/fastqc/.",
                        type=str, dest='reports_outdir', nargs="?", const='QC/fastqc/')
-    parser.add_argument("-w", "--working_dir", help="Working directory of the program. The base directory of project, "
-                                                    "where QC directory is. Default is current directory",
+    parser.add_argument("-w", "--working_dir", help="Working directory of the program. Default is current directory",
                         nargs=1, type=str, dest='wd')
 
     args = parser.parse_args()
+
+    if args.wd:
+        wd = args.wd
+    else:
+        wd = os.getcwd()
 
     if args.trim:
         print('trim')
@@ -174,8 +180,8 @@ if __name__ == '__main__':
 
     elif args.reports_outdir:  # reports
         print('reports')
-        fastqc_reports(args.reports_outdir)
-        multiqc_report(args.reports_outdir)
+        fastqc_reports(args.reports_outdir, wd)
+        multiqc_report(args.reports_outdir, wd)  # at the moment: multiqc produces report in pwd
 
     elif args.template_fqpath:
         if args.wd:
