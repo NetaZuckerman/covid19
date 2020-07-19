@@ -1,19 +1,41 @@
 #!/bin/bash
-# TODO: for each sample create a pipe for better runtime
+
+trim_flag=false
+
+# parse input
+while (( "$#" )); do
+  case "$1" in
+    -t|--trimmed_fq)
+      trim_flag=true
+      shift
+      ;;
+    -*|--*=) # unsupported flags
+      echo "Error: Unsupported flag $1" >&2
+      exit 1
+      ;;
+  esac
+done
 
 # (3) Map reads to corona virus (REF_NC_045512.2)
 # index reference
-# export?
 bwa index refs/REF_NC_045512.2.fasta
-# map reads to reference -> PE
-# TODO: May be ran on trimmed or on raw. get wanter option form user!!
-for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
-  r2=${r1/R1/R2} # ${var/find/replace}
-  output=${r1/_R1/}
-  # old:   bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta $r1 $r2 > SAM/`basename $output _paired.fastq.gz`.sam
-  bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 8 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
-done
 
+# map reads to reference -> PE
+if $trim_flag
+then
+  for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
+    r2=${r1/R1/R2} # ${var/find/replace}
+    output=${r1/_R1/}
+    # old:   bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta $r1 $r2 > SAM/`basename $output _paired.fastq.gz`.sam
+    bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 8 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
+  done
+else
+  for r1 in fastq/raw/*R1*.fastq.gz; do
+    r2=${r1/R1/R2}
+    output=${r1/_R1/}
+    bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 8 -Sb - > BAM/`basename $output .fastq.gz`.bam
+  done
+fi
 ## samtools <command> -@: number of threads (default 1)
 ## (4) sam to bam
 #for file in SAM/*.sam; do
