@@ -149,7 +149,7 @@ if __name__ == '__main__':
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns. "
                                             "base_path: path to base directory, where fastq/ and QC/ dirs are found.",
-                       type=str, metavar="CSV", nargs=1)
+                       type=str, metavar="[CSV]", nargs=1)
     group.add_argument("--template", help="Produce trimmomatic auto-trimmig template csv file with default values",
                        dest='template_fqpath', const="fastq/raw/", nargs="?")
     group.add_argument("-r", "--reports",  help="Produce fastqc and multifastqc reports of all fastq.gz files in input"
