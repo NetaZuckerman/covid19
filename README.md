@@ -1,8 +1,12 @@
 # covid19
 # QC.py
-`usage: QC.py [-h] [-t CSV, base_path [CSV, base_path ...] | --template
-             [FQ_PATH] | -r]`
+`usage: QC.py [-h] [-t [CSV] | --template [TEMPLATE_FQPATH] | -r
+             [REPORTS_OUTDIR]] [-w WD]`
 ### Usage:
+#### QC Reports:
+##### -r <reports/output/path>
+Produces fastqc and multiqc reports. \
+* <eports/output/path> - Optional. Default is QC/fastqc/. The fastqc and multiqc reports will be found there.
 #### Template:
 ##### --template <optional-path/to/fqs>
 Produces template of csv file, which is the input file for --trim.\

@@ -153,7 +153,7 @@ if __name__ == '__main__':
     group.add_argument("--template", help="Produce trimmomatic auto-trimmig template csv file with default values",
                        dest='template_fqpath', const="fastq/raw/", nargs="?")
     group.add_argument("-r", "--reports",  help="Produce fastqc and multifastqc reports of all fastq.gz files in input"
-                                                "directory",
+                                                "directory. Reports output path is optional, default is QC/fastqc/.",
                        type=str, dest='reports_outdir', nargs="?", const='QC/fastqc/')
     parser.add_argument("-w", "--working_dir", help="Working directory of the program. The base directory of project, "
                                                     "where QC directory is. Default is current directory",
