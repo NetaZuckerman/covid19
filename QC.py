@@ -181,7 +181,7 @@ if __name__ == '__main__':
 
     elif args.reports_outdir:  # reports
         print('reports')
-        fastqc_reports(args.reports_outdir, wd)
+        fastqc_reports(args.reports_outdir)
         multiqc_report(args.reports_outdir, wd)  # at the moment: multiqc produces report in pwd
 
     elif args.template_fqpath:
