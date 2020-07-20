@@ -26,7 +26,7 @@ To trim run the following command:\
 To trim with the template csv as input, simply run `python3 QC.py -t template.csv`. Make sure you are in the base
 directory of the project so the program could access fastq/raw, fastq/trim etc.
 If you prefer running the program from another location, please add the path to the base location, like so:
-`python3 QC.py -t path/to/file.csv path/to/base/dir`\
+`python3 QC.py -t path/to/file.csv path/to/base/dir`
 
 ### The CSV file:
 Template csv header:

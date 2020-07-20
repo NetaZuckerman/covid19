@@ -2,13 +2,14 @@ import argparse  # for pretty help menu and parsing arguments
 import csv  # for writing and reading csv files
 import subprocess  # to run shell commands
 import os  # to run os commands
-import re  # regex
-import fnmatch # regex
+import fnmatch  # regex
 trimm_path='/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar'
 
 
-# customised exception class
 class InputError(Exception):
+    """
+    customised exception class
+    """
     def __init__(self, message=None):
         self.msg = message
 
@@ -19,7 +20,6 @@ class InputError(Exception):
             return 'InputError: Some required fields are missing in trim csv.'
 
 
-# validate csv input (receives line in csv)
 def validate_input(line_dict):
     """
     validate csv file (ends vs input provided)
