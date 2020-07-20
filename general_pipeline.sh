@@ -77,22 +77,26 @@ cat CNS/*.fasta refs/REF_NC_045512.2.fasta > alignment/all_not_aligned.fasta
 mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout
 mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta
 
+mkdir -p results/
+report=results/report.txt
 # samtools coverage headers: 1#rname  2startpos  3endpos    4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
-echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tmeandepth\tmaxdepth\tmindepth" > report.txt
+echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tmeandepth\tmaxdepth\tmindepth" > "$report"
 for file in BAM/*.mapped.sorted.bam; do
   sample_name=${file/BAM\//}
   original_bam=${file/.mapped.sorted.bam/.bam} #{var/find/replace}
-  tot_reads=$(samtools view -c "$original_bam")
+  tot_reads=$(samtools view -c "$original_bam") # do not use -@n, no output inside variable
   line=( $($new_samtools coverage -H "$file" | cut -f4,5,6) )
   mapped_num=${line[0]}
   percentage_mapped=$(awk -v m="$mapped_num" -v t="$tot_reads" 'BEGIN {print (m/t)*100}')
-  $new_samtools depth -a "$file" > depth.txt # -a for use of all bases of sample. for all refseq use -aa.
+  $new_samtools depth "$file" > depth.txt
   max_depth=$(awk 'BEGIN{max=0} {if ($3>max) max=$3} END {print max}' depth.txt)
-  min_depth=$(awk 'BEGIN {min=0} {if ($3<min) min=$3} END {print min}' depth.txt)
+  min_depth=$(awk 'BEGIN {min=$max_depth} {if ($3<min) min=$3} END {print min}' depth.txt)
   mean_depth=$(awk '{c++;s+=$3}END{print s/c}' depth.txt)
   # echo to report
   line="${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${line[1]}\t${line[2]}\t${mean_depth}\t${max_depth}\t${min_depth}"
-  echo -e "$line" >> report.txt
+  echo -e "$line" >> "$report"
 done
 
 rm depth.txt
+
+# for parallel: TODO
