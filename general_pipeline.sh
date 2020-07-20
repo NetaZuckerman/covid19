@@ -1,16 +1,43 @@
 #!/bin/bash
 
 trim_flag=false
-refseq=refs/REF_NC_045512.2.fasta
+dirs_flag=false
+refseq=refs/REF_NC_045512.2.fasta # default refseq
 new_samtools=/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools
 new_bcftools=/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools
 # parse input wiht flags
+function usage() {
+    cat <<EOF
+Usage: $0 [options]
+
+-h| --help                      Print this usage message and exit. Ignore the rest
+-t|--trimmed_fq                 Run the pipeline with trimmed fsatq data (instead of raw).
+-d|--create_dirs                Create all project's directories in current working directorie.
+-r|--refseq      refseq/path/   User defined reference. Required: refseq/path/ - path to reference fasta file.
+                                default: refs/REF_NC_045512.2.fasta
+EOF
+exit 0
+}
+
 while (( "$#" )); do
   case "$1" in
     -t|--trimmed_fq)
       trim_flag=true
       shift
       ;;
+    -d|--create_dirs) # just create all directories
+    dirs_flag=true
+    shift
+    ;;
+  -r|--refseq) # user provided refseq
+    shift
+    refseq="$1"
+    shift
+    ;;
+  -h|--help)
+    usage
+    shift
+    ;;
     -*|--*=) # unsupported flags
       echo "Error: Unsupported flag $1" >&2
       exit 1
@@ -18,14 +45,23 @@ while (( "$#" )); do
   esac
 done
 
+if $dirs_flag; then
+  mkdir -p fastq/{raw,trimmed} QC/fastqc refs BAM CNS alignment Trees results
+  echo "Created project directories. Please download your data to fastq/raw and/or fastq/trimmed, and your reference sequence to refs/. "
+  exit 0
+fi
+
 # (3) Map reads to corona virus (REF_NC_045512.2)
 # index reference
-if [ ! -f "$refseq" ]; then # TODO: make reference changeable!
+if [ ! -f "$refseq" ]; then
+  mkdir -p refs
   echo "$refseq" does not exist. Please provide the reference sequence and try again.
   exit 1
 fi
+
 bwa index "$refseq"
 
+mkdir -p BAM CNS alignment results Trees
 # map reads to reference. straight to bam format! assuming PE for now # TODO
 if $trim_flag # data is trimmed
 then
@@ -77,26 +113,22 @@ cat CNS/*.fasta refs/REF_NC_045512.2.fasta > alignment/all_not_aligned.fasta
 mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout
 mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta
 
-mkdir -p results/
+### RESULTS REPORT
 report=results/report.txt
 # samtools coverage headers: 1#rname  2startpos  3endpos    4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
 echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tmeandepth\tmaxdepth\tmindepth" > "$report"
 for file in BAM/*.mapped.sorted.bam; do
   sample_name=${file/BAM\//}
   original_bam=${file/.mapped.sorted.bam/.bam} #{var/find/replace}
-  tot_reads=$(samtools view -c "$original_bam") # do not use -@n, no output inside variable
+  tot_reads=$(samtools view -c "$original_bam") # do not use -@n when capturing output in variable
   line=( $($new_samtools coverage -H "$file" | cut -f4,5,6) )
   mapped_num=${line[0]}
   percentage_mapped=$(awk -v m="$mapped_num" -v t="$tot_reads" 'BEGIN {print (m/t)*100}')
   $new_samtools depth "$file" > depth.txt
-  max_depth=$(awk 'BEGIN{max=0} {if ($3>max) max=$3} END {print max}' depth.txt)
-  min_depth=$(awk 'BEGIN {min=$max_depth} {if ($3<min) min=$3} END {print min}' depth.txt)
-  mean_depth=$(awk '{c++;s+=$3}END{print s/c}' depth.txt)
-  # echo to report
-  line="${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${line[1]}\t${line[2]}\t${mean_depth}\t${max_depth}\t${min_depth}"
-  echo -e "$line" >> "$report"
+  depths=$(awk '{if(min==""){min=max=$3}; if($3>max) {max=$3}; if($3< min) {min=$3}; total+=$3; count+=1} END {print total/count"\t"max"\t"min}' depth.txt)
+  echo -e "${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${line[1]}\t${line[2]}\t${depths}" >> "$report"
 done
 
 rm depth.txt
 
-# for parallel: TODO
+# for parallel: TODO manage up to N parallel runs to save time
