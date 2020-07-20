@@ -135,7 +135,9 @@ def fastqc_reports(out_dir, working_dir='fastq/raw/'):
     for fqfile in os.listdir(working_dir):
         if not fqfile.endswith(".fastq.gz"):
             continue  # step over files that are not fastq.gz format
-        subprocess.call(['fastqc', working_dir+fqfile, "--outdir=%s" % out_dir])
+        print(working_dir+fqfile)
+        with open("error.log", 'w') as log:
+            subprocess.call(['fastqc', working_dir+fqfile, "--outdir=%s" % out_dir], stderr=log, stdout=log)
 
     print('finished producing reports')
     return out_dir
