@@ -16,9 +16,10 @@ default -o location: QC/
 Produces template of csv file with some default trimmomatic arguments.\
 `python3 QC.py --template`\
 You may also provide input (-i) and/or output (-o) paths: \
-`python3 QC.py --template -i some/path/to/fastq/location/ -o some/path/for/template/.csv` \
+`python3 QC.py --template -i some/path/to/fastq/location/ -o some/path/for/output` \
 default -i location: fastq/raw/ \
-default -o location: template.csv (in current working directory)
+default -o location: current working directory
+The output file is called template.csv, it will be located in current directory, or output path (-o) if provided.
 
 #### Trimming:
 ##### -t|--trim <path/to/csv> <optional-path/to/base/dir>

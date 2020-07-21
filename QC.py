@@ -3,6 +3,7 @@ import csv  # for writing and reading csv files
 import subprocess  # to run shell commands
 import os  # to run os commands
 import fnmatch  # regex
+import pathlib  # only > python 3.5!
 trimm_path='/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar'
 
 
@@ -169,7 +170,7 @@ if __name__ == '__main__':
     if args.output_path:
         out_path = args.output_path[0]
         if not os.path.exists(out_path):
-            os.mkdir(out_path)
+            pathlib.Path(out_path).mkdir(parents=True, exist_ok=True)  # mkdir -p equivalent
         if not out_path.endswith('/'):
             out_path += '/'
 
