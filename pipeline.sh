@@ -7,15 +7,18 @@
 # -> align consensuses to ref-seq <mafft>
 # + produce report
 
-# trap ctrl-c and call ctrl_c() function
+# trap ctrl-c to end in the same directory as started even if user ended the program
 trap ctrl_c INT
+last_loc=$(pwd)
 
 function ctrl_c() {
     echo
-    echo "Ctrl-C by user"
+    echo Exiting...
+    cd last_loc || exit
     exit
 }
 
+cd_flag=false
 trim_flag=false
 dirs_flag=false
 refseq=refs/REF_NC_045512.2.fasta # default refseq
@@ -35,7 +38,7 @@ Usage: $0 [options]
 EOF
 exit 0
 }
-
+wd=""
 while (( "$#" )); do
   case "$1" in
     -t|--trimmed_fq)
@@ -51,6 +54,12 @@ while (( "$#" )); do
     refseq="$1"
     shift
     ;;
+  --working_dir)
+    shift
+    cd_flag=true
+    wd=$1
+    shift
+    ;;
   -h|--help)
     usage
     shift
@@ -61,6 +70,11 @@ while (( "$#" )); do
       ;;
   esac
 done
+
+# change location
+if $cd_flag; then
+  cd "$wd"
+fi
 
 if $dirs_flag; then
   mkdir -p fastq/{raw,trimmed} QC/{fastqc} refs BAM CNS alignment Trees results
@@ -147,4 +161,8 @@ done
 
 rm depth.txt
 
+# if location changed (user's input) -> return to original path.
+if $cd_flag; then
+  cd last_loc
+fi
 # for parallel: TODO manage up to N parallel runs to save time
