@@ -192,10 +192,17 @@ if __name__ == '__main__':
 
     elif args.reports:  # reports
         print('reports')
-        if out_path:
-            fastqc_reports(out_path)
+        if wd and out_path:
+            fastqc_reports(out_dir=out_path, in_dir=wd)
             multiqc_report(out_path)
-        else:
+        elif wd or out_path:
+            if wd:
+                fastqc_reports(in_dir=wd)
+                multiqc_report()
+            else:
+                fastqc_reports(out_dir=out_path)
+                multiqc_report(out_path)
+        else:  # all default
             fastqc_reports()
             multiqc_report()
 
