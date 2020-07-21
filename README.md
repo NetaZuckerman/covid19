@@ -1,7 +1,7 @@
 # covid19
 # QC.py
 ### Usage:
-`usage: python QC.py [-h] [-t [CSV] | --template | -r] [-i WD] [-o OUTPUT_PATH]`
+`python QC.py [-h] [-t [CSV] | --template | -r] [-i WD] [-o OUTPUT_PATH]`
 #### QC Reports:
 ##### -r | --reports
 Produces fastqc and multiqc reports for all fastq.gz files. \
@@ -72,13 +72,8 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 ---------------
 # pipeline.sh
 ### Usage:
-Usage: bash pipeline.sh [options]\
-
--h| --help                      Print this usage message and exit. Ignore the rest
--t|--trimmed_fq                 Run the pipeline with trimmed fsatq data (instead of raw).
--d|--create_dirs                Create all project's directories in current working directorie.
--r|--refseq      refseq/path/   User defined reference. Required: refseq/path/ - path to reference fasta file.
-                                default: refs/REF_NC_045512.2.fasta
+ bash pipeline.sh [options]
+ 
 #### Trimmed data:
 ##### -t|--trimmed_fq 
 Run the pipeline with trimmed data (by trimmomatic). \
@@ -88,6 +83,7 @@ Run the pipeline with trimmed data (by trimmomatic). \
 ##### -d|--create_dirs 
 Create all the project directories in the current directory and exit. \
 The directories: fastq/raw, fastq/trimmed, QC/fastqc, BAM, CNS, alignment, Trees, results
+`bash pipeline.sh -d` OR `bash pipeline.sh --crate_dirs`
 
 ####  Define your own reference sequence:
 ##### -r|--refseq <refseq/path/>
@@ -98,8 +94,7 @@ Don't worry about indexing the fasta file, it happens automatically.
 
 #### If you are still confused, here are some examples
 `bash pipeline.sh -r /data/references/covid.fasta -t`\
-The command above runs the pipeline with trimmed fastq files (-t), and uses the non-default reference sequence (-r) in 
-_/data/references/covid.fasta_ \
+The command above runs the pipeline with trimmed fastq files (-t), and uses the non-default reference sequence (-r) in _/data/references/covid.fasta_ \
  ~ more examples in the future ~ 
 
 ---------------
