@@ -21,7 +21,7 @@ Usage: $0 [options]
 -h| --help                      Print this usage message and exit. Ignore the rest
 -t|--trimmed_fq                 Run the pipeline with trimmed fsatq data (instead of raw).
 -d|--create_dirs                Create all project's directories in current working directory.
--r|--refseq      refseq/path/   User defined reference. Required: refseq/path/ - path to reference fasta file.
+-r|--refseq     [refseq/path/]  User defined reference. Required: refseq/path/ - path to reference fasta file.
                                 default: refs/REF_NC_045512.2.fasta
 EOF
 exit 0
