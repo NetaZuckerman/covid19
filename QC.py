@@ -127,6 +127,7 @@ def template_csv(fq_path):
 
 def fastqc_reports(out_dir, working_dir='fastq/raw/'):
     out_dest = out_dir + "fastqc/"
+    os.mkdir(out_dest)
     for fqfile in os.listdir(working_dir):
         if not fqfile.endswith(".fastq.gz"):
             continue  # step over files that are not fastq.gz format
