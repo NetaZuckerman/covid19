@@ -20,7 +20,7 @@ Usage: $0 [options]
 
 -h| --help                      Print this usage message and exit. Ignore the rest
 -t|--trimmed_fq                 Run the pipeline with trimmed fsatq data (instead of raw).
--d|--create_dirs                Create all project's directories in current working directorie.
+-d|--create_dirs                Create all project's directories in current working directory.
 -r|--refseq      refseq/path/   User defined reference. Required: refseq/path/ - path to reference fasta file.
                                 default: refs/REF_NC_045512.2.fasta
 EOF
@@ -54,7 +54,7 @@ while (( "$#" )); do
 done
 
 if $dirs_flag; then
-  mkdir -p fastq/{raw,trimmed} QC refs BAM CNS alignment Trees results
+  mkdir -p fastq/{raw,trimmed} QC/{fastqc} refs BAM CNS alignment Trees results
   echo "Created project directories. Please download your data to fastq/raw and/or fastq/trimmed, and your reference sequence to refs/. "
   exit 0
 fi

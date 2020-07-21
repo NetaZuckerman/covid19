@@ -42,12 +42,12 @@ def trim(flags_file, path='fastq/raw/', prefix_out="fastq/trimmed/"):
     """
     construct the trimmomatic command and execute it
     :param flags_file: csv input file
-    :param path: path to base project directory
+    :param path: path to raw fastq files
+    :param prefix_out: Path to destination directory
     """
     global trimm_path
-    if not os.path.exists("fastq/trimmed/"):
-        os.mkdir("fastq/trimmed/")
-
+    if not os.path.exists(prefix_out):
+        os.mkdir(prefix_out)
 
     with open(flags_file, 'r') as csv_file:
         file = csv.DictReader(csv_file)  # reads csv as dict. header is keys. each line is a dict.
@@ -125,7 +125,8 @@ def template_csv(fq_path='fastq/raw/', out_loc='template.csv'):
 
 def fastqc_reports(out_dir="QC/", in_dir='fastq/raw/'):
     out_dest = out_dir + "fastqc/"
-    os.mkdir(out_dest)
+    if not os.path.exists(out_dest):
+        os.mkdir(out_dest)
     for fqfile in os.listdir(in_dir):
         if not fqfile.endswith(".fastq.gz"):
             continue  # step over files that are not fastq.gz format
@@ -150,7 +151,7 @@ if __name__ == '__main__':
                        type=str, metavar="[CSV]", nargs=1)
     group.add_argument("--template", help="produce trimmomatic auto-trimmig template csv file with default values",
                        action="store_true")
-    group.add_argument("-r", "--reports",  help="produce fastqc and multifastqc reports of all fastq.gz files in input"
+    group.add_argument("-r", "--reports",  help="produce fastqc and multifastqc reports of all fastq.gz files in input "
                                                 "directory \nIf output path not provided (-o), default is QC/fastqc/",
                        action="store_true")
     parser.add_argument("-i", help="working directory of the program. \noptional, default is current directory",

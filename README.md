@@ -1,30 +1,35 @@
 # covid19
 # QC.py
-`usage: QC.py [-h] [-t [CSV] | --template [TEMPLATE_FQPATH] | -r
-             [REPORTS_OUTDIR]] [-w WD]`
 ### Usage:
+`usage: python QC.py [-h] [-t [CSV] | --template | -r] [-i WD] [-o OUTPUT_PATH]`
 #### QC Reports:
-##### -r <reports/output/path>
-Produces fastqc and multiqc reports. \
-* <reports/output/path> - Optional. Default is QC/fastqc/. The fastqc and multiqc reports will be found there.
+##### -r | --reports
+Produces fastqc and multiqc reports for all fastq.gz files. \
+`python3 QC.py -r` \
+You may also provide input (-i) and/or output (-o) paths: \
+`python3 QC.py -r -i path/to/fastq/files -o path/for/output/reports`
+default -i location: fastq/raw/ \
+default -o location: QC/ 
+
 #### Template:
-##### --template <optional-path/to/fqs>
-Produces template of csv file, which is the input file for --trim.\
-If no input provided, uses "fastq/raw/" as default path to fastq files. If your fastq files are in a different 
-location, please provide a path.  \
-The csv produced will include some default arguments, feel free to change their values and add more arguments as you 
-wish. \
+##### --template 
+Produces template of csv file with some default trimmomatic arguments.\
 `python3 QC.py --template`\
-`python3 QC.py --template /some/path/to/fastq/location/`\
-The output: _template.csv_ file in your working directory.
+You may also provide input (-i) and/or output (-o) paths: \
+`python3 QC.py --template -i some/path/to/fastq/location/ -o some/path/for/template/.csv` \
+default -i location: fastq/raw/ \
+default -o location: template.csv (in current working directory)
 
 #### Trimming:
 ##### -t|--trim <path/to/csv> <optional-path/to/base/dir>
 To trim run the following command:\
-`python3 QC.py -t path/to/file.csv ` or
+`python3 QC.py -t path/to/file.csv `\ or
 `python3 QC.py --trim path/to/file.csv`\
-To trim with the template csv as input, simply run `python3 QC.py -t template.csv`. Make sure you are in the base
-directory of the project so the program could access fastq/raw, fastq/trim etc.
+You may also provide input (-i) and/or output (-o) paths: \
+`python3 QC.py -t path/to/file.csv -i path/to/raw/fastq/files -o path/to/trimmed/fatsq/output`
+To trim with the template csv as input, simply run `python3 QC.py -t template.csv`.\
+default -i location: fastq/raw/ \
+default -o location: fastq/trimmed/
 
 ### The CSV file:
 Template csv header:
@@ -65,7 +70,37 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 >http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf,
 >http://www.usadellab.org/cms/?page=trimmomatic
 ---------------
-# general_pipeline.sh
+# pipeline.sh
+### Usage:
+Usage: bash pipeline.sh [options]\
+
+-h| --help                      Print this usage message and exit. Ignore the rest
+-t|--trimmed_fq                 Run the pipeline with trimmed fsatq data (instead of raw).
+-d|--create_dirs                Create all project's directories in current working directorie.
+-r|--refseq      refseq/path/   User defined reference. Required: refseq/path/ - path to reference fasta file.
+                                default: refs/REF_NC_045512.2.fasta
+#### Trimmed data:
+##### -t|--trimmed_fq 
+Run the pipeline with trimmed data (by trimmomatic). \
+`bash pipeline.sh -t` OR `bash pipeline.sh --trimmed_fq`
+
+#### Create project's directories:
+##### -d|--create_dirs 
+Create all the project directories in the current directory and exit. \
+The directories: fastq/raw, fastq/trimmed, QC/fastqc, BAM, CNS, alignment, Trees, results
+
+####  Define your own reference sequence:
+##### -r|--refseq <refseq/path/>
+The current default reference sequence is refs/REF_NC_045512.2.fasta. If you are interested in providing your own
+reference fasta instead, add this option when running the program. \
+`bash pipeline.sh -r path/to/some-refseq.fasta` OR `bash pipeline.sh --refseq_dirs path/to/some-refseq.fasta`\
+Don't worry about indexing the fasta file, it happens automatically.
+
+#### If you are still confused, here are some examples
+`bash pipeline.sh -r /data/references/covid.fasta -t`\
+The command above runs the pipeline with trimmed fastq files (-t), and uses the non-default reference sequence (-r) in 
+_/data/references/covid.fasta_ \
+ ~ more examples in the future ~ 
 
 ---------------
 Dana Bar-Ilan.
