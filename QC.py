@@ -126,25 +126,19 @@ def template_csv(fq_path):
 
 
 def fastqc_reports(out_dir, working_dir='fastq/raw/'):
-    # TODO: add first/second qc options, to produce reports after trimming as well
-    # fastqc_script_path = '/home/dana/covid19/fastqc_all.sh'
-    # os.chmod(fastqc_script_path, 755)
-    # with open('fastqc.log', 'w') as log:
-    #     subprocess.call(['bash', fastqc_script_path, out_dir], stderr=log)
-
+    out_dest = out_dir + "fastqc/"
     for fqfile in os.listdir(working_dir):
         if not fqfile.endswith(".fastq.gz"):
             continue  # step over files that are not fastq.gz format
         print(working_dir+fqfile)
         with open("error.log", 'w') as log:
-            subprocess.call(['fastqc', working_dir+fqfile, "--outdir=%s" % out_dir], stderr=log, stdout=log)
-
+            subprocess.call(['fastqc', working_dir+fqfile, "--outdir=%s" % out_dest], stderr=log, stdout=log)
     print('finished producing reports')
-    return out_dir
 
 
-def multiqc_report(fq_out_dir, working_dir):
-    subprocess.call(['multiqc', fq_out_dir, '-o', working_dir])
+def multiqc_report(out_dir):
+    in_dir = out_dir + '/fastqc/'
+    subprocess.call(['multiqc', in_dir, '-o', out_dir])
     print('finished multiqc')
 
 
@@ -181,8 +175,11 @@ if __name__ == '__main__':
 
     elif args.reports_outdir:  # reports
         print('reports')
-        fastqc_reports(args.reports_outdir)
-        multiqc_report(args.reports_outdir, wd)  # at the moment: multiqc produces report in pwd
+        outdir=args.reports_outdir
+        if not outdir.endswith('/'):
+            outdir += '/'
+        fastqc_reports(outdir)
+        multiqc_report(outdir)  # at the moment: multiqc produces report in outdir
 
     elif args.template_fqpath:
         if args.wd:
