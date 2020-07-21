@@ -168,6 +168,8 @@ if __name__ == '__main__':
     out_path = ""
     if args.output_path:
         out_path = args.output_path[0]
+        if not os.path.exists(out_path):
+            os.mkdir(out_path)
         if not out_path.endswith('/'):
             out_path += '/'
 
