@@ -137,7 +137,7 @@ def fastqc_reports(out_dir, working_dir='fastq/raw/'):
 
 
 def multiqc_report(out_dir):
-    in_dir = out_dir + '/fastqc/'
+    in_dir = out_dir + 'fastqc/'
     subprocess.call(['multiqc', in_dir, '-o', out_dir])
     print('finished multiqc')
 
