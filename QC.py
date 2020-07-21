@@ -97,15 +97,15 @@ def trim(flags_file, path='fastq/raw/', prefix_out="fastq/trimmed/"):
 
 
 # produce a template csv file used in trimming
-def template_csv(fq_path='fastq/raw/', out_loc='template.csv'):
+def template_csv(fq_path='fastq/raw/', out_loc=''):
     """
     create template file with default arguments for trimmomatic
     :param path: path for all fastq.gz files.
     """
 
     fq_R1 = fnmatch.filter(os.listdir(fq_path), "*R1*.fastq.gz")  # Assuming reads are marked as "R1" and "R2"!!
-
-    with open(out_loc, 'w') as output:
+    out_file = out_loc + "template.csv"
+    with open(out_file, 'w') as output:
         headers = ['ends', 'input_forward', 'input_reverse', 'phred', 'threads', 'ILLUMINACLIP:', 'SLIDINGWINDOW:',
                    'LEADING:', 'TRAILING:', 'CROP:', 'HEADCROP:', 'MINLEN:']
         writer = csv.DictWriter(output, fieldnames=headers)
@@ -120,7 +120,7 @@ def template_csv(fq_path='fastq/raw/', out_loc='template.csv'):
                 'TRAILING:': '28',
             })
 
-    print('finished template file. find it here: %s' %out_loc)
+    print('finished template file. find it here: %s' % out_file)
 
 
 def fastqc_reports(out_dir="QC/", in_dir='fastq/raw/'):
