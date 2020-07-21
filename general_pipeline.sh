@@ -1,4 +1,12 @@
 #!/bin/bash
+###############################
+# Dana Bar-Ilan
+# 21.07.20
+# The pipeline:
+# mapping fq files to ref-seq <bwa> -> keep mapped reads, sort, index <samtools> -> create consensus sequence <samtools & bcftools>
+# -> align consensuses to ref-seq <mafft>
+# + produce report
+
 
 trim_flag=false
 dirs_flag=false
@@ -94,7 +102,6 @@ done
 for file in BAM/*.mapped.sorted.bam; do
   $new_samtools mpileup -uf refs/REF_NC_045512.2.fasta $file | $new_bcftools call -mv -Oz --threads 8 -o CNS/calls.vcf.gz # change to bcftools mpileup??
   $new_bcftools index --threads 8 CNS/calls.vcf.gz
-  # cat refs/REF_NC_045512.2.fasta | $new_bcftools consensus CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
   $new_bcftools consensus -f refs/REF_NC_045512.2.fasta CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
 done
 
