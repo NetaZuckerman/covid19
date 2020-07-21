@@ -92,7 +92,7 @@ reference fasta instead, add this option when running the program. \
 `bash pipeline.sh -r path/to/some-refseq.fasta` OR `bash pipeline.sh --refseq_dirs path/to/some-refseq.fasta`\
 Don't worry about indexing the fasta file, it happens automatically.
 
-#### If you are still confused, here are some examples
+### If you are still confused, here are some examples
 `bash pipeline.sh -r /data/references/covid.fasta -t`\
 The command above runs the pipeline with trimmed fastq files (-t), and uses the non-default reference sequence (-r) in _/data/references/covid.fasta_ \
  ~ more examples in the future ~ 
