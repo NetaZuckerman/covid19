@@ -7,6 +7,14 @@
 # -> align consensuses to ref-seq <mafft>
 # + produce report
 
+# trap ctrl-c and call ctrl_c() function
+trap ctrl_c INT
+
+function ctrl_c() {
+    echo
+    echo "Ctrl-C by user"
+    exit
+}
 
 trim_flag=false
 dirs_flag=false
@@ -18,11 +26,12 @@ function usage() {
     cat <<EOF
 Usage: $0 [options]
 
--h| --help                      Print this usage message and exit. Ignore the rest
--t|--trimmed_fq                 Run the pipeline with trimmed fsatq data (instead of raw).
--d|--create_dirs                Create all project's directories in current working directory.
--r|--refseq     [refseq/path/]  User defined reference. Required: refseq/path/ - path to reference fasta file.
+-h| --help                      print this usage message and exit. Ignore the rest
+-t|--trimmed_fq                 run the pipeline with trimmed fsatq data (instead of raw).
+-d|--create_dirs                create all project's directories in current working directory.
+-r|--refseq     [refseq/path/]  user defined reference. required: refseq/path/ - path to reference fasta file.
                                 default: refs/REF_NC_045512.2.fasta
+--working_dir   [path/]         change working directory to <path/>
 EOF
 exit 0
 }
