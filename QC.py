@@ -134,13 +134,14 @@ def fastqc_reports(out_dir, working_dir='fastq/raw/'):
         print(working_dir+fqfile)
         with open("error.log", 'w') as log:
             subprocess.call(['fastqc', working_dir+fqfile, "--outdir=%s" % out_dest], stderr=log, stdout=log)
-    print('finished producing reports')
+    print('Finished fastqc reports. Find them here: %s' % out_dest)
 
 
 def multiqc_report(out_dir):
     in_dir = out_dir + 'fastqc/'
+    print('Start multiqc report')
     subprocess.call(['multiqc', in_dir, '-o', out_dir])
-    print('finished multiqc')
+    print('Finished multiqc. Find it here: %s' % out_dir)
 
 
 if __name__ == '__main__':
