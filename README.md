@@ -98,6 +98,5 @@ The command above runs the pipeline with trimmed fastq files (-t), and uses the 
  ~ more examples in the future ~ 
 
 ---------------
-Dana Bar-Ilan.
-
-last modified: 15.07.2020
+Dana Bar-Ilan. 
+21/07/2020
