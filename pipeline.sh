@@ -107,13 +107,13 @@ function map_to_ref() {
     for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
       r2=${r1/R1/R2} # ${var/find/replace}
       output=${r1/_R1/}
-      bwa mem -v1 -t16 "$refseq" "$r1" "$r2" | samtools view -@ 16 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
+      bwa mem -v1 -t32 "$refseq" "$r1" "$r2" | samtools view -@ 32 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
     done
   else # data is raw
     for r1 in fastq/raw/*R1*.fastq.gz; do
       r2=${r1/R1/R2}
       output=${r1/_R1/}
-      bwa mem -v1 -t16 "$refseq" "$r1" "$r2" | samtools view -@ 16 -Sb - > BAM/`basename $output .fastq.gz`.bam
+      bwa mem -v1 -t32 "$refseq" "$r1" "$r2" | samtools view -@ 32 -Sb - > BAM/`basename $output .fastq.gz`.bam
     done
   fi
 }
