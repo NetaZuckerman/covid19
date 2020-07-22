@@ -11,7 +11,9 @@
 function ctrl_c() {
     echo
     echo Exiting...
-    cd last_loc || exit
+    if $cd_flag; then
+      cd last_loc || exit
+    fi
     exit
 }
 function initialize_globals() {
