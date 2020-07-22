@@ -134,7 +134,7 @@ function sort_index_bam() {
 
 function consensus() {
   for file in BAM/*.mapped.sorted.bam; do
-    $new_samtools mpileup -uf refs/REF_NC_045512.2.fasta $file | $new_bcftools call -mv -Oz --threads 8 -o CNS/calls.vcf.gz # change to bcftools mpileup??
+    $new_samtools mpileup -uf refs/REF_NC_045512.2.fasta "$file" | $new_bcftools call -mv -Oz --threads 8 -o CNS/calls.vcf.gz # change to bcftools mpileup??
     $new_bcftools index --threads 4 CNS/calls.vcf.gz
     $new_bcftools consensus -f refs/REF_NC_045512.2.fasta CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
   done
