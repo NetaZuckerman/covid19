@@ -99,7 +99,9 @@ function check_flags() {
 function map_to_ref() {
   # index reference
   bwa index "$refseq"
-
+  if [ -d BAM/ ]; then # not first run, rm BAM files to avoid mixups
+    rm BAM/*
+  fi
   mkdir -p BAM CNS alignment results Trees
   if $trim_flag; then
     for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
