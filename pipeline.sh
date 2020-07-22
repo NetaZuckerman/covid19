@@ -150,7 +150,7 @@ function mpilup_call() {
   $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz -o "$out" # change to bcftools mpileup??
 }
 function consensus() {
-  N=$threads
+  N="$threads"
   count=0
   for file in BAM/*.mapped.sorted.bam; do
     samp_name=${file/BAM\//}
