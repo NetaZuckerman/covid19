@@ -78,7 +78,7 @@ function get_user_input() {
 function check_flags() {
   # change location
   if $cd_flag; then
-    cd "$wd"
+    cd "$wd" || true
   fi
 
   if $dirs_flag; then
@@ -107,27 +107,27 @@ function map_to_ref() {
     for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
       r2=${r1/R1/R2} # ${var/find/replace}
       output=${r1/_R1/}
-      bwa mem -v1 -t4 "$refseq" "$r1" "$r2" | samtools view -@ 4 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
+      bwa mem -v1 -t4 "$refseq" "$r1" "$r2" | samtools view -@ 16 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
     done
   else # data is raw
     for r1 in fastq/raw/*R1*.fastq.gz; do
       r2=${r1/R1/R2}
       output=${r1/_R1/}
-      bwa mem -v1 -t4 "$refseq" "$r1" "$r2" | samtools view -@ 4 -Sb - > BAM/`basename $output .fastq.gz`.bam
+      bwa mem -v1 -t4 "$refseq" "$r1" "$r2" | samtools view -@ 16 -Sb - > BAM/`basename $output .fastq.gz`.bam
     done
   fi
 }
 
 function keep_mapped_reads() {
   for file in BAM/*.bam; do
-     $new_samtools view -@ 4 -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam
+     $new_samtools view -@ 16 -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam
   done
 }
 
 function sort_index_bam() {
   for file in BAM/*.mapped.bam; do
     sorted=${file/.mapped.bam/.mapped.sorted.bam}
-    samtools sort -@ 4 $file BAM/`basename $file .mapped.bam`.mapped.sorted
+    samtools sort -@ 16 $file BAM/`basename $file .mapped.bam`.mapped.sorted
     samtools index "$sorted"
   done
 }
@@ -135,7 +135,7 @@ function sort_index_bam() {
 function mpilup_call() {
   local file="$1"
   local out="$2"
-  $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz --threads 8 -o "$out" # change to bcftools mpileup??
+  $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz --threads 4 -o "$out" # change to bcftools mpileup??
 }
 function consensus() {
   N=10
