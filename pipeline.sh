@@ -109,7 +109,7 @@ function map_to_ref() {
       output=${r1/_R1/}
       (bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam &)
       count=$((count+1))
-      if (( count % N == 0 )); then
+      if (( count % threads == 0 )); then
         wait
         count=0
       fi
@@ -121,6 +121,7 @@ function map_to_ref() {
       (bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output .fastq.gz`.bam &)
     done
   fi
+  wait
 }
 
 function keep_mapped_reads() {
@@ -143,14 +144,13 @@ function mpilup_call() {
   $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz -o "$out" # change to bcftools mpileup??
 }
 function consensus() {
-  N="$threads"
   count=0
   for file in BAM/*.mapped.sorted.bam; do
     samp_name=${file/BAM\//}
     samp_name=`basename $samp_name .mapped.sorted.bam`
     mpilup_call "$file" CNS/"$samp_name"_calls.vcf.gz &
     count=$((count+1))
-    if (( count % N == 0 )); then
+    if (( count % threads == 0 )); then
       wait
       count=0
     fi
