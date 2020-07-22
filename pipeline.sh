@@ -107,13 +107,13 @@ function map_to_ref() {
     for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
       r2=${r1/R1/R2} # ${var/find/replace}
       output=${r1/_R1/}
-      bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 4 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
+      bwa mem -v1 -t4 "$refseq" "$r1" "$r2" | samtools view -@ 4 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
     done
   else # data is raw
     for r1 in fastq/raw/*R1*.fastq.gz; do
       r2=${r1/R1/R2}
       output=${r1/_R1/}
-      bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 4 -Sb - > BAM/`basename $output .fastq.gz`.bam
+      bwa mem -v1 -t4 "$refseq" "$r1" "$r2" | samtools view -@ 4 -Sb - > BAM/`basename $output .fastq.gz`.bam
     done
   fi
 }
@@ -132,14 +132,34 @@ function sort_index_bam() {
   done
 }
 
+function mpilup_call() {
+  local file="$1"
+  local out="$2"
+  $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz --threads 8 -o "$out" # change to bcftools mpileup??
+}
 function consensus() {
+  N=10
+  count=0
   for file in BAM/*.mapped.sorted.bam; do
-    $new_samtools mpileup -uf refs/REF_NC_045512.2.fasta "$file" | $new_bcftools call -mv -Oz --threads 8 -o CNS/calls.vcf.gz # change to bcftools mpileup??
-    $new_bcftools index --threads 4 CNS/calls.vcf.gz
-    $new_bcftools consensus -f refs/REF_NC_045512.2.fasta CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
+    samp_name=${file/BAM\//}
+    samp_name=`basename $samp_name .mapped.sorted.bam`
+    mpilup_call "$file" CNS/"$samp_name"_calls.vcf.gz &
+    count++
+    if (( $count % $N == 0 )); then
+      wait
+    fi
+    # $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz --threads 8 -o CNS/"$samp_name"_calls.vcf.gz # change to bcftools mpileup??
+   done
+  wait
+  for file in BAM/*.mapped.sorted.bam; do
+    samp_name=${file/BAM\//}
+    samp_name=`basename $samp_name .mapped.sorted.bam`
+    $new_bcftools index --threads 4 CNS/"$samp_name"_calls.vcf.gz
+    $new_bcftools consensus -f "$refseq" CNS/"$samp_name"_calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
+    rm CNS/"$samp_name"_calls.vcf.gz CNS/"$samp_name"_calls.vcf.gz.csi
   done
 
-  rm CNS/calls.vcf.gz CNS/calls.vcf.gz.csi
+  # rm CNS/calls.vcf.gz CNS/calls.vcf.gz.csi
 }
 
 # change fasta header from ref to sample name
