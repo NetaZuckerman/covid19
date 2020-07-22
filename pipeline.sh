@@ -7,10 +7,13 @@
 # -> align consensuses to ref-seq <mafft>
 # + produce report
 
+trap "kill 0" EXIT
+trap ctrl_c INT
 
 function ctrl_c() {
     echo
     echo Exiting...
+
     if $cd_flag; then
       cd last_loc || exit
     fi
@@ -212,8 +215,7 @@ function results_report() {
 
 ########################### MAIN ###############################
 # trap ctrl-c to end in the same directory as started even if user ended the program
-trap 'kill $(jobs -p)' EXIT
-trap ctrl_c INT
+
 last_loc=$(pwd)
 # call all functions
 # user input:
