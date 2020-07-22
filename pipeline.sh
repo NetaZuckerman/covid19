@@ -38,6 +38,7 @@ Usage: $0 [options]
 -r|--refseq     [refseq/path/]  user defined reference. required: refseq/path/ - path to reference fasta file.
                                 default: refs/REF_NC_045512.2.fasta
 --working_dir   [path/]         change working directory to <path/>
+--threads       [int]           number of threads
 EOF
 exit 0
 }
@@ -100,7 +101,6 @@ function check_flags() {
   fi
 }
 
-
 # map reads to reference. straight to bam format! assuming PE for now # TODO
 function map_to_ref() {
   # index reference
@@ -110,16 +110,22 @@ function map_to_ref() {
   fi
   mkdir -p BAM CNS alignment results Trees
   if $trim_flag; then
+    count=0
     for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
       r2=${r1/R1/R2} # ${var/find/replace}
       output=${r1/_R1/}
-      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
+      (bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam &)
+      count=$((count+1))
+      if (( count % N == 0 )); then
+        wait
+        count=0
+      fi
     done
   else # data is raw
     for r1 in fastq/raw/*R1*.fastq.gz; do
       r2=${r1/R1/R2}
       output=${r1/_R1/}
-      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output .fastq.gz`.bam
+      (bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output .fastq.gz`.bam &)
     done
   fi
 }
@@ -153,6 +159,7 @@ function consensus() {
     count=$((count+1))
     if (( count % N == 0 )); then
       wait
+      count=0
     fi
     # $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz --threads 8 -o CNS/"$samp_name"_calls.vcf.gz # change to bcftools mpileup??
    done
