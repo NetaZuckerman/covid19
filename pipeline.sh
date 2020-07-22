@@ -8,17 +8,7 @@
 # + produce report
 
 trap "kill 0" EXIT
-trap ctrl_c INT
 
-function ctrl_c() {
-    echo
-    echo Exiting...
-
-    if $cd_flag; then
-      cd last_loc || exit
-    fi
-    exit
-}
 function initialize_globals() {
   cd_flag=false
   trim_flag=false
