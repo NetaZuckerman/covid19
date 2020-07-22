@@ -100,7 +100,7 @@ function map_to_ref() {
   # index reference
   bwa index "$refseq"
   if [ -d BAM/ ]; then # not first run, rm BAM files to avoid mixups
-    rm BAM/*
+    rm BAM/* 2> /dev/null # if file not found it's ok. no need to see on screen
   fi
   mkdir -p BAM CNS alignment results Trees
   if $trim_flag; then
@@ -203,7 +203,7 @@ consensus
 change_header_to_sample_name
 mafft_alignment
 results_report
-
+echo "pipeline finished! (:"
 # if location changed -> return to original path.
 if $cd_flag; then
   cd last_loc || return
