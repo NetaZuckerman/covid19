@@ -220,6 +220,7 @@ consensus
 change_header_to_sample_name
 mafft_alignment
 results_report
+wait
 echo "pipeline finished! (:"
 # if location changed -> return to original path.
 if $cd_flag; then
