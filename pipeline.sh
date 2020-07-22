@@ -144,8 +144,8 @@ function consensus() {
     samp_name=${file/BAM\//}
     samp_name=`basename $samp_name .mapped.sorted.bam`
     mpilup_call "$file" CNS/"$samp_name"_calls.vcf.gz &
-    count++
-    if (( $count % $N == 0 )); then
+    count=$((count+1))
+    if (( count % N == 0 )); then
       wait
     fi
     # $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz --threads 8 -o CNS/"$samp_name"_calls.vcf.gz # change to bcftools mpileup??
@@ -199,6 +199,7 @@ function results_report() {
 
 ########################### MAIN ###############################
 # trap ctrl-c to end in the same directory as started even if user ended the program
+trap 'kill $(jobs -p)' EXIT
 trap ctrl_c INT
 last_loc=$(pwd)
 # call all functions
