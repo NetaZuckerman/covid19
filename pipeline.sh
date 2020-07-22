@@ -101,32 +101,31 @@ function map_to_ref() {
   bwa index "$refseq"
 
   mkdir -p BAM CNS alignment results Trees
-  if $trim_flag # data is trimmed
-  then
+  if $trim_flag; then
     for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
       r2=${r1/R1/R2} # ${var/find/replace}
       output=${r1/_R1/}
-      bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 8 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
+      bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 4 -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
     done
   else # data is raw
     for r1 in fastq/raw/*R1*.fastq.gz; do
       r2=${r1/R1/R2}
       output=${r1/_R1/}
-      bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 8 -Sb - > BAM/`basename $output .fastq.gz`.bam
+      bwa mem -v1 -t4 refs/REF_NC_045512.2.fasta "$r1" "$r2" | samtools view -@ 4 -Sb - > BAM/`basename $output .fastq.gz`.bam
     done
   fi
 }
 
 function keep_mapped_reads() {
   for file in BAM/*.bam; do
-     $new_samtools view -@ 8 -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam
+     $new_samtools view -@ 4 -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam
   done
 }
 
 function sort_index_bam() {
   for file in BAM/*.mapped.bam; do
-    sorted=${file/.mapped.bam/mapped.sorted.bam}
-    samtools sort -@ 8 $file BAM/`basename $file .mapped.bam`.mapped.sorted
+    sorted=${file/.mapped.bam/.mapped.sorted.bam}
+    samtools sort -@ 4 $file BAM/`basename $file .mapped.bam`.mapped.sorted
     samtools index "$sorted"
   done
 }
@@ -134,7 +133,7 @@ function sort_index_bam() {
 function consensus() {
   for file in BAM/*.mapped.sorted.bam; do
     $new_samtools mpileup -uf refs/REF_NC_045512.2.fasta $file | $new_bcftools call -mv -Oz --threads 8 -o CNS/calls.vcf.gz # change to bcftools mpileup??
-    $new_bcftools index --threads 8 CNS/calls.vcf.gz
+    $new_bcftools index --threads 4 CNS/calls.vcf.gz
     $new_bcftools consensus -f refs/REF_NC_045512.2.fasta CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
   done
 
@@ -176,7 +175,7 @@ function results_report() {
   rm depth.txt
 }
 
-######################### MAIN ###############################
+########################### MAIN ###############################
 # trap ctrl-c to end in the same directory as started even if user ended the program
 trap ctrl_c INT
 last_loc=$(pwd)
