@@ -1,4 +1,33 @@
 # covid19
+
+## Suggested Workflow Using QC.py and pipeline.sh
+
+1. Create project's directories - Optional. \
+`bash pipeline.sh -d` \
+The directories will be created in the current working directory, and it is recommended to run all following commands 
+from that working directory.
+* Fill fastq/raw/ directory with all raw fastq.gz files. 
+* Fill refs/ with your desired reference sequence.
+
+2. Produce reports for each fastq.gz file in fastq/raw (or any other location of your choice) \
+`python3 QC.py --reports -i fastq/raw/`
+
+3. Create template csv file for convenient trimming. See details at Template. \
+`python3 QC.py --template -i fastq/raw/ ` \
+Take a look at _template.csv_ produced as output and fix some trimming parameters according to fastqc/multiqc reports.
+Scroll down to read more about the csv file.  
+
+4. Trim fastq files according to the csv file created in (2). \
+`python3 QC.py --trim template.csv -i /input/path/to/fastq.gz.files -o /trimmed/path` \
+
+5. Produce second reports to make sure you're happy with the trimming results. \
+`python3 QC.py --reports -i /trimmed/path -o /output/fastqc/2/path` \
+Be sure to provide the path to the trimmed fastq.gz this time. Repeat steps 2-3 if more trimming is needed.
+
+6. Run pipeline to produce consensus sequences for your samples, and get additional info in results/report.txt \
+`bash pipeline.sh --trimmed_fq ` 
+
+
 # QC.py
 ### Usage:
 `python QC.py [-h] [-t [CSV] | --template | -r] [-i WD] [-o OUTPUT_PATH]`
