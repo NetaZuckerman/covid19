@@ -22,11 +22,12 @@ Scroll down to read more about the csv file.
 
 5. Produce second reports to make sure you're happy with the trimming results. \
 `python3 QC.py --reports -i /trimmed/path -o /output/fastqc/2/path` \
-Be sure to provide the path to the trimmed fastq.gz this time. Repeat steps 2-3 if more trimming is needed.
+Be sure to provide the path to the trimmed fastq.gz this time. Repeat steps 2-5 if more trimming is needed.
 
-6. Run pipeline to produce consensus sequences for your samples, and get additional info in results/report.txt \
-`bash pipeline.sh --trimmed_fq ` 
-
+6. Run pipeline to produce consensus sequences for your samples, and get additional info such as number of reads, depth, 
+coverage, etc. in results/report.txt. --trimmed_fq: to run the pipeline on the trimmed fastq.gz files. the pipeline uses 
+the paired files, ignoring singletons. To run the pipeline with raw fastq files omit the _--trimmed_fq_ flag. 
+`bash pipeline.sh --trimmed_fq -r /refs/refseq.fa` \ 
 
 # QC.py
 ### Usage:
