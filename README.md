@@ -28,7 +28,7 @@ Be sure to provide the path to the trimmed fastq.gz this time. Repeat steps 2-5 
 coverage, etc. in results/report.txt. Run the pipeline on the trimmed fastq.gz files (the pipeline uses 
 the paired files, ignoring singletons). 
 To run the pipeline with raw fastq files omit the _--trimmed_fq_ flag. \
-`bash pipeline.sh --trimmed_fq -r /refs/refseq.fa` \ 
+`bash pipeline.sh --trimmed_fq -r /refs/refseq.fa` 
 
 # QC.py
 ### Usage:
