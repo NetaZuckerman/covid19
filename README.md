@@ -7,6 +7,7 @@ The directories will be created in the current working directory, and it is reco
 from that working directory.
 * Fill fastq/raw/ with all raw fastq.gz files. 
 * Fill refs/ with your desired reference sequence.
+To see the full directories hierarchy scroll to the bottom of the page.
 
 2. Produce reports for each fastq.gz file in fastq/raw (or any other location of your choice) \
 `python3 QC.py --reports -i fastq/raw/`
