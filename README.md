@@ -1,7 +1,6 @@
 # covid19
 
 ## Suggested Workflow Using QC.py and pipeline.sh
-
 1. Create project's directories - Optional. \
 `bash pipeline.sh -d` \
 The directories will be created in the current working directory, and it is recommended to run all following commands 
@@ -11,6 +10,8 @@ from that working directory.
 
 2. Produce reports for each fastq.gz file in fastq/raw (or any other location of your choice) \
 `python3 QC.py --reports -i fastq/raw/`
+
+![alt text](https://github.com/ShebaVirals/covid19/blob/master/dirs_hierarchy.png?raw=true)
 
 3. Create template csv file for convenient trimming. See details at Template. \
 `python3 QC.py --template -i fastq/raw/ ` \
@@ -138,7 +139,8 @@ To run the whole pipeline on _trimmed_ fastq files found in _/input/path_ and re
 OR with abbreviated flags: \
 `bash pipeline.sh -i /input/path/ -r references/refseq.fasta -t`
 
-
+### Results:
+The consensus sequences are found in CNS/, and further info in results/report.txt
 ---------------
 Dana Bar-Ilan. 
 21/07/2020

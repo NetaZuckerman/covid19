@@ -88,7 +88,7 @@ function check_flags() {
 #    cd "$wd" || true
 #  fi
   if $dirs_flag; then
-    mkdir -p fastq/{raw,trimmed} QC/{fastqc} refs BAM CNS alignment Trees results
+    mkdir -p fastq/{raw,trimmed} QC/fastqc refs BAM CNS alignment results
     echo "Created project directories. Please download your data to fastq/raw and/or fastq/trimmed, and your reference sequence to refs/. "
     exit 0
   fi
