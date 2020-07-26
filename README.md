@@ -18,7 +18,7 @@ Take a look at _template.csv_ produced as output and fix some trimming parameter
 Scroll down to read more about the csv file.  
 
 4. Trim fastq files according to the csv file created in (2). \
-`python3 QC.py --trim template.csv -i /input/path/to/fastq.gz.files -o /trimmed/path` \
+`python3 QC.py --trim template.csv -i /input/path/to/fastq.gz.files -o /trimmed/path` 
 
 5. Produce second reports to make sure you're happy with the trimming results. \
 `python3 QC.py --reports -i /trimmed/path -o /output/fastqc/2/path` \
@@ -126,7 +126,8 @@ Don't worry about indexing the fasta file, it happens automatically.
 
 ### If you are still confused, here are some examples
 `bash pipeline.sh -r /data/references/covid.fasta -t`\
-The command above runs the pipeline with trimmed fastq files (-t), and uses the non-default reference sequence (-r) in _/data/references/covid.fasta_ \
+The command above runs the pipeline with trimmed fastq files (-t), and uses the non-default reference sequence (-r) in 
+_/data/references/covid.fasta_ \
  ~ more examples in the future ~ 
 
 ---------------
