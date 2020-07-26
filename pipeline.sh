@@ -151,7 +151,8 @@ function sort_index_bam() {
 function mpilup_call() {
   local file="$1"
   local out="$2"
-  $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz -o "$out" # change to bcftools mpileup??
+#  $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz -o "$out" # change to bcftools mpileup??
+  $new_bcftools mpileup -f "$refseq" "$file" | $new_bcftools call -mv -Oz -o "$out"
 }
 function consensus() {
   count=0
