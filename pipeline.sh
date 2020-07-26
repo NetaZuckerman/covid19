@@ -10,10 +10,10 @@
 trap "kill 0" EXIT
 
 function initialize_globals() {
-  # cd_flag=false
+# cd_flag=false
   trim_flag=false
   dirs_flag=false
-  refseq=refs/REF_NC_045512.2.fasta # default refseq
+# refseq=refs/REF_NC_045512.2.fasta # default refseq
   new_samtools=/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools
   new_bcftools=/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools
   # wd=""
@@ -25,14 +25,14 @@ function initialize_globals() {
 function usage() {
     cat <<EOF
 Usage: $0 [options]
-required:
--i              [fastq.gz/path] input path to fastq.gz files location.
 
-optional:
+required: [-h | -d | -i AND -r]
 -h| --help                      print this usage message and exit. Ignore the rest
 -d|--create_dirs                create all project's directories in current working directory.
+-i              [fastq.gz/path] input path to fastq.gz files location.
 -r|--refseq     [refseq/path/]  user defined reference. required: refseq/path/ - path to reference fasta file.
                                 default: refs/REF_NC_045512.2.fasta
+optional:
 --threads       [int]           number of threads. default: 32
 EOF
 exit 0
@@ -87,20 +87,21 @@ function check_flags() {
 #  if $cd_flag; then
 #    cd "$wd" || true
 #  fi
-  if [ -z "$input_path" ]; then
-    echo "Please provide -i <input_path> to your fastq.gz files location."
-    usage
-    exit 1
-  fi
   if $dirs_flag; then
     mkdir -p fastq/{raw,trimmed} QC/{fastqc} refs BAM CNS alignment Trees results
     echo "Created project directories. Please download your data to fastq/raw and/or fastq/trimmed, and your reference sequence to refs/. "
     exit 0
   fi
 
-  if [ ! -f "$refseq" ]; then
+  if [ -z "$input_path" ]; then
+    echo "Please provide -i <input_path> to your fastq.gz files location."
+    usage
+    exit 1
+  fi
+
+  if [ -z "$refseq" ]; then
     mkdir -p refs
-    echo "$refseq" does not exist. Please provide the reference sequence and try again.
+    echo please provide reference sequence --refseq!
     exit 1
   fi
 }
