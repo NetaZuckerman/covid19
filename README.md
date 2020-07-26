@@ -98,9 +98,8 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 ---------------
 # pipeline.sh
 ### Usage:
-### options:
  bash pipeline.sh [options]
-
+### options:
 #### -h | --help
 Prints the usage message and exits.
 
