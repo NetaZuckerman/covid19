@@ -10,28 +10,30 @@
 trap "kill 0" EXIT
 
 function initialize_globals() {
-  cd_flag=false
-  trim_flag=false
+  # cd_flag=false
+  # trim_flag=false
   dirs_flag=false
   refseq=refs/REF_NC_045512.2.fasta # default refseq
   new_samtools=/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools
   new_bcftools=/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools
-  wd=""
+  # wd=""
   threads=32
+  input_path=""
 }
 
 # parse input wiht flags
 function usage() {
     cat <<EOF
 Usage: $0 [options]
+required:
+-i              [fastq.gz/path] input path to fastq.gz files location.
 
+optional:
 -h| --help                      print this usage message and exit. Ignore the rest
--t|--trimmed_fq                 run the pipeline with trimmed fsatq data (instead of raw).
 -d|--create_dirs                create all project's directories in current working directory.
 -r|--refseq     [refseq/path/]  user defined reference. required: refseq/path/ - path to reference fasta file.
                                 default: refs/REF_NC_045512.2.fasta
---working_dir   [path/]         change working directory to <path/>
---threads       [int]           number of threads
+--threads       [int]           number of threads. default: 32
 EOF
 exit 0
 }
@@ -39,10 +41,10 @@ exit 0
 function get_user_input() {
   while (( "$#" )); do
     case "$1" in
-      -t|--trimmed_fq)
-        trim_flag=true
-        shift
-        ;;
+#      -t|--trimmed_fq)
+#        trim_flag=true
+#        shift
+#        ;;
       -d|--create_dirs) # just create all directories
       dirs_flag=true
       shift
@@ -52,16 +54,20 @@ function get_user_input() {
       refseq="$1"
       shift
       ;;
-    --working_dir)
-      shift
-      cd_flag=true
-      wd=$1
-      shift
-      ;;
+#    --working_dir)
+#      shift
+#      cd_flag=true
+#      wd=$1
+#      shift
+#      ;;
     --threads)
       shift
       threads="$1"
       shift
+      ;;
+    -i) # path to fastq.gz files location
+      shift
+      input_path="$1"
       ;;
     -h|--help)
       usage
@@ -77,10 +83,14 @@ function get_user_input() {
 
 function check_flags() {
   # change location
-  if $cd_flag; then
-    cd "$wd" || true
+#  if $cd_flag; then
+#    cd "$wd" || true
+#  fi
+  if [ -z "$input_path" ]; then
+    echo "Please provide -i <input_path> to your fastq.gz files location."
+    usage
+    exit 1
   fi
-
   if $dirs_flag; then
     mkdir -p fastq/{raw,trimmed} QC/{fastqc} refs BAM CNS alignment Trees results
     echo "Created project directories. Please download your data to fastq/raw and/or fastq/trimmed, and your reference sequence to refs/. "
@@ -102,19 +112,19 @@ function map_to_ref() {
     rm BAM/* 2> /dev/null # if file not found it's ok. no need to see on screen
   fi
   mkdir -p BAM CNS alignment results Trees
-  if $trim_flag; then
-    for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
-      r2=${r1/R1/R2} # ${var/find/replace}
-      output=${r1/_R1/}
-      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
-    done
-  else # data is raw
-    for r1 in fastq/raw/*R1*.fastq.gz; do
-      r2=${r1/R1/R2}
-      output=${r1/_R1/}
-      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output .fastq.gz`.bam
-    done
-  fi
+#  if $trim_flag; then
+#    for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
+#      r2=${r1/R1/R2} # ${var/find/replace}
+#      output=${r1/_R1/}
+#      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
+#    done
+#  else # data is raw
+  for r1 in "$input_path"*R1*.fastq.gz; do
+    r2=${r1/R1/R2}
+    output=${r1/_R1/}
+    bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output .fastq.gz`.bam
+  done
+#  fi
 }
 
 function keep_mapped_reads() {
@@ -216,7 +226,7 @@ results_report
 wait
 echo "pipeline finished! (:"
 # if location changed -> return to original path.
-if $cd_flag; then
-  cd last_loc || return
-fi
+#if $cd_flag; then
+#  cd last_loc || return
+#fi
 
