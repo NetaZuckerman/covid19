@@ -131,10 +131,11 @@ Run the pipeline with trimmed data (by trimmomatic). \
 
 ### If you are still confused, here are some examples
 To get the usage menu: \
-`bash pipeline.sh -h` OR `bash pipeline.sh --help`\
+`bash pipeline.sh -h` OR `bash pipeline.sh --help`
 
-To run the whole pipeline on _trimmed_ fastq files found in _/input/path_ and refseq found in _references/refseq.fasta_: /
-`bash pipeline.sh -i /input/path/ --refseq references/refseq.fasta --trimmed_fq`\ OR with abbreviated flags: \
+To run the whole pipeline on _trimmed_ fastq files found in _/input/path_ and refseq found in _references/refseq.fasta_:\
+`bash pipeline.sh -i /input/path/ --refseq references/refseq.fasta --trimmed_fq` \
+OR with abbreviated flags: \
 `bash pipeline.sh -i /input/path/ -r references/refseq.fasta -t`
 
 
