@@ -33,35 +33,29 @@ To run the pipeline with raw fastq files omit the _--trimmed_fq_ flag. \
 # QC.py
 ### Usage:
 `python QC.py [-h] [-t [CSV] | --template | -r] [-i WD] [-o OUTPUT_PATH]`
-#### QC Reports:
-##### -r | --reports
+#### -r | --reports : QC Reports
 Produces fastqc and multiqc reports for all fastq.gz files. \
-`python3 QC.py -r` \
-You may also provide input (-i) and/or output (-o) paths: \
-`python3 QC.py -r -i path/to/fastq/files -o path/for/output/reports`
-default -i location: fastq/raw/ \
-default -o location: QC/ 
+_-i_ : path to fastq.gz files locations. default: fastq/raw/ \
+_-o_ : path to drop the template.csv. default: QC/ \
+`python3 QC.py -r -i path/to/fastq/files -o path/for/output/reports` \
+To create QC reports with default input and output arguments:
+`python3 QC.py -r` 
 
-#### Template:
-##### --template 
-Produces template of csv file with some default trimmomatic arguments.\
-`python3 QC.py --template`\
-You may also provide input (-i) and/or output (-o) paths: \
+#### --template : Template of trimmomatic command for each sample
+ _-i_ : path to fastq.gz files location. default: fastq/raw/ \
+ _-o_ : path to drop the template.csv. default: working directory \ 
 `python3 QC.py --template -i some/path/to/fastq/location/ -o some/path/for/output` \
-default -i location: fastq/raw/ \
-default -o location: current working directory
-The output file is called template.csv, it will be located in current directory, or output path (-o) if provided.
+To create template with default input and output arguments: \
+`python3 QC.py --template` 
 
-#### Trimming:
-##### -t|--trim <path/to/csv> <optional-path/to/base/dir>
-To trim run the following command:\
+#### -t|--trim <path/to/csv> <optional-path/to/base/dir> : Trim fastq.gz files with trimmomatic, according to csv file.
+_-i_ : path to fastq.gz files location. default: fastq/raw/ \
+_-o_ : path to drop the trimmed samples. default: fastq/trimmed \ 
+`python3 QC.py -t path/to/file.csv -i path/to/raw/fastq/files -o path/to/trimmed/fatsq/output` \
+To trim fastq.gz files with default input and output arguments: \
 `python3 QC.py -t path/to/file.csv ` or
 `python3 QC.py --trim path/to/file.csv`\
-You may also provide input (-i) and/or output (-o) paths: \
-`python3 QC.py -t path/to/file.csv -i path/to/raw/fastq/files -o path/to/trimmed/fatsq/output`
 To trim with the template csv as input, simply run `python3 QC.py -t template.csv`.\
-default -i location: fastq/raw/ \
-default -o location: fastq/trimmed/
 
 ### The CSV file:
 Template csv header:
@@ -106,28 +100,26 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 ### Usage:
  bash pipeline.sh [options]
 
-#### Help:
-##### -h | --help
+#### -h | --help
+Prints the usage message and exits.
 
-#### Create project's directories:
-##### -d|--create_dirs 
+#### -d|--create_dirs  : Create project's directories
 Create all the project directories in the current directory and exit. \
 The directories: fastq/raw, fastq/trimmed, QC/fastqc, BAM, CNS, alignment, Trees, results
 `bash pipeline.sh -d` OR `bash pipeline.sh --crate_dirs`
+Scroll down to check out the directories hierarchy.
 
-#### Run pipeline on samples to get consensus sequences and additional data:
-#### Provide input path:
-##### -i /input/path (required)
+### Run pipeline on samples to get consensus sequences and additional data:
+#### -i /input/path : provide input path  (required)
 `/input/path` - the path to fastq.gz files. may be trimmed or not. If the files are trimmed by QC.py, add --trimmed_fq 
 flag. See example in the Trimmed data section below. 
 
-#### Provide path to reference sequence:
-##### -r|--refseq <refseq/path/> (required)
+#### -r|--refseq <refseq/path/> : provide refseq path (required)
 Don't worry about indexing the fasta file, it happens automatically.
 
-#### Trimmed data:
-##### -t|--trimmed_fq (optional)
-Run the pipeline with trimmed data (by trimmomatic).
+
+#### -t|--trimmed_fq (optional) : add this flag if fastq files are trimmed
+Run the pipeline with trimmed data (by QC.py).
 
 ### If you are still confused, here are some examples
 To get the usage menu: \
