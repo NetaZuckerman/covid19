@@ -1,5 +1,5 @@
 # covid19
-
+add name to 
 ## Suggested Workflow Using QC.py and pipeline.sh
 1. Create project's directories - Optional. \
 `bash pipeline.sh -d` \
@@ -145,6 +145,47 @@ The consensus sequences are found in CNS/, and further info in results/report.tx
 If you choose to use ` bash pipeline.sh -d` to create directories, the hierarchy is as follows:
 
 ![alt text](https://github.com/ShebaVirals/covid19/blob/master/dirs_hierarchy.png?raw=true)
+
+### Pipeline's Basic Commands
+1. Index the reference sequence. \
+`bwa index /refseq/path`
+
+2. For each fastq sample - map to reference and keep as bam file. \
+For each fastq.gz file run: \
+    `bwa mem /refseq/path sample_R1 sample_R2 | samtools view -Sb - > BAM/sample_name.bam` \
+R1 and R2: forward and reverse paired ends.
+  
+3. Keep only mapped reads of each sample. \
+For each bam file run: \
+    `samtools view -b -F 260 file_name.bam > BAM/file_name.mapped.bam` \
+
+4. Sort and index each sample in BAM. \
+For each mapped bam file run:
+    `samtools sort file_name.mapped.bam file_name.mapped.sorted`
+
+5. Create consensus files for each sample. \
+For each mapped and sorted bam file run:
+    `samtools mpileup -uf /refseq/path file_name.mapped.sorted.bam | bcftools call -mv -Oz -o CNS/sample_name.vcf.gz` \
+    `bcftools index CNS/sample` \
+    `bcftools consensus -f /refseq/pah CNS/samples_name.vcf.gz > CNS/sample_name.fasta` \
+    `rm CNS/sample_name.vcf.gz CNS/sample_name.vcf.gz.csi`
+
+6. Change consensus header name (instead of reference sequence name) \
+For eah fasta consensus in CNS run: \
+    `sed -i "s/>.*/>${new_name%%.*}/" "$CNS/sample_name.fasta"`
+
+7. Align all consensus sequences and references sequence: \
+Gather all fasta sequences (consensus + reference): \
+    `cat CNS/*.fasta /refseq/path > alignment/all_not_aligned.fasta` \
+Align with mafft and save output in alignment/ directory: \
+    `mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout` 
+    `mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta`
+
+8. Report.txt.
+    `samtools coverage -H BAM/sample_name.mapped.sorted.bam` for some coverage statistics and number of mapped reads. \
+    `samtools view -c BAM/sample_name.bam` for total number of reads in sample. \
+    `samtools depth BAM/sample_name.mapped.sorted.bam` for depth of each position in sample \
+Check out pipeline.sh code for specifics.
 ---------------
 Dana Bar-Ilan. 
 21/07/2020
