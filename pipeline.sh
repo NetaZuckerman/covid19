@@ -68,6 +68,7 @@ function get_user_input() {
     -i) # path to fastq.gz files location
       shift
       input_path="$1"
+      shift
       ;;
     -h|--help)
       usage
