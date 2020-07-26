@@ -11,8 +11,6 @@ from that working directory.
 2. Produce reports for each fastq.gz file in fastq/raw (or any other location of your choice) \
 `python3 QC.py --reports -i fastq/raw/`
 
-![alt text](https://github.com/ShebaVirals/covid19/blob/master/dirs_hierarchy.png?raw=true)
-
 3. Create template csv file for convenient trimming. See details at Template. \
 `python3 QC.py --template -i fastq/raw/ ` \
 Take a look at _template.csv_ produced as output and fix some trimming parameters according to fastqc/multiqc reports.
@@ -141,6 +139,11 @@ OR with abbreviated flags: \
 
 ### Results:
 The consensus sequences are found in CNS/, and further info in results/report.txt
+
+### Directories Hierarchy:
+If you choose to use ` bash pipeline.sh -d` to create directories, the hierarchy is as follows:
+
+![alt text](https://github.com/ShebaVirals/covid19/blob/master/dirs_hierarchy.png?raw=true)
 ---------------
 Dana Bar-Ilan. 
 21/07/2020
