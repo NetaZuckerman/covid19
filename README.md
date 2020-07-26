@@ -6,7 +6,7 @@
 `bash pipeline.sh -d` \
 The directories will be created in the current working directory, and it is recommended to run all following commands 
 from that working directory.
-* Fill fastq/raw/ directory with all raw fastq.gz files. 
+* Fill fastq/raw/ with all raw fastq.gz files. 
 * Fill refs/ with your desired reference sequence.
 
 2. Produce reports for each fastq.gz file in fastq/raw (or any other location of your choice) \
@@ -77,7 +77,7 @@ trimmomatic requires output files as well, but those are given automatically in 
 * input_reverse `<sample_R2.fastq.gz>`: sample name
 
 **Optional fields**: 
-Do not remove unwanted fields, just leave them empty and they will be ignored.
+Do not remove unwanted fields, just leave them empty and it will be ignored.
 * -phred`[33 | 64]` -  -phred33 or -phred64 specifies the base quality encoding. If no quality encoding is specified,
 it will be determined automatically 
 * threads<int>: indicates the number of threads to use, which improves performance on multi-core
@@ -106,8 +106,8 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 ### Usage:
  bash pipeline.sh [options]
 
-#### Required:
---create_dirs | -i AND -r | --help
+#### Help:
+##### -h | --help
 
 #### Create project's directories:
 ##### -d|--create_dirs 
@@ -115,19 +115,19 @@ Create all the project directories in the current directory and exit. \
 The directories: fastq/raw, fastq/trimmed, QC/fastqc, BAM, CNS, alignment, Trees, results
 `bash pipeline.sh -d` OR `bash pipeline.sh --crate_dirs`
 
-#### Provide input path and refseq:
+#### Run pipeline on samples to get consensus sequences and additional data:
 #### Provide input path:
-##### -i /input/path
-/input/path -> the path to fastq.gz files. may be trimmed or not. If the files are trimmed by QC.py, add --trimmed_fq 
-flag. See example in the Trimmed data section below. \
+##### -i /input/path (required)
+`/input/path` - the path to fastq.gz files. may be trimmed or not. If the files are trimmed by QC.py, add --trimmed_fq 
+flag. See example in the Trimmed data section below. 
 
 #### Provide path to reference sequence:
-##### -r|--refseq <refseq/path/>
+##### -r|--refseq <refseq/path/> (required)
 Don't worry about indexing the fasta file, it happens automatically.
 
 #### Trimmed data:
-##### -t|--trimmed_fq 
-Run the pipeline with trimmed data (by trimmomatic). \
+##### -t|--trimmed_fq (optional)
+Run the pipeline with trimmed data (by trimmomatic).
 
 ### If you are still confused, here are some examples
 To get the usage menu: \
