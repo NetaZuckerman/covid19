@@ -28,7 +28,7 @@ Be sure to provide the path to the trimmed fastq.gz this time. Repeat steps 2-5 
 coverage, etc. in results/report.txt. Run the pipeline on the trimmed fastq.gz files (the pipeline uses 
 the paired files, ignoring singletons). 
 To run the pipeline with raw fastq files omit the _--trimmed_fq_ flag. \
-`bash pipeline.sh --trimmed_fq -r /refs/refseq.fa` 
+`bash pipeline.sh --trimmed_fq -i fastq/trimmed/ -r /refs/refseq.fa` 
 
 # QC.py
 ### Usage:
@@ -105,11 +105,9 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 # pipeline.sh
 ### Usage:
  bash pipeline.sh [options]
- 
-#### Trimmed data:
-##### -t|--trimmed_fq 
-Run the pipeline with trimmed data (by trimmomatic). \
-`bash pipeline.sh -t` OR `bash pipeline.sh --trimmed_fq`
+
+#### Required:
+--create_dirs | -i AND -r | --help
 
 #### Create project's directories:
 ##### -d|--create_dirs 
@@ -117,18 +115,28 @@ Create all the project directories in the current directory and exit. \
 The directories: fastq/raw, fastq/trimmed, QC/fastqc, BAM, CNS, alignment, Trees, results
 `bash pipeline.sh -d` OR `bash pipeline.sh --crate_dirs`
 
-####  Define your own reference sequence:
+#### Provide input path and refseq:
+#### Provide input path:
+##### -i /input/path
+/input/path -> the path to fastq.gz files. may be trimmed or not. If the files are trimmed by QC.py, add --trimmed_fq 
+flag. See example in the Trimmed data section below. \
+
+#### Provide path to reference sequence:
 ##### -r|--refseq <refseq/path/>
-The current default reference sequence is refs/REF_NC_045512.2.fasta. If you are interested in providing your own
-reference fasta instead, add this option when running the program. \
-`bash pipeline.sh -r path/to/some-refseq.fasta` OR `bash pipeline.sh --refseq_dirs path/to/some-refseq.fasta`\
 Don't worry about indexing the fasta file, it happens automatically.
 
+#### Trimmed data:
+##### -t|--trimmed_fq 
+Run the pipeline with trimmed data (by trimmomatic). \
+
 ### If you are still confused, here are some examples
-`bash pipeline.sh -r /data/references/covid.fasta -t`\
-The command above runs the pipeline with trimmed fastq files (-t), and uses the non-default reference sequence (-r) in 
-_/data/references/covid.fasta_ \
- ~ more examples in the future ~ 
+To get the usage menu: \
+`bash pipeline.sh -h` OR `bash pipeline.sh --help`\
+
+To run the whole pipeline on _trimmed_ fastq files found in _/input/path_ and refseq found in _references/refseq.fasta_: /
+`bash pipeline.sh -i /input/path/ --refseq references/refseq.fasta --trimmed_fq`\ OR with abbreviated flags: \
+`bash pipeline.sh -i /input/path/ -r references/refseq.fasta -t`
+
 
 ---------------
 Dana Bar-Ilan. 
