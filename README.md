@@ -157,7 +157,7 @@ R1 and R2: forward and reverse paired ends.
   
 3. Keep only mapped reads of each sample. \
 For each bam file run: \
-    `samtools view -b -F 260 file_name.bam > BAM/file_name.mapped.bam` \
+    `samtools view -b -F 260 file_name.bam > BAM/file_name.mapped.bam` 
 
 4. Sort and index each sample in BAM. \
 For each mapped bam file run:
@@ -182,9 +182,9 @@ Align with mafft and save output in alignment/ directory: \
     `mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta`
 
 8. Report.txt.
-    `samtools coverage -H BAM/sample_name.mapped.sorted.bam` for some coverage statistics and number of mapped reads. \
-    `samtools view -c BAM/sample_name.bam` for total number of reads in sample. \
-    `samtools depth BAM/sample_name.mapped.sorted.bam` for depth of each position in sample \
+    some coverage statistics and number of mapped reads: `samtools coverage -H BAM/sample_name.mapped.sorted.bam`  \
+    total number of reads in sample: `samtools view -c BAM/sample_name.bam` \
+    depth of each position in sample: `samtools depth BAM/sample_name.mapped.sorted.bam`  \
 Check out pipeline.sh code for specifics.
 ---------------
 Dana Bar-Ilan. 
