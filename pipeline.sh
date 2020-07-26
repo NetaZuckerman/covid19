@@ -11,7 +11,7 @@ trap "kill 0" EXIT
 
 function initialize_globals() {
   # cd_flag=false
-  # trim_flag=false
+  trim_flag=false
   dirs_flag=false
   refseq=refs/REF_NC_045512.2.fasta # default refseq
   new_samtools=/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools
@@ -41,39 +41,39 @@ exit 0
 function get_user_input() {
   while (( "$#" )); do
     case "$1" in
-#      -t|--trimmed_fq)
-#        trim_flag=true
-#        shift
-#        ;;
+      -t|--trimmed_fq)
+        trim_flag=true
+        shift
+        ;;
       -d|--create_dirs) # just create all directories
-      dirs_flag=true
-      shift
-      ;;
-    -r|--refseq) # user provided refseq
-      shift
-      refseq="$1"
-      shift
-      ;;
-#    --working_dir)
+        dirs_flag=true
+        shift
+        ;;
+      -r|--refseq) # user provided refseq
+        shift
+        refseq="$1"
+        shift
+        ;;
+#     --working_dir)
 #      shift
 #      cd_flag=true
 #      wd=$1
 #      shift
 #      ;;
-    --threads)
-      shift
-      threads="$1"
-      shift
-      ;;
-    -i) # path to fastq.gz files location
-      shift
-      input_path="$1"
-      shift
-      ;;
-    -h|--help)
-      usage
-      shift
-      ;;
+      --threads)
+        shift
+        threads="$1"
+        shift
+        ;;
+      -i) # path to fastq.gz files location
+        shift
+        input_path="$1"
+        shift
+        ;;
+      -h|--help)
+        usage
+        shift
+        ;;
       -*|--*=) # unsupported flags
         echo "Error: Unsupported flag $1" >&2
         exit 1
@@ -109,23 +109,28 @@ function check_flags() {
 function map_to_ref() {
   # index reference
   bwa index "$refseq"
+
   if [ -d BAM/ ]; then # not first run, rm BAM files to avoid mixups
     rm BAM/* 2> /dev/null # if file not found it's ok. no need to see on screen
   fi
+  if [ -d CNS/ ]; then
+    rm CNS/* 2> /dev/null
+  fi
   mkdir -p BAM CNS alignment results Trees
-#  if $trim_flag; then
-#    for r1 in fastq/trimmed/*R1*_paired.fastq.gz; do
-#      r2=${r1/R1/R2} # ${var/find/replace}
-#      output=${r1/_R1/}
-#      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
-#    done
-#  else # data is raw
-  for r1 in "$input_path"*R1*.fastq.gz; do
-    r2=${r1/R1/R2}
-    output=${r1/_R1/}
-    bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output .fastq.gz`.bam
-  done
-#  fi
+
+  if $trim_flag; then
+    for r1 in "$input_path"*R1*_paired.fastq.gz; do
+      r2=${r1/R1/R2} # ${var/find/replace}
+      output=${r1/_R1/}
+      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
+    done
+  else # data is raw
+    for r1 in "$input_path"*R1*.fastq.gz; do
+      r2=${r1/R1/R2}
+      output=${r1/_R1/}
+      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output .fastq.gz`.bam
+    done
+  fi
 }
 
 function keep_mapped_reads() {
