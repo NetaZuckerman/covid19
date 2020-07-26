@@ -55,7 +55,7 @@ The output file is called template.csv, it will be located in current directory,
 #### Trimming:
 ##### -t|--trim <path/to/csv> <optional-path/to/base/dir>
 To trim run the following command:\
-`python3 QC.py -t path/to/file.csv `\ or
+`python3 QC.py -t path/to/file.csv ` or
 `python3 QC.py --trim path/to/file.csv`\
 You may also provide input (-i) and/or output (-o) paths: \
 `python3 QC.py -t path/to/file.csv -i path/to/raw/fastq/files -o path/to/trimmed/fatsq/output`
@@ -181,7 +181,7 @@ Align with mafft and save output in alignment/ directory: \
     `mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout` 
     `mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta`
 
-8. Report.txt.
+8. Report.txt: \
     some coverage statistics and number of mapped reads: `samtools coverage -H BAM/sample_name.mapped.sorted.bam`  \
     total number of reads in sample: `samtools view -c BAM/sample_name.bam` \
     depth of each position in sample: `samtools depth BAM/sample_name.mapped.sorted.bam`  \

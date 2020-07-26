@@ -199,7 +199,8 @@ function results_report() {
   # samtools coverage headers: 1#rname  2startpos  3endpos    4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
   echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tmeandepth\tmaxdepth\tmindepth" > "$report"
   for file in BAM/*.mapped.sorted.bam; do
-    sample_name=${file/BAM\//}
+#    sample_name=${file/BAM\//}
+    sample_name=`basename $file .mapped.sorted.bam`
     original_bam=${file/.mapped.sorted.bam/.bam} #{var/find/replace}
     tot_reads=$(samtools view -c "$original_bam") # do not use -@n when capturing output in variable
     line=( $($new_samtools coverage -H "$file" | cut -f4,5,6) )
