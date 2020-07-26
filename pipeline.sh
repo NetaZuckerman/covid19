@@ -120,7 +120,10 @@ function map_to_ref() {
   mkdir -p BAM CNS alignment results Trees
 
   if $trim_flag; then
-    for r1 in "$input_path"*R1*"_paired"+.fastq.gz; do
+    for r1 in "$input_path"*R1*_paired.fastq.gz; do
+      if [[ $r1 = *unpaired* ]]; then
+        continue
+      fi
       r2=${r1/R1/R2} # ${var/find/replace}
       output=${r1/_R1/}
       bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
