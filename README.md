@@ -43,7 +43,7 @@ To create QC reports with default input and output arguments:
 
 #### --template : Template of trimmomatic command for each sample
  _-i_ : path to fastq.gz files location. default: fastq/raw/ \
- _-o_ : path to drop the template.csv. default: working directory \ 
+ _-o_ : path to drop the template.csv. default: working directory \
 `python3 QC.py --template -i some/path/to/fastq/location/ -o some/path/for/output` \
 To create template with default input and output arguments: \
 `python3 QC.py --template` 
