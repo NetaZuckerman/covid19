@@ -50,12 +50,12 @@ To create template with default input and output arguments: \
 
 #### -t|--trim <path/to/csv> <optional-path/to/base/dir> : Trim fastq.gz files with trimmomatic, according to csv file.
 _-i_ : path to fastq.gz files location. default: fastq/raw/ \
-_-o_ : path to drop the trimmed samples. default: fastq/trimmed \ 
+_-o_ : path to drop the trimmed samples. default: fastq/trimmed \
 `python3 QC.py -t path/to/file.csv -i path/to/raw/fastq/files -o path/to/trimmed/fatsq/output` \
 To trim fastq.gz files with default input and output arguments: \
 `python3 QC.py -t path/to/file.csv ` or
 `python3 QC.py --trim path/to/file.csv`\
-To trim with the template csv as input, simply run `python3 QC.py -t template.csv`.\
+To trim with the template csv as input, simply run `python3 QC.py -t template.csv`.
 
 ### The CSV file:
 Template csv header:
