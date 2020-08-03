@@ -31,7 +31,10 @@ required: [-h | -d | -i AND -r]
 -d|--create_dirs                create all project's directories in current working directory.
 -i              [fastq.gz/path] input path to fastq.gz files location.
 -r|--refseq     [refseq/path/]  user defined reference. required: refseq/path/ - path to reference fasta file.
-                                default: refs/REF_NC_045512.2.fasta
+-t|--trimmed_fq                 add when input fastq files are trimmed by QC.py script in order to igrnore unpaired
+                                files.
+
+
 optional:
 --threads       [int]           number of threads. default: 32
 EOF

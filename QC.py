@@ -63,19 +63,19 @@ def trim(flags_file, path='fastq/raw/', prefix_out="fastq/trimmed/"):
                 in_f = path + line['input_forward']
                 in_r = path + line['input_reverse']
                 out_f = prefix_out + line['input_forward'].rstrip('.fastq.gz')
-                out_f_paired = out_f + '_paired.fastq.gz'
-                out_f_unpaired = out_f + '_unpaired.fastq.gz'
+                out_f_paired = out_f + '.fastq.gz'
+                out_f_unpaired = out_f + '_singletons.fastq.gz'
                 out_r = prefix_out + line['input_reverse'].rstrip('.fastq.gz')
-                out_r_paired = out_r + '_paired.fastq.gz'
-                out_r_unpaired = out_r + '_unpaired.fastq.gz'
+                out_r_paired = out_r + '.fastq.gz'
+                out_r_unpaired = out_r + '_singletons.fastq.gz'
                 # add input and output files to final command
                 command += [in_f, in_r, out_f_paired, out_f_unpaired, out_r_paired, out_r_unpaired]
             else:  # single ends
                 # create input and output files
                 inp = path + line['input_forward']
                 out = prefix_out + line['input_forward'].rstrip('.fastq.gz')
-                out_paired = out + '_paired.fastq.gz'
-                out_unpaired = out + '_unpaired.fastq.gz'
+                out_paired = out + '.fastq.gz'
+                out_unpaired = out + '_singletons.fastq.gz'
                 # add input and output files to final command
                 command += [inp, out_paired, out_unpaired]
 
@@ -95,6 +95,19 @@ def trim(flags_file, path='fastq/raw/', prefix_out="fastq/trimmed/"):
             print(command)
 
             subprocess.call(command)  # run trimmomatic command. errors will be kept at trim_log
+
+
+def create_dirs(location):  # assuming location ends with '/' or empty, assuming location exists
+    """
+    creates the following directories if don't exist: fastq/raw, fastq/trimmed/, QC, BAM, alignment, CNS, results, refs.
+    :param location: the location to drop directories to
+    """
+    dirs = ['QC', 'fastq/raw', 'fastq/trimmed', 'BAM', 'alignment', 'CNS', 'results', 'refs']
+    for d in dirs:
+        path = location + d
+        print(path)
+        pathlib.Path(path).mkdir(parents=True, exist_ok=True)  # mkdir -p
+
 
 
 # produce a template csv file used in trimming
@@ -133,7 +146,7 @@ def fastqc_reports(out_dir="QC/", in_dir='fastq/raw/'):
             continue  # step over files that are not fastq.gz format
         print(in_dir + fqfile)
         with open("error.log", 'w') as log:
-            subprocess.call(['fastqc', in_dir + fqfile, "--outdir=%s" % out_dest], stderr=log, stdout=log)
+            subprocess.call(['fastqc', in_dir + fqfile, "--outdir=%s" % out_dest], stderr=log)
     print('Finished fastqc reports. Find them here: %s' % out_dest)
 
 
@@ -155,6 +168,9 @@ if __name__ == '__main__':
     group.add_argument("-r", "--reports",  help="produce fastqc and multifastqc reports of all fastq.gz files in input "
                                                 "directory \nIf output path not provided (-o), default is QC/fastqc/",
                        action="store_true")
+    group.add_argument("--dirs", help="create all project's recommended directories in current working directory, or in"
+                                      " output path if provided", action="store_true")
+
     parser.add_argument("-i", help="working directory of the program. \noptional, default is current directory",
                         nargs=1, type=str, dest='wd')
     parser.add_argument("-o", help="output path - optional.", nargs=1, type=str, dest='output_path')
@@ -169,8 +185,7 @@ if __name__ == '__main__':
     out_path = ""
     if args.output_path:
         out_path = args.output_path[0]
-        if not os.path.exists(out_path):
-            pathlib.Path(out_path).mkdir(parents=True, exist_ok=True)  # mkdir -p equivalent
+        pathlib.Path(out_path).mkdir(parents=True, exist_ok=True)  # mkdir -p equivalent
         if not out_path.endswith('/'):
             out_path += '/'
 
@@ -218,7 +233,9 @@ if __name__ == '__main__':
         else:  # use defaults only
             template_csv()
         # TODO: add PE SE options to create the right template
-        # TODO: check SE as well
+
+    elif args.dirs:
+        create_dirs(out_path)
 
     else:  # if user did not choose an option -> print help
         parser.print_help()
