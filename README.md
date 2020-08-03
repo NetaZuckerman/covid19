@@ -9,7 +9,7 @@ from that working directory.
 * Fill refs/ with your desired reference sequence.
 Check out the [directories hierarchy](#directories-hierarchy).
 
-2. Produce reports for each fastq.gz file in fastq/raw (or any other location of your choice) \
+2. Produce reports for each fastq file in fastq/raw (or any other location of your choice) \
 `python3 QC.py --reports -i fastq/raw/`
 
 3. Create template csv file for convenient trimming. See details at Template. \
@@ -18,14 +18,14 @@ Take a look at _template.csv_ produced as output and fix some trimming parameter
 Scroll down to read more about the csv file.  
 
 4. Trim fastq files according to the csv file created in (2). \
-`python3 QC.py --trim template.csv -i /input/path/to/fastq.gz.files -o /trimmed/path` 
+`python3 QC.py --trim template.csv -i /input/path/to/fastq/files -o /trimmed/path` 
 
 5. Produce second reports to make sure you're happy with the trimming results. \
 `python3 QC.py --reports -i /trimmed/path -o /output/fastqc/2/path` \
-Be sure to provide the path to the trimmed fastq.gz this time. Repeat steps 2-5 if more trimming is needed.
+Be sure to provide the path to the trimmed fastq files this time. Repeat steps 2-5 if more trimming is needed.
 
 6. Run pipeline to produce consensus sequences for your samples, and get additional info such as number of reads, depth, 
-coverage, etc. in results/report.txt. Run the pipeline on the trimmed fastq.gz files (the pipeline uses 
+coverage, etc. in results/report.txt. Run the pipeline on the trimmed fastq files (the pipeline uses 
 the paired files, ignoring singletons). 
 To run the pipeline with raw fastq files omit the _--trimmed_fq_ flag. \
 `bash pipeline.sh --trimmed_fq -i fastq/trimmed/ -r /refs/refseq.fa` 
@@ -34,25 +34,25 @@ To run the pipeline with raw fastq files omit the _--trimmed_fq_ flag. \
 ### Usage:
 `python QC.py [-h] [-t [CSV] | --template | -r] [-i WD] [-o OUTPUT_PATH]`
 #### -r | --reports : QC Reports
-Produces fastqc and multiqc reports for all fastq.gz files. \
-_-i_ : path to fastq.gz files locations. default: fastq/raw/ \
+Produces fastqc and multiqc reports for all fastq files. \
+_-i_ : path to fastq files locations. default: fastq/raw/ \
 _-o_ : path to drop the template.csv. default: QC/ \
 `python3 QC.py -r -i path/to/fastq/files -o path/for/output/reports` \
 To create QC reports with default input and output arguments:
 `python3 QC.py -r` 
 
 #### --template : Template of trimmomatic command for each sample
- _-i_ : path to fastq.gz files location. default: fastq/raw/ \
+ _-i_ : path to fastq files location. default: fastq/raw/ \
  _-o_ : path to drop the template.csv. default: working directory \
 `python3 QC.py --template -i some/path/to/fastq/location/ -o some/path/for/output` \
 To create template with default input and output arguments: \
 `python3 QC.py --template` 
 
-#### -t|--trim <path/to/csv> <optional-path/to/base/dir> : Trim fastq.gz files with trimmomatic, according to csv file.
-_-i_ : path to fastq.gz files location. default: fastq/raw/ \
+#### -t|--trim <path/to/csv> <optional-path/to/base/dir> : Trim fastq files with trimmomatic, according to csv file.
+_-i_ : path to fastq files location. default: fastq/raw/ \
 _-o_ : path to drop the trimmed samples. default: fastq/trimmed \
 `python3 QC.py -t path/to/file.csv -i path/to/raw/fastq/files -o path/to/trimmed/fatsq/output` \
-To trim fastq.gz files with default input and output arguments: \
+To trim fastq files with default input and output arguments: \
 `python3 QC.py -t path/to/file.csv ` or
 `python3 QC.py --trim path/to/file.csv`\
 To trim with the template csv as input, simply run `python3 QC.py -t template.csv`.
@@ -67,8 +67,8 @@ Each line will represent a fastq file.
 **Required fields**: ends, input_forward. Make sure those fields are filled in the csv file \
 trimmomatic requires output files as well, but those are given automatically in the script. Don't include them in the csv.
 * ends`[PE|SE]` - PE:paired end, SE: single end. If you choose `PE`, be sure to include both input_forward **and**  input_reverse! 
-* input_forward `<sample_R1.fastq.gz>`: sample name
-* input_reverse `<sample_R2.fastq.gz>`: sample name
+* input_forward `<sample_R1.fastq>`: sample name
+* input_reverse `<sample_R2.fastq>`: sample name
 
 **Optional fields**: 
 Do not remove unwanted fields, just leave them empty and it will be ignored.
@@ -111,7 +111,7 @@ Check out the [directories hierarchy graph](#directories-hierarchy)
 
 ### Run pipeline on samples to get consensus sequences and additional data:
 #### -i /input/path : provide input path  (required)
-`/input/path` - the path to fastq.gz files. may be trimmed or not. If the files are trimmed by QC.py, add --trimmed_fq 
+`/input/path` - the path to fastq files. may be trimmed or not. If the files are trimmed by QC.py, add --trimmed_fq 
 flag. See example in the Trimmed data section below. 
 
 #### -r|--refseq <refseq/path/> : provide refseq path (required)
@@ -143,7 +143,7 @@ If you choose to use ` bash pipeline.sh -d` to create directories, the hierarchy
 `bwa index /refseq/path`
 
 2. For each fastq sample - map to reference and keep as bam file. \
-For each fastq.gz file run: \
+For each fastq file run: \
     `bwa mem /refseq/path sample_R1 sample_R2 | samtools view -Sb - > BAM/sample_name.bam` \
 R1 and R2: forward and reverse paired ends.
   
