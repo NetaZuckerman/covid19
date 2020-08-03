@@ -107,7 +107,7 @@ Prints the usage message and exits.
 Create all the project directories in the current directory and exit. \
 The directories: fastq/raw, fastq/trimmed, QC/fastqc, BAM, CNS, alignment, Trees, results
 `bash pipeline.sh -d` OR `bash pipeline.sh --crate_dirs`
-Scroll down to check out the directories hierarchy.
+Check out the [directories hierarchy graph](#directories-hierarchy)
 
 ### Run pipeline on samples to get consensus sequences and additional data:
 #### -i /input/path : provide input path  (required)
