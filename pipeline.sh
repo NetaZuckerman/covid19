@@ -91,7 +91,7 @@ function check_flags() {
 #    cd "$wd" || true
 #  fi
   if $dirs_flag; then
-    mkdir -p fastq/{raw,trimmed} QC/fastqc refs BAM CNS alignment results
+    mkdir -p fastq/{raw,trimmed} QC/fastqc refs BAM CNS alignment
     echo "Created project directories. Please download your data to fastq/raw and/or fastq/trimmed, and your reference sequence to refs/. "
     exit 0
   fi
@@ -123,13 +123,19 @@ function map_to_ref() {
   mkdir -p BAM CNS alignment results Trees
 
   if $trim_flag; then
-    for r1 in "$input_path"*R1*_paired.fastq.gz; do
+    for r1 in "$input_path"*R1*_paired.fastq*; do
+      if [[ $r1 == *Undetermined*.fastq* ]]; then # ignore undetermined
+        continue
+      fi
       r2=${r1/R1/R2} # ${var/find/replace}
       output=${r1/_R1/}
       bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
     done
   else # data is raw
-    for r1 in "$input_path"*R1*.fastq.gz; do
+    for r1 in "$input_path"*R1*.fastq*; do
+      if [[ $r1 == *Undetermined*.fastq* ]]; then  # ignore undetermined
+        continue
+      fi
       r2=${r1/R1/R2}
       output=${r1/_R1/}
       bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output .fastq.gz`.bam
@@ -157,6 +163,7 @@ function mpilup_call() {
 #  $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz -o "$out" # change to bcftools mpileup??
   $new_bcftools mpileup -f "$refseq" "$file" | $new_bcftools call -mv -Oz -o "$out"
 }
+
 function consensus() {
   count=0
   for file in BAM/*.mapped.sorted.bam; do
@@ -199,7 +206,7 @@ function mafft_alignment() {
 }
 
 function results_report() {
-  report=results/report.txt
+  report=QC/report.txt
   # samtools coverage headers: 1#rname  2startpos  3endpos    4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
   echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tmeandepth\tmaxdepth\tmindepth" > "$report"
   for file in BAM/*.mapped.sorted.bam; do
