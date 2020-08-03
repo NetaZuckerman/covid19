@@ -117,7 +117,7 @@ def template_csv(fq_path='fastq/raw/', out_loc=''):
     :param path: path for all fastq.gz files.
     """
 
-    fq_R1 = fnmatch.filter(os.listdir(fq_path), "*R1*.fastq.gz")  # Assuming reads are marked as "R1" and "R2"!!
+    fq_R1 = fnmatch.filter(os.listdir(fq_path), "*R1*.fastq*")  # Assuming reads are marked as "R1" and "R2"!!
     out_file = out_loc + "template.csv"
     with open(out_file, 'w') as output:
         headers = ['ends', 'input_forward', 'input_reverse', 'phred', 'threads', 'ILLUMINACLIP:', 'SLIDINGWINDOW:',

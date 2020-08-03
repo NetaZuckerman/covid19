@@ -1,13 +1,13 @@
 # covid19
-add name to 
+
 ## Suggested Workflow Using QC.py and pipeline.sh
 1. Create project's directories - Optional. \
 `bash pipeline.sh -d` \
 The directories will be created in the current working directory, and it is recommended to run all following commands 
 from that working directory.
-* Fill fastq/raw/ with all raw fastq.gz files. 
+* Fill fastq/raw/ with all raw fastq files. 
 * Fill refs/ with your desired reference sequence.
-To see the full directories hierarchy scroll to the bottom of the page.
+Check out the [directories hierarchy](#directories-hierarchy).
 
 2. Produce reports for each fastq.gz file in fastq/raw (or any other location of your choice) \
 `python3 QC.py --reports -i fastq/raw/`
