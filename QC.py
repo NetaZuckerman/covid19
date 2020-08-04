@@ -4,6 +4,7 @@ import subprocess  # to run shell commands
 import os  # to run os commands
 import fnmatch  # regex
 import pathlib  # only > python 3.5!
+
 trimm_path='/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar'
 
 
@@ -153,7 +154,7 @@ def fastqc_reports(out_dir="QC/", in_dir='fastq/raw/'):
 def multiqc_report(out_dir="QC/"):
     in_dir = out_dir + 'fastqc/'
     print('Start multiqc report')
-    subprocess.call(['multiqc', in_dir, '-o', out_dir])
+    subprocess.call(['multiqc', '--interactive', in_dir, '-o', out_dir])
     print('Finished multiqc. Find it here: %s' % out_dir)
 
 
@@ -168,8 +169,8 @@ if __name__ == '__main__':
                                           "file name: trimmomatic_template.csv",
                        action="store_true")
     group.add_argument("-r", "--reports",  help="produce fastqc and multifastqc reports of all fastq.gz files in input "
-                                                "directory \nIf output path not provided (-o), default is QC/fastqc/",
-                       action="store_true")
+                                                "directory \nIf output path not provided (-o), default is QC/fastqc/. ",
+                       nargs='?', default='interactive')
     group.add_argument("--dirs", help="create all project's recommended directories in current working directory, or in"
                                       " output path if provided", action="store_true")
 

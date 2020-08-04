@@ -14,7 +14,7 @@ function initialize_globals() {
   trim_flag=false
   dirs_flag=false
 # refseq=refs/REF_NC_045512.2.fasta # default refseq
-  new_samtools=/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools
+#  new_samtools=/data/software/samtools/samtools-1.10_new/samtools-1.10/samtools
   new_bcftools=/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools
   # wd=""
   threads=32
@@ -57,12 +57,6 @@ function get_user_input() {
         refseq="$1"
         shift
         ;;
-#     --working_dir)
-#      shift
-#      cd_flag=true
-#      wd=$1
-#      shift
-#      ;;
       --threads)
         shift
         threads="$1"
@@ -129,7 +123,7 @@ function map_to_ref() {
       fi
       r2=${r1/R1/R2} # ${var/find/replace}
       output=${r1/_R1/}
-      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output _paired.fastq.gz`.bam
+      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > BAM/`basename $output _paired.fastq.gz`.bam
     done
   else # data is raw
     for r1 in "$input_path"*R1*.fastq*; do
@@ -138,14 +132,14 @@ function map_to_ref() {
       fi
       r2=${r1/R1/R2}
       output=${r1/_R1/}
-      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -Sb - > BAM/`basename $output .fastq.gz`.bam
+      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > BAM/`basename $output .fastq.gz`.bam
     done
   fi
 }
 
 function keep_mapped_reads() {
   for file in BAM/*.bam; do
-     $new_samtools view -@ "$threads" -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam
+     samtools view -@ "$threads" -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam
   done
 }
 
@@ -214,10 +208,10 @@ function results_report() {
     sample_name=`basename $file .mapped.sorted.bam`
     original_bam=${file/.mapped.sorted.bam/.bam} #{var/find/replace}
     tot_reads=$(samtools view -c "$original_bam") # do not use -@n when capturing output in variable
-    line=( $($new_samtools coverage -H "$file" | cut -f4,5,6) )
+    line=( $(samtools coverage -H "$file" | cut -f4,5,6) )
     mapped_num=${line[0]}
     percentage_mapped=$(awk -v m="$mapped_num" -v t="$tot_reads" 'BEGIN {print (m/t)*100}')
-    $new_samtools depth "$file" > depth.txt
+    samtools depth "$file" > depth.txt
     depths=$(awk '{if(min==""){min=max=$3}; if($3>max) {max=$3}; if($3< min) {min=$3}; total+=$3; count+=1} END {print total/count"\t"max"\t"min}' depth.txt)
     echo -e "${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${line[1]}\t${line[2]}\t${depths}" >> "$report"
   done
