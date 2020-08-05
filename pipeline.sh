@@ -80,10 +80,6 @@ function get_user_input() {
 }
 
 function check_flags() {
-  # change location
-#  if $cd_flag; then
-#    cd "$wd" || true
-#  fi
   if $dirs_flag; then
     mkdir -p fastq/{raw,trimmed} QC/fastqc refs BAM CNS alignment
     echo "Created project directories. Please download your data to fastq/raw and/or fastq/trimmed, and your reference sequence to refs/. "
@@ -151,6 +147,21 @@ function sort_index_bam() {
   done
 }
 
+function zero_depth_bed() {
+    mkdir -p QC/depth/
+    # create depth files from each mapped sorted and indexed bam file. -a: include all sample's positions including 0 depth.
+    for file in BAM/*.mapped.sorted.bam; do
+      samtools depth -a "$file" > QC/`basename "$file" .mapped.sorted.bam`.txt
+    done
+
+    # create bed file with 0 depth regions from each depth file
+    for file in QC/depth/*.txt; do
+      cut -f 3 "$file" | sort| uniq | while read X; do awk -v X=$X '($3==X && $3==0) { printf("%s\t%d\t%d\n",$1,$2,int($2)+1);}' "$file" \
+      | sort -k1,1 -k2,2n | bedtools merge -i - | sed "s/\$/\t${X}/" ; done > `basename "$file" .txt`.bed
+    done
+}
+
+
 function mpilup_call() {
   local file="$1"
   local out="$2"
@@ -169,23 +180,33 @@ function consensus() {
       wait
       count=0
     fi
-    # $new_samtools mpileup -uf "$refseq" "$file" | $new_bcftools call -mv -Oz --threads 8 -o CNS/"$samp_name"_calls.vcf.gz # change to bcftools mpileup??
    done
+
   wait
+
   for file in BAM/*.mapped.sorted.bam; do
-    samp_name=${file/BAM\//}
-    samp_name=`basename $samp_name .mapped.sorted.bam`
+    samp_name=`basename $file .mapped.sorted.bam`
+    bed_file=QC/depth/"$sample_name".bed  # matching bed file
     $new_bcftools index --threads "$threads" CNS/"$samp_name"_calls.vcf.gz
-    $new_bcftools consensus -f "$refseq" CNS/"$samp_name"_calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
+    $new_bcftools consensus -f "$refseq" -m "$bed_file" CNS/"$samp_name"_calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
     rm CNS/"$samp_name"_calls.vcf.gz CNS/"$samp_name"_calls.vcf.gz.csi
   done
-
-  # rm CNS/calls.vcf.gz CNS/calls.vcf.gz.csi
 }
 
+function N_depth_bed() {
+  N=5
+  for file in QC/depth/*.txt; do
+      cut -f 3 "$file" | sort| uniq | while read X; do awk -v X=$X -v N=$N '($3==X && $3<N) { printf("%s\t%d\t%d\n",$1,$2,int($2)+1);}' "$file" \
+      | sort -k1,1 -k2,2n | bedtools merge -i - | sed "s/\$/\t${X}/" ; done > `basename "$file" .txt`.bed
+  done
+}
+
+
 # change fasta header from ref to sample name
-function change_header_to_sample_name() {
+function change_fasta_header() {
   for file in CNS/*.fasta; do
+    # maskfasta works if bed location equal to fasta header! => maskfasta before header change!
+    # change header to sample name:
     name=${file/CNS\//} # ${var/find/replace} => remove 'CNS/' prefix
     sed -i "s/>.*/>${name%%.*}/" "$file"
   done
@@ -232,8 +253,9 @@ check_flags
 map_to_ref
 keep_mapped_reads
 sort_index_bam
+zero_depth_bed
 consensus
-change_header_to_sample_name
+change_fasta_header
 mafft_alignment
 results_report
 wait
