@@ -146,8 +146,7 @@ def fastqc_reports(out_dir="QC/", in_dir='fastq/raw/'):
         if not fqfile.endswith(".fastq.gz"):
             continue  # step over files that are not fastq.gz format
         print(in_dir + fqfile)
-        with open("error.log", 'w') as log:
-            subprocess.call(['fastqc', in_dir + fqfile, "--outdir=%s" % out_dest], stderr=log)
+        subprocess.call(['fastqc', in_dir + fqfile, "--outdir=%s" % out_dest])
     print('Finished fastqc reports. Find them here: %s' % out_dest)
 
 
@@ -170,7 +169,7 @@ if __name__ == '__main__':
                        action="store_true")
     group.add_argument("-r", "--reports",  help="produce fastqc and multifastqc reports of all fastq.gz files in input "
                                                 "directory \nIf output path not provided (-o), default is QC/fastqc/. ",
-                       nargs='?', default='interactive')
+                       action='store_true')
     group.add_argument("--dirs", help="create all project's recommended directories in current working directory, or in"
                                       " output path if provided", action="store_true")
 
