@@ -150,15 +150,8 @@ function sort_index_bam() {
   done
 }
 
-function N_depth_bed() {
-  N=5
-  for file in QC/depth/*.txt; do
-      cut -f 3 "$file" | sort| uniq | while read X; do awk -v X=$X -v N=$N '($3==X && $3<N) { printf("%s\t%d\t%d\n",$1,$2,int($2)+1);}' "$file" \
-      | sort -k1,1 -k2,2n | bedtools merge -i - | sed "s/\$/\t${X}/" ; done > `basename "$file" .txt`.bed
-  done
-}
 
-function zero_depth_bed() {
+function depth() {
     mkdir -p QC/depth/
     # create depth files from each mapped sorted and indexed bam file. -a: include all sample's positions including 0 depth.
     for file in BAM/*.mapped.sorted.bam; do
@@ -167,9 +160,9 @@ function zero_depth_bed() {
     # create bed file with 0 depth regions from each depth file
     # multi process TODO
     # in the future maybe pipe the depth into the rest of the command?
-    for file in QC/depth/*.txt; do
-      cut -f 3 "$file" | sort | uniq | while read X; do awk -v X="$X" '($3==X && $3==0) { printf("%s\t%d\t%d\n",$1,int($2)-1,int($2)+1);}' "$file" | sort -k1,1 -k2,2n | bedtools merge -i - | sed "s/\$/\t${X}/" ; done > QC/depth/`basename "$file" .txt`.bed
-    done
+#    for file in QC/depth/*.txt; do
+#      cut -f 3 "$file" | sort | uniq | while read X; do awk -v X="$X" '($3==X && $3==0) { printf("%s\t%d\t%d\n",$1,int($2)-1,int($2)+1);}' "$file" | sort -k1,1 -k2,2n | bedtools merge -i - | sed "s/\$/\t${X}/" ; done > QC/depth/`basename "$file" .txt`.bed
+#    done
 }
 
 function consensus() {
@@ -178,7 +171,14 @@ function consensus() {
     bed_file=QC/depth/`basename $file .mapped.sorted.bam`.bed
     $new_bcftools mpileup -f "$refseq" "$file" | $new_bcftools call -mv -Oz -o CNS/"$sample_name"_calls.vcf.gz
     $new_bcftools index CNS/"$sample_name"_calls.vcf.gz
-    $new_bcftools consensus -f "$refseq" -m "$bed_file" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
+#    $new_bcftools consensus -f "$refseq" -m "$bed_file" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
+    $new_bcftools consensus -f "$refseq" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
+    # mask low depth:
+    # mask 0 depth:
+    python3 /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 1
+    # mask 5 depth: every position under 5 depth is N.
+    mkdir -p CNS_5/
+    pytohn3 /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 5 -o CNS_5/"$sample_name".fasta
     rm CNS/"$sample_name"_calls.vcf.gz CNS/"$sample_name"_calls.vcf.gz.csi
   done
 
@@ -241,7 +241,7 @@ check_flags
 map_to_ref
 keep_mapped_reads
 sort_index_bam
-zero_depth_bed
+depth
 consensus
 change_fasta_header
 mafft_alignment

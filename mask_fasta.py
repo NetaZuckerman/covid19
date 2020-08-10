@@ -56,12 +56,19 @@ if __name__ == '__main__':
     parser.add_argument('depth', type=str, help="depth file as samtools depth command's output.")
     parser.add_argument('-n', type=int, help="depth threshold. every position with depth lower than N will be "
                                                       "masked as 'N'. default: 1")
+    parser.add_argument('-o', type=str, help="output file. if not specifed, will override input fasta.")
+
     args = parser.parse_args()
+
     N = 1
+    output_path = args.fasta
     if args.n:
         N = args.n
+    if args.o:
+        output_path = args.o
+
     all_fasta_records = mask_multiple_records(args.fasta, args.depth, N)
-    SeqIO.write(all_fasta_records, args.fasta, "fasta")
+    SeqIO.write(all_fasta_records, output_path, "fasta")
 
 
 
