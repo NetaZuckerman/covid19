@@ -1,4 +1,3 @@
-
 from collections import defaultdict
 from Bio import SeqIO
 import argparse

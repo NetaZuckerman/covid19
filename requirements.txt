@@ -1,9 +1,14 @@
 astroid==2.4.2
+biopython @ file:///C:/ci/biopython_1593539392618/work
 certifi==2020.6.20
 colorama==0.4.3
 isort==4.3.21
 lazy-object-proxy==1.4.3
 mccabe==0.6.1
+mkl-fft==1.1.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+numpy @ file:///C:/ci/numpy_and_numpy_base_1596233945180/work
 pylint==2.5.3
 six==1.15.0
 toml==0.10.1

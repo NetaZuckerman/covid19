@@ -178,7 +178,7 @@ function consensus() {
     python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 1
     # mask 5 depth: every position under 5 depth is N.
     mkdir -p CNS_5/
-    pytohn /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 5 -o CNS_5/"$sample_name".fasta
+    python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 5 -o CNS_5/"$sample_name".fasta
     rm CNS/"$sample_name"_calls.vcf.gz CNS/"$sample_name"_calls.vcf.gz.csi
   done
 
@@ -224,8 +224,6 @@ function results_report() {
     depths=$(awk '{if($3==0){next}; if(min==""){min=max=$3}; if($3>max) {max=$3}; if($3< min) {min=$3}; total+=$3; count+=1} END {print total/count"\t"max"\t"min}' QC/depth/"$sample_name".txt)
     echo -e "${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${line[1]}\t${line[2]}\t${depths}" >> "$report"
   done
-
-  rm depth.txt
 }
 
 ########################### MAIN ###############################
