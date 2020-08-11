@@ -31,7 +31,7 @@ def parse_depth(depth_file, n=1):
         for line in df:  # line[0]:chr  line[1]:pos line[2]:depth
             line = line.split('\t')
             if int(line[2]) < n:
-                n_pos[line[0]].append(int(line[1])-1) # one to the left - depth always starts with 1 instead of 0.
+                n_pos[line[0]].append(int(line[1])-1)  # -1  - depth always starts with 1 instead of 0.
     return n_pos
 
 
