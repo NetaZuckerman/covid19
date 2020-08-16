@@ -81,7 +81,7 @@ function get_user_input() {
 
 function check_flags() {
   if $dirs_flag; then
-    mkdir -p fastq/{raw,trimmed} QC/fastqc refs BAM CNS alignment
+    mkdir -p fastq/{raw,trimmed} QC/fastqc refs BAM CNS CNS_5 alignment
     echo "Created project directories. Please download your data to fastq/raw and/or fastq/trimmed, and your reference sequence to refs/. "
     exit 0
   fi
@@ -110,9 +110,12 @@ function map_to_ref() {
   if [ -d CNS/ ]; then
     rm CNS/* 2> /dev/null
   fi
+  if [ -d CNS_5/ ]; then
+    rm CNS_5/ 2> /dev/null
+  fi
   mkdir -p BAM CNS alignment results Trees
 
-  for r1 in "$input_path"*R1*_paired.fastq*; do
+  for r1 in "$input_path"*R1*.fastq*; do
     if [[ $r1 == *Undetermined*.fastq* || $r1 == *unpaired*.fastq* ]]; then # ignore undetermined
         continue
     fi
@@ -215,7 +218,6 @@ function results_report() {
 ########################### MAIN ###############################
 # trap ctrl-c to end in the same directory as started even if user ended the program
 
-last_loc=$(pwd)
 # call all functions
 # user input:
 initialize_globals
