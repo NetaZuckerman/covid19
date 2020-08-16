@@ -136,7 +136,7 @@ The consensus sequences are found in CNS/, and further info in results/report.tx
 ### Directories Hierarchy:
 If you choose to use ` bash pipeline.sh -d` to create directories, the hierarchy is as follows:
 
-![alt text](https://github.com/ShebaVirals/covid19/blob/master/dirs_hierarchy.png?raw=true)
+![alt text](https://github.com/ShebaVirals/covid19/blob/master/Directories_Hierarchy.png?raw=true)
 
 ### Pipeline's Basic Commands
 1. Index the reference sequence. \
