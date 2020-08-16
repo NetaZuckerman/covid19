@@ -112,29 +112,15 @@ function map_to_ref() {
   fi
   mkdir -p BAM CNS alignment results Trees
 
-  if $trim_flag; then
-    for r1 in "$input_path"*R1*_paired.fastq*; do
-      if [[ $r1 == *Undetermined*.fastq* ]]; then # ignore undetermined
+  for r1 in "$input_path"*R1*_paired.fastq*; do
+    if [[ $r1 == *Undetermined*.fastq* || $r1 == *unpaired*.fastq* ]]; then # ignore undetermined
         continue
-      fi
-      r2=${r1/R1/R2} # ${var/find/replace}
-      output=${r1/_R1/}
-      bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > BAM/`basename $output _paired.fastq.gz`.bam
-    done
-  else # data is raw
-    for r1 in "$input_path"*R1*.fastq*; do
-      if [[ $r1 == *Undetermined*.fastq* ]]; then  # ignore undetermined
-        continue
-      fi
-      r2=${r1/R1/R2}
-      output=${r1/_R1/}
-      if [[ -f "$r2" ]]; then
-        bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > BAM/`basename $output .fastq.gz`.bam
-      else  # treat as single end
-        bwa mem -v1 -t"$threads" "$refseq" "$r1" | samtools view -@ "$threads" -b - > BAM/`basename "$r1" .fastq.gz`.bam
-      fi
-    done
-  fi
+    fi
+    r1=${r1/_paired/} # remove 'paired' if appears in name
+    r2=${r1/R1/R2} # ${var/find/replace}
+    output=${r1/_R1/}
+    bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > BAM/`basename $output .fastq.gz`.bam
+  done
 }
 
 function keep_mapped_reads() {
