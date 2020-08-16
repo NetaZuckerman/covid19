@@ -119,9 +119,9 @@ function map_to_ref() {
     if [[ $r1 == *Undetermined*.fastq* || $r1 == *unpaired*.fastq* ]]; then # ignore undetermined
         continue
     fi
-    r1=${r1/_paired/} # remove 'paired' if appears in name
     r2=${r1/R1/R2} # ${var/find/replace}
     output=${r1/_R1/}
+    output=${output/_paired/}
     bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > BAM/`basename $output .fastq.gz`.bam
   done
 }
