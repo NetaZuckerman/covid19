@@ -28,9 +28,9 @@ Be sure to provide the path to the trimmed fastq files this time. Repeat steps 2
 
 6. Run pipeline to produce consensus sequences for your samples, and get additional info such as number of reads, depth, 
 coverage, etc. in results/report.txt. Run the pipeline on the trimmed fastq files (the pipeline uses 
-the paired files, ignoring singletons). 
-To run the pipeline with raw fastq files omit the _--trimmed_fq_ flag. \
-`bash pipeline.sh --trimmed_fq -i fastq/trimmed/ -r /refs/refseq.fa` 
+the paired files, ignoring singletons). \
+-i: input fastq files path
+`bash pipeline.sh -i fastq/trimmed/ -r /refs/refseq.fa` 
 
 # QC.py
 ### Usage:
@@ -100,7 +100,7 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 ---------------
 # pipeline.sh
 ### Usage:
- bash pipeline.sh [options]
+ `bash pipeline.sh [-h | -r [REFSEQ_PATH] [-i WD] [-o OUTPUT_PATH]`
 ### options:
 #### -h | --help
 Prints the usage message and exits.
