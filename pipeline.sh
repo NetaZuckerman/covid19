@@ -10,6 +10,7 @@
 #
 trap "kill 0" EXIT
 
+conda activate
 function initialize_globals() {
   dirs_flag=false
 # refseq=refs/REF_NC_045512.2.fasta # default refseq
@@ -149,10 +150,10 @@ function consensus() {
   for file in BAM/*.mapped.sorted.bam; do
     sample_name=`basename $file .mapped.sorted.bam`
     #bed_file=QC/depth/`basename $file .mapped.sorted.bam`.bed
-    $new_bcftools mpileup -f "$refseq" "$file" | $new_bcftools call -mv -Oz -o CNS/"$sample_name"_calls.vcf.gz
-    $new_bcftools index CNS/"$sample_name"_calls.vcf.gz
-#    $new_bcftools consensus -f "$refseq" -m "$bed_file" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
-    $new_bcftools consensus -f "$refseq" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
+    bcftools mpileup -f "$refseq" "$file" | bcftools call -mv -Oz -o CNS/"$sample_name"_calls.vcf.gz
+    bcftools index CNS/"$sample_name"_calls.vcf.gz
+#    bcftools consensus -f "$refseq" -m "$bed_file" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
+    bcftools consensus -f "$refseq" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
     # mask low depth:
     # mask 0 depth:
     python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 1
