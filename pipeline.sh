@@ -112,7 +112,8 @@ function map_to_ref() {
     r2=${r1/R1/R2} # ${var/find/replace}
     output=${r1/_R1/}
     output=${output/_paired/}
-    bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > BAM/`basename $output .fastq.gz`.bam
+    output=${output/.gz/}
+    bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > BAM/`basename $output .fastq`.bam
   done
 }
 

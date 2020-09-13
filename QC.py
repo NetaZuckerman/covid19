@@ -103,7 +103,7 @@ def create_dirs(location):  # assuming location ends with '/' or empty, assuming
     creates the following directories if don't exist: fastq/raw, fastq/trimmed/, QC, BAM, alignment, CNS, results, refs.
     :param location: the location to drop directories to
     """
-    dirs = ['QC/fastqc', 'fastq/raw', 'fastq/trimmed', 'BAM', 'alignment', 'CNS', 'results', 'refs']
+    dirs = ['QC/fastqc', 'fastq/raw', 'fastq/trimmed', 'BAM', 'alignment', 'CNS', 'CNS_5', 'results', 'refs']
     for d in dirs:
         path = location + d
         print(path)

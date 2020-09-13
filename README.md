@@ -140,7 +140,7 @@ If you choose to use ` bash pipeline.sh -d` to create directories, the hierarchy
 
 ![alt text](https://github.com/ShebaVirals/covid19/blob/master/Directories_Hierarchy.png?raw=true)
 
-### Pipeline's Basic Commands
+### Pipeline's Basic Steps
 1. Index the reference sequence. \
 `bwa index /refseq/path`
 
