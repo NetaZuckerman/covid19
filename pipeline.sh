@@ -10,7 +10,6 @@
 #
 trap "kill 0" EXIT
 
-conda activate
 function initialize_globals() {
   dirs_flag=false
 # refseq=refs/REF_NC_045512.2.fasta # default refseq

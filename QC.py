@@ -138,7 +138,7 @@ def template_csv(fq_path='fastq/raw/', out_loc=''):
     print('finished template file. find it here: %s' % out_file)
 
 
-def fastqc_reports(out_dir="QC/", in_dir='fastq/raw/'):
+def fastqc_reports(out_dir, in_dir):
     out_dest = out_dir + "fastqc/"
     if not os.path.exists(out_dest):
         os.mkdir(out_dest)
@@ -146,11 +146,12 @@ def fastqc_reports(out_dir="QC/", in_dir='fastq/raw/'):
         if not fqfile.endswith(".fastq.gz"):
             continue  # step over files that are not fastq.gz format
         print(in_dir + fqfile)
-        subprocess.call(['fastqc', in_dir + fqfile, "--outdir=%s" % out_dest])
+        # -q: quite mode
+        subprocess.call(['fastqc', in_dir + fqfile, "--outdir=%s" % out_dest, '-q'])
     print('Finished fastqc reports. Find them here: %s' % out_dest)
 
 
-def multiqc_report(out_dir="QC/"):
+def multiqc_report(out_dir):
     in_dir = out_dir + 'fastqc/'
     print('Start multiqc report')
     subprocess.call(['multiqc', '--interactive', in_dir, '-o', out_dir])
@@ -210,19 +211,20 @@ if __name__ == '__main__':
 
     elif args.reports:  # reports
         print('reports')
-        if wd and out_path:
-            fastqc_reports(out_dir=out_path, in_dir=wd)
-            multiqc_report(out_path)
-        elif wd or out_path:
-            if wd:
-                fastqc_reports(in_dir=wd)
-                multiqc_report()
-            else:
-                fastqc_reports(out_dir=out_path)
-                multiqc_report(out_path)
-        else:  # all default
-            fastqc_reports()
-            multiqc_report()
+        # if wd and out_path:
+        #     fastqc_reports(out_dir=out_path, in_dir=wd)
+        #     multiqc_report(out_path)
+        # elif wd or out_path:
+        #     if wd:
+        #         fastqc_reports(in_dir=wd)
+        #         multiqc_report()
+        #     else:
+        #         fastqc_reports(out_dir=out_path)
+        #         multiqc_report(out_path)
+        # else:  # all default
+        #     fastqc_reports()
+        #     multiqc_report()
+        fastqc_reports(out_dir=out_path, in_dir=wd)
 
     elif args.template:
         if wd and out_path:
@@ -234,7 +236,6 @@ if __name__ == '__main__':
                 template_csv(out_loc=out_path)
         else:  # use defaults only
             template_csv()
-        # TODO: add PE SE options to create the right template
 
     elif args.dirs:
         create_dirs(out_path)

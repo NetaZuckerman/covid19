@@ -4,7 +4,8 @@ import subprocess
 import collections
 import csv
 
-samples=[] # ADD SAMPLES NAMES HERE  * without .fastq.gz suffix
+samples=[] # ADD SAMPLES NAMES HERE  * cuoted, without .fastq.gz suffix
+# for example: samples=['S1', 'S2', 'S3']
 refseq="refs/REF_NC_045512.2.fasta"
 
 def mask_fasta(fasta_record, positions_list):
