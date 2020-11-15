@@ -184,6 +184,7 @@ if __name__ == '__main__':
         wd = args.wd[0]
     else:
         wd = os.getcwd()
+        wd = wd + '/' if not wd.endswith('/') else wd
 
     out_path = ""
     if args.output_path:
