@@ -8,7 +8,7 @@
 # -> align consensuses to ref-seq <mafft>
 # + produce report
 
-# requirements: samtools v1.10, bcftools v1.9, mafft v7.215,
+# requirements: samtools v1.10, bcftools v1.9, ivar v. 1.2.2, mafft v7.215
 trap "kill 0" EXIT
 
 function initialize_globals() {
@@ -146,30 +146,33 @@ function consensus() {
 #    bcftools consensus -f "$refseq" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
 #
     # ivar instead of bcftools:
-    samtools mpileup -A "$file" | ivar consensus -m 5 -p ivarCNS5/`basename "$file" .mapped.sorted.bam`
+    # CNS1
+    samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/`basename "$file" .mapped.sorted.bam`
+    # CNS5
+    samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/`basename "$file" .mapped.sorted.bam`
     # mask 0 depth:
-    python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 1
+#    python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 1
     # mask 5 depth: every position under 5 depth is N.
-    mkdir -p CNS_5/
-    python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 5 -o CNS_5/"$sample_name".fasta
-    rm CNS/"$sample_name"_calls.vcf.gz CNS/"$sample_name"_calls.vcf.gz.csi
+#    mkdir -p CNS_5/
+#    python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 5 -o CNS_5/"$sample_name".fasta
+#    rm CNS/"$sample_name"_calls.vcf.gz CNS/"$sample_name"_calls.vcf.gz.csi
   done
 }
 
 # change fasta header from ref to sample name
-function change_fasta_header() {
-  for file in CNS/*.fasta; do
-    # change header to sample name:
-    name=`basename $file`
-    sed -i "s/>.*/>${name%%.*}/" "$file"
-  done
-
-  for file in CNS_5/*.fasta; do
-    # change header to sample name:
-    name=${file/CNS_5\//} # ${var/find/replace} => remove 'CNS/' prefix
-    sed -i "s/>.*/>${name%%.*}/" "$file"
-  done
-}
+#function change_fasta_header() { # not needed with ivar
+#  for file in CNS/*.fasta; do
+#    # change header to sample name:
+#    name=`basename $file`
+#    sed -i "s/>.*/>${name%%.*}/" "$file"
+#  done
+#
+#  for file in CNS_5/*.fasta; do
+#    # change header to sample name:
+#    name=${file/CNS_5\//} # ${var/find/replace} => remove 'CNS/' prefix
+#    sed -i "s/>.*/>${name%%.*}/" "$file"
+#  done
+#}
 
 function mafft_alignment() {
   # align with MAFFT
