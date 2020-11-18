@@ -3,22 +3,21 @@
 # Dana Bar-Ilan
 # 21.07.20
 #
+# tin general:
 # mapping fq files to ref-seq <bwa> -> keep mapped reads, sort, index <samtools> -> create consensus sequence <samtools & bcftools>
 # -> align consensuses to ref-seq <mafft>
 # + produce report
-# version: samtools-1.10
-#
+
+# requirements: samtools v1.10, bcftools v1.9, mafft v7.215,
 trap "kill 0" EXIT
 
 function initialize_globals() {
   dirs_flag=false
-# refseq=refs/REF_NC_045512.2.fasta # default refseq
-  new_bcftools=/data/software/bcftools/bcftools-1.10.2_new/bcftools-1.10.2/bcftools
   threads=32
   input_path=""
 }
 
-# parse input wiht flags
+# parse input with flags
 function usage() {
     cat <<EOF
 Usage: $0 [options]
@@ -109,7 +108,7 @@ function map_to_ref() {
     if [[ $r1 == *Undetermined*.fastq* || $r1 == *unpaired*.fastq* ]]; then # ignore undetermined
         continue
     fi
-    r2=${r1/R1/R2} # ${var/find/replace}
+    r2=${r1/R1/R2}
     output=${r1/_R1/}
     output=${output/_paired/}
     output=${output/.gz/}
@@ -137,23 +136,17 @@ function depth() {
     for file in BAM/*.mapped.sorted.bam; do
       samtools depth -a "$file" > QC/depth/`basename "$file" .mapped.sorted.bam`.txt
     done
-    # create bed file with 0 depth regions from each depth file
-    # multi process TODO
-    # in the future maybe pipe the depth into the rest of the command?
-#    for file in QC/depth/*.txt; do
-#      cut -f 3 "$file" | sort | uniq | while read X; do awk -v X="$X" '($3==X && $3==0) { printf("%s\t%d\t%d\n",$1,int($2)-1,int($2)+1);}' "$file" | sort -k1,1 -k2,2n | bedtools merge -i - | sed "s/\$/\t${X}/" ; done > QC/depth/`basename "$file" .txt`.bed
-#    done
 }
 
 function consensus() {
   for file in BAM/*.mapped.sorted.bam; do
     sample_name=`basename $file .mapped.sorted.bam`
-    #bed_file=QC/depth/`basename $file .mapped.sorted.bam`.bed
-    bcftools mpileup -f "$refseq" "$file" | bcftools call -mv -Oz -o CNS/"$sample_name"_calls.vcf.gz
-    bcftools index CNS/"$sample_name"_calls.vcf.gz
-#    bcftools consensus -f "$refseq" -m "$bed_file" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
-    bcftools consensus -f "$refseq" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
-    # mask low depth:
+#    bcftools mpileup -f -Ou "$refseq" "$file" | bcftools call -mv -Oz -o CNS/"$sample_name"_calls.vcf.gz
+#    bcftools index CNS/"$sample_name"_calls.vcf.gz
+#    bcftools consensus -f "$refseq" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
+#
+    # ivar instead of bcftools:
+    samtools mpileup -A "$file" | ivar consensus -m 5 -p ivarCNS5/`basename "$file" .mapped.sorted.bam`
     # mask 0 depth:
     python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 1
     # mask 5 depth: every position under 5 depth is N.
@@ -161,21 +154,19 @@ function consensus() {
     python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 5 -o CNS_5/"$sample_name".fasta
     rm CNS/"$sample_name"_calls.vcf.gz CNS/"$sample_name"_calls.vcf.gz.csi
   done
-
-#  for file in BAM/*.mapped.sorted.bam; do
-#    samp_name=`basename $file .mapped.sorted.bam`
-#    bed_file=QC/depth/"$sample_name".bed  # matching bed file
-#    $new_bcftools index --threads "$threads" CNS/"$samp_name"_calls.vcf.gz
-#    $new_bcftools consensus -f "$refseq" -m "$bed_file" CNS/"$samp_name"_calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fasta
-#    rm CNS/"$samp_name"_calls.vcf.gz CNS/"$samp_name"_calls.vcf.gz.csi
-#  done
 }
 
 # change fasta header from ref to sample name
 function change_fasta_header() {
   for file in CNS/*.fasta; do
     # change header to sample name:
-    name=${file/CNS\//} # ${var/find/replace} => remove 'CNS/' prefix
+    name=`basename $file`
+    sed -i "s/>.*/>${name%%.*}/" "$file"
+  done
+
+  for file in CNS_5/*.fasta; do
+    # change header to sample name:
+    name=${file/CNS_5\//} # ${var/find/replace} => remove 'CNS/' prefix
     sed -i "s/>.*/>${name%%.*}/" "$file"
   done
 }
@@ -190,11 +181,11 @@ function mafft_alignment() {
 
 function results_report() {
   report=QC/report.txt
-  # samtools coverage headers: 1#rname  2startpos  3endpos    4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
+  # samtools coverage headers: 1#rname  2startpos  3endpos  4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
   echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tmeandepth\tmaxdepth\tmindepth" > "$report"
   for file in BAM/*.mapped.sorted.bam; do
     sample_name=`basename $file .mapped.sorted.bam`
-    original_bam=${file/.mapped.sorted.bam/.bam} #{var/find/replace}
+    original_bam=${file/.mapped.sorted.bam/.bam} # {var/find/replace}
     tot_reads=$(samtools view -c "$original_bam") # do not use -@n when capturing output in variable
     coverage_stats=( $(samtools coverage -H "$file" | cut -f4,5,6) ) # number of mapped reads, covered bases, coverage
     mapped_num=${coverage_stats[0]}
@@ -206,7 +197,6 @@ function results_report() {
 
 ########################### MAIN ###############################
 # trap ctrl-c to end in the same directory as started even if user ended the program
-
 # call all functions
 # user input:
 initialize_globals

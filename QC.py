@@ -1,3 +1,4 @@
+#!/usr/bin/python3.7
 import argparse  # for pretty help menu and parsing arguments
 import csv  # for writing and reading csv files
 import subprocess  # to run shell commands
@@ -226,6 +227,7 @@ if __name__ == '__main__':
         #     fastqc_reports()
         #     multiqc_report()
         fastqc_reports(out_dir=out_path, in_dir=wd)
+        multiqc_report(out_dir=out_path)
 
     elif args.template:
         if wd and out_path:
