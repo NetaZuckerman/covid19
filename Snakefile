@@ -11,7 +11,7 @@ input_path='fastq/raw/'
 rule all:
     input:
         "QC/report.txt",
-        expand("CNS_5/{sample}_001.fasta", sample=samples),
+        expand("CNS_5/{sample}_001.fa", sample=samples),
         "alignment/all_aligned.fasta", "alignment/all_aligned.clustalout"
 
 rule map_to_refseq:
@@ -48,27 +48,36 @@ rule consensus:
     input:
        "BAM/{sample}_001.mapped.sorted.bam"
     output:
-        cns_1="CNS/{sample}_001.fasta", cns_5="CNS_5/{sample}_001.fasta"
+        cns_1="CNS/{sample}_001.fa", cns_5="CNS_5/{sample}_001.fa"
     shell:
-        "samtools mpileup -A {input} | ivar consensus -m 1 -p {output.cns_1}"
-        "samtools mpileup -A {input} | ivar consensus -m 5 -p {output.cns_5}"
+        """samtools mpileup -A {input} | ivar consensus -m 1 -p {output.cns_1}
+        samtools mpileup -A {input} | ivar consensus -m 5 -p {output.cns_5}"""
 
 rule concat_all_cns:
     input:
-        expand("CNS/{sample}_001.fasta", sample=samples) # aggregate all samples together
+        expand("CNS/{sample}_001.fa", sample=samples) # aggregate all samples together
     output:
         "alignment/all_not_aligned.fasta"
     shell:
         "cat {input} {refseq} > {output}"
 
-rule mafft_alignment:
+
+rule mafft_clustal:
     input:
         "alignment/all_not_aligned.fasta"
     output:
-        clustal="alignment/all_aligned.clustalout", fasta="alignment/all_aligned.fasta"
-    run:
-        shell("mafft --clustalout {input} > {output.clustal}")
-        shell("mafft {input} > {output.fasta}")
+        "alignment/all_aligned.clustalout"
+    shell:
+        "mafft --clustalout {input} > {output}"
+
+
+rule mafft_fasta:
+    input:
+        "alignment/all_not_aligned.fasta"
+    output:
+        "alignment/all_aligned.fasta"
+    shell:
+        "mafft {input} > {output}"
 
 
 rule produce_report:

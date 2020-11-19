@@ -159,7 +159,7 @@ function consensus() {
   done
 }
 
-# change fasta header from ref to sample name
+# change fasta header from ref to sample name - not needed when using ivar
 #function change_fasta_header() { # not needed with ivar
 #  for file in CNS/*.fasta; do
 #    # change header to sample name:
