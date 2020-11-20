@@ -1,7 +1,7 @@
 import subprocess
 import csv
 
-samples=[] # ADD SAMPLES NAMES HERE  * quoted, without .fastq.gz suffix
+samples=['42958_S2_L001', 'eg_S1_L001'] # ADD SAMPLES NAMES HERE  * quoted, without .fastq.gz suffix
 # for example: samples=['41326_S1_L001', '41357_S2_L001']
 refseq="refs/REF_NC_045512.2.fasta"
 threads=32
