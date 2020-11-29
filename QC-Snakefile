@@ -1,7 +1,6 @@
 # FastQC v0.11.3
 # MultiQC v1.9
-
-samples=[] # ADD SAMPLES NAMES HERE  * without .fastq.gz suffix
+samples=[] # ADD SAMPLES NAMES HERE  * without .fastq.gz suffix * without prefix
 
 rule all:
     input:

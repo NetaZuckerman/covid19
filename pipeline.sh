@@ -3,7 +3,7 @@
 # Dana Bar-Ilan
 # 21.07.20
 #
-# tin general:
+# in general:
 # mapping fq files to ref-seq <bwa> -> keep mapped reads, sort, index <samtools> -> create consensus sequence <samtools & bcftools>
 # -> align consensuses to ref-seq <mafft>
 # + produce report
@@ -37,11 +37,11 @@ exit 0
 function get_user_input() {
   while (( "$#" )); do
     case "$1" in
-      -d|--create_dirs) # just create all directories
+      -d|--create_dirs)
         dirs_flag=true
         shift
         ;;
-      -r|--refseq) # user provided refseq
+      -r|--refseq)
         shift
         refseq="$1"
         shift
@@ -51,7 +51,7 @@ function get_user_input() {
         threads="$1"
         shift
         ;;
-      -i) # path to fastq.gz files location
+      -i)
         shift
         input_path="$1"
         shift
@@ -60,7 +60,7 @@ function get_user_input() {
         usage
         shift
         ;;
-      -*|--*=) # unsupported flags
+      -*|--*=)
         echo "Error: Unsupported flag $1" >&2
         exit 1
         ;;
@@ -141,21 +141,11 @@ function depth() {
 function consensus() {
   for file in BAM/*.mapped.sorted.bam; do
     sample_name=`basename $file .mapped.sorted.bam`
-#    bcftools mpileup -f -Ou "$refseq" "$file" | bcftools call -mv -Oz -o CNS/"$sample_name"_calls.vcf.gz
-#    bcftools index CNS/"$sample_name"_calls.vcf.gz
-#    bcftools consensus -f "$refseq" CNS/"$sample_name"_calls.vcf.gz > CNS/"$sample_name".fasta
-#
     # ivar instead of bcftools:
     # CNS1
     samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/`basename "$file" .mapped.sorted.bam`
     # CNS5
     samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/`basename "$file" .mapped.sorted.bam`
-    # mask 0 depth:
-#    python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 1
-    # mask 5 depth: every position under 5 depth is N.
-#    mkdir -p CNS_5/
-#    python /home/dana/covid19/mask_fasta.py CNS/"$sample_name".fasta QC/depth/`basename $file .mapped.sorted.bam`.txt -n 5 -o CNS_5/"$sample_name".fasta
-#    rm CNS/"$sample_name"_calls.vcf.gz CNS/"$sample_name"_calls.vcf.gz.csi
   done
 }
 
@@ -199,7 +189,6 @@ function results_report() {
 }
 
 ########################### MAIN ###############################
-# trap ctrl-c to end in the same directory as started even if user ended the program
 # call all functions
 # user input:
 initialize_globals
