@@ -175,16 +175,19 @@ function mafft_alignment() {
 function results_report() {
   report=QC/report.txt
   # samtools coverage headers: 1#rname  2startpos  3endpos  4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
-  echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tmeandepth\tmaxdepth\tmindepth" > "$report"
+  echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tcoverageCNS_5%\tmeandepth\tmaxdepth\tmindepth" > "$report"
   for file in BAM/*.mapped.sorted.bam; do
     sample_name=`basename $file .mapped.sorted.bam`
     original_bam=${file/.mapped.sorted.bam/.bam} # {var/find/replace}
     tot_reads=$(samtools view -c "$original_bam") # do not use -@n when capturing output in variable
     coverage_stats=( $(samtools coverage -H "$file" | cut -f4,5,6) ) # number of mapped reads, covered bases, coverage
+    breadth_cns5=$(cut -f3 QC/depth/"$sample_name".txt | awk '$1>5{c++} END{print c+0}')
+    genome_size=$(cat QC/depth/"$sample_name".txt | wc -l)
+    coverage_cns5=$((breadth_cns5 / genome_size))
     mapped_num=${coverage_stats[0]}
     percentage_mapped=$(awk -v m="$mapped_num" -v t="$tot_reads" 'BEGIN {print (m/t)*100}')
     depths=$(awk '{if($3==0){next}; if(min==""){min=max=$3}; if($3>max) {max=$3}; if($3< min) {min=$3}; total+=$3; count+=1} END {print total/count"\t"max"\t"min}' QC/depth/"$sample_name".txt)
-    echo -e "${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${coverage_stats[1]}\t${coverage_stats[2]}\t${depths}" >> "$report"
+    echo -e "${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${coverage_stats[1]}\t${coverage_stats[2]}\t${coverage_cns5}\t${depths}" >> "$report"
   done
 }
 
