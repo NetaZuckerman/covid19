@@ -100,7 +100,7 @@ function map_to_ref() {
     rm CNS/* 2> /dev/null
   fi
   if [ -d CNS_5/ ]; then
-    rm CNS_5/ 2> /dev/null
+    rm CNS_5/* 2> /dev/null
   fi
   mkdir -p BAM CNS alignment results Trees
 
@@ -150,19 +150,19 @@ function consensus() {
 }
 
 # change fasta header from ref to sample name - not needed when using ivar
-#function change_fasta_header() { # not needed with ivar
-#  for file in CNS/*.fasta; do
-#    # change header to sample name:
-#    name=`basename $file`
-#    sed -i "s/>.*/>${name%%.*}/" "$file"
-#  done
-#
-#  for file in CNS_5/*.fasta; do
-#    # change header to sample name:
-#    name=${file/CNS_5\//} # ${var/find/replace} => remove 'CNS/' prefix
-#    sed -i "s/>.*/>${name%%.*}/" "$file"
-#  done
-#}
+function change_fasta_header() { # not needed with ivar
+  for file in CNS/*.fasta; do
+    # change header to sample name:
+    name=`basename $file`
+    sed -i "s/>.*/>${name%%.*}/" "$file"
+  done
+
+  for file in CNS_5/*.fasta; do
+    # change header to sample name:
+    name=${file/CNS_5\//} # ${var/find/replace} => remove 'CNS/' prefix
+    sed -i "s/>.*/>${name%%.*}/" "$file"
+  done
+}
 
 function mafft_alignment() {
   # align with MAFFT
