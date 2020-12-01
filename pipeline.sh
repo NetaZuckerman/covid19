@@ -184,7 +184,7 @@ function results_report() {
     coverage_stats=( $(samtools coverage -H "$file" | cut -f4,5,6) ) # number of mapped reads, covered bases, coverage
     breadth_cns5=$(cut -f3 QC/depth/"$sample_name".txt | awk '$1>5{c++} END{print c+0}')
     genome_size=$(cat QC/depth/"$sample_name".txt | wc -l)
-    coverage_cns5=$(python -c 'import sys; a=float(sys.argv[1]); b=float(sys.argv[2]); print(a/b)' "$breadth_cns5" "$genome_size")
+    coverage_cns5=$(python -c 'import sys; a=float(sys.argv[1]); b=float(sys.argv[2]); print(a/b)*100' "$breadth_cns5" "$genome_size")
     mapped_num=${coverage_stats[0]}
     percentage_mapped=$(awk -v m="$mapped_num" -v t="$tot_reads" 'BEGIN {print (m/t)*100}')
     depths=$(awk '{if($3==0){next}; if(min==""){min=max=$3}; if($3>max) {max=$3}; if($3< min) {min=$3}; total+=$3; count+=1} END {print total/count"\t"max"\t"min}' QC/depth/"$sample_name".txt)
