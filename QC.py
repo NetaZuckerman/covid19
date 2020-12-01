@@ -160,14 +160,15 @@ def multiqc_report(out_dir):
 
 
 if __name__ == '__main__':
-
+    # TODO: add -crop INT flag to automatically run trimmomatic crop. for fast basic use.
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns ",
                        type=str, metavar="[CSV]", nargs=1)
-    group.add_argument("--template", help="produce trimmomatic auto-trimmig template csv file with default values. will "
-                                          "be found in current working directory, or output path if provided by user. "
-                                          "file name: trimmomatic_template.csv",
+    group.add_argument("--template", help="produce trimmomatic auto-trimmig template csv file with default values."
+                                          "requires -i path/to/fastqfiles, else will look for them in current directory."
+                                          "template.csv will be found in current working directory, or output path if "
+                                          "provided by user. ",
                        action="store_true")
     group.add_argument("-r", "--reports",  help="produce fastqc and multifastqc reports of all fastq.gz files in input "
                                                 "directory \nIf output path not provided (-o), default is QC/fastqc/. ",
@@ -175,9 +176,10 @@ if __name__ == '__main__':
     group.add_argument("--dirs", help="create all project's recommended directories in current working directory, or in"
                                       " output path if provided", action="store_true")
 
-    parser.add_argument("-i", help="working directory of the program. \noptional, default is current directory",
+    parser.add_argument("-i", help="input files path. \noptional, default is current directory",
                         nargs=1, type=str, dest='wd')
-    parser.add_argument("-o", help="output path - optional. default: current directory", nargs=1, type=str, dest='output_path')
+    parser.add_argument("-o", help="output path - optional. default: current directory", nargs=1, type=str,
+                        dest='output_path')
 
     args = parser.parse_args()
 
