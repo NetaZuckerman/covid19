@@ -77,7 +77,7 @@ function check_flags() {
   if $dirs_flag; then
     mkdir -p fastq/{raw,trimmed} QC/fastqc refs BAM CNS CNS_5 alignment
     echo "Created project directories. Please download your data to fastq/raw and/or fastq/trimmed, and your reference sequence to refs/. "
-    exit 0
+    exit 1
   fi
 
   if [ -z "$input_path" ]; then
