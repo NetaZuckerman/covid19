@@ -179,7 +179,16 @@ function mafft_alignment() {
 }
 
 function results_report() {
-  report=QC/report.txt
+  report=QC/report
+  if [[ -e $report.txt || -L $report.txt ]]; then
+    i=1
+    while [[ -e $report-$i.txt || -L $report-$i.txt ]]; do
+      let i++
+    done
+    report=$report-$i
+  fi
+  touch -- "$report".txt
+  report="$report".txt
   # samtools coverage headers: 1#rname  2startpos  3endpos  4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
   echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tcoverageCNS_5%\tmeandepth\tmaxdepth\tmindepth" > "$report"
   for file in BAM/*.mapped.sorted.bam; do
