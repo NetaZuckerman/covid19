@@ -91,7 +91,6 @@ function check_flags() {
     echo please provide reference sequence --refseq! >&2
     exit 1
   fi
-  exit 0
 }
 
 # map reads to reference. straight to bam format! assuming PE for now # TODO
