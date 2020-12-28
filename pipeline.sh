@@ -10,6 +10,11 @@
 
 # requirements: samtools v1.10, bcftools v1.9, ivar v. 1.2.2, mafft v7.215
 trap "kill 0" EXIT
+set -e
+# keep track of the last executed command
+trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+# echo an error message before exiting
+trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 function initialize_globals() {
   dirs_flag=false
@@ -151,14 +156,14 @@ function consensus() {
 }
 
 # change fasta header from ref to sample name - not needed when using ivar
-function change_fasta_header() { # not needed with ivar
-  for file in CNS/*.fasta; do
+function change_fasta_header() {
+  for file in CNS/*.fa*; do
     # change header to sample name:
     name=`basename $file`
     sed -i "s/>.*/>${name%%.*}/" "$file"
   done
 
-  for file in CNS_5/*.fasta; do
+  for file in CNS_5/*.fa*; do
     # change header to sample name:
     name=${file/CNS_5\//} # ${var/find/replace} => remove 'CNS/' prefix
     sed -i "s/>.*/>${name%%.*}/" "$file"
@@ -168,7 +173,7 @@ function change_fasta_header() { # not needed with ivar
 function mafft_alignment() {
   # align with MAFFT
   # https://towardsdatascience.com/how-to-perform-sequence-alignment-on-2019-ncov-with-mafft-96c1944da8c6
-  cat CNS/*.fasta "$refseq" > alignment/all_not_aligned.fasta
+  cat CNS/*.fa* "$refseq" > alignment/all_not_aligned.fasta
   mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout
   mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta
 }
