@@ -148,12 +148,14 @@ function depth() {
 function consensus() {
   mkdir -p CNS CNS_5
   for file in BAM/*.mapped.sorted.bam; do
-    sample_name=`basename $file .mapped.sorted.bam`
+#    sample_name=`basename $file .mapped.sorted.bam`
     # ivar instead of bcftools:
     # CNS1
-    samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/`basename "$file" .mapped.sorted.bam`
+    file_name=`basename "$file" .mapped.sorted.bam`
+    file_name=$( echo "$file_name" | cut -d'_' -f 1 )
+    samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name"
     # CNS5
-    samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/`basename "$file" .mapped.sorted.bam`
+    samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
   done
 }
 
@@ -161,15 +163,15 @@ function consensus() {
 function change_fasta_header() {
   for file in CNS/*.fa*; do
     # change header to sample name:
-    name=`basename $file`
-    name=$( echo "$name" | cut -d'_' -f 1 )
+    name=`basename $file .fa`
+    #name=$( echo "$name" | cut -d'_' -f 1 )
     sed -i "s/>.*/>${name%%.*}/" "$file"
   done
 
   for file in CNS_5/*.fa*; do
     # change header to sample name:
-    name=`basename $file`
-    name=$( echo "$name" | cut -d'_' -f 1 )
+    name=`basename $file .fa`
+    #name=$( echo "$name" | cut -d'_' -f 1 )
     sed -i "s/>.*/>${name%%.*}/" "$file"
   done
 }
