@@ -162,12 +162,14 @@ function change_fasta_header() {
   for file in CNS/*.fa*; do
     # change header to sample name:
     name=`basename $file`
+    name=$( echo "$name" | cut -d'_' -f 1 )
     sed -i "s/>.*/>${name%%.*}/" "$file"
   done
 
   for file in CNS_5/*.fa*; do
     # change header to sample name:
-    name=${file/CNS_5\//} # ${var/find/replace} => remove 'CNS/' prefix
+    name=`basename $file`
+    name=$( echo "$name" | cut -d'_' -f 1 )
     sed -i "s/>.*/>${name%%.*}/" "$file"
   done
 }
