@@ -12,11 +12,11 @@
 
 # requirements: samtools v1.10, bcftools v1.9, ivar v. 1.2.2, mafft v7.215
 trap "kill 0" EXIT
-set -e
+#set -e
 # keep track of the last executed command
-trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+#trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 # echo an error message before exiting
-trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+#trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 function initialize_globals() {
   dirs_flag=false
