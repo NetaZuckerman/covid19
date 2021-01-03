@@ -41,6 +41,36 @@ def validate_input(line_dict):
     return
 
 
+def crop(numbases, path='fastq/raw/', prefix_out="fastq/trimmed/"):
+    """
+    fast crop of all fastq.gz files (crop tail) using trimmomtaic, user needs to provide a number of bases to cut.
+    Assuming Paired Ends!!
+    :param numbases: number of bases to cut.
+    :param path: path to raw fastq files
+    :param prefix_out: path to destination directory
+    :return void
+    """
+    global trimm_path
+    if not os.path.exists(prefix_out):
+        os.mkdir(prefix_out)
+
+    crop_length = str(numbases)
+    r1_files = fnmatch.filter(os.listdir(path), "*R1*.fastq*")
+    for file in r1_files:
+        command = ['java', '-jar', trimm_path, 'PE']  # assuming PE
+        r1 = path + file
+        r2 = path + file.replace('R1', 'R2')
+        out_f = prefix_out + file.rstrip('.fastq.gz')
+        out_f_paired = out_f + '.fastq.gz'
+        out_f_unpaired = out_f + '_singletons.fastq.gz'
+        out_r = prefix_out + file.rstrip('.fastq.gz')
+        out_r_paired = out_f + '.fastq.gz'
+        out_r_unpaired = out_r + '_singletons.fastq.gz'
+        command += [r1, r2, out_f_paired, out_f_unpaired, out_r_paired, out_r_unpaired, "CROP:"+crop_length]
+        print(command)
+        subprocess.call(command)
+
+
 def trim(flags_file, path='fastq/raw/', prefix_out="fastq/trimmed/"):
     """
     construct the trimmomatic command and execute it
@@ -166,10 +196,12 @@ if __name__ == '__main__':
     group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns ",
                        type=str, metavar="[CSV]", nargs=1)
     group.add_argument("--template", help="produce trimmomatic auto-trimmig template csv file with default values."
-                                          "requires -i path/to/fastqfiles, else will look for them in current directory."
-                                          "template.csv will be found in current working directory, or output path if "
-                                          "provided by user. ",
-                       action="store_true")
+                                          "requires -i path/to/fastqfiles, else will look for them in current "
+                                          "directory.template.csv will be found in current working directory, or output"
+                                          " path if provided by user. ", action="store_true")
+    group.add_argument("--crop", help="crop INT number of bases from end of all reads. Provide number of bases to "
+                                      "trim.", type=int, metavar="[INT]", nargs=1)
+
     group.add_argument("-r", "--reports",  help="produce fastqc and multifastqc reports of all fastq.gz files in input "
                                                 "directory \nIf output path not provided (-o), default is QC/fastqc/. ",
                        action='store_true')
@@ -244,6 +276,9 @@ if __name__ == '__main__':
 
     elif args.dirs:
         create_dirs(out_path)
+
+    elif args.crop:
+        crop(args.crop, wd, out_path)
 
     else:  # if user did not choose an option -> print help
         parser.print_help()
