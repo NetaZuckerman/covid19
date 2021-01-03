@@ -190,7 +190,6 @@ def multiqc_report(out_dir):
 
 
 if __name__ == '__main__':
-    # TODO: add -crop INT flag to automatically run trimmomatic crop. for fast basic use.
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-t", "--trim", help="QC trimming. Provide csv file with trimmomatic flags as columns ",
