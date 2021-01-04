@@ -180,7 +180,6 @@ function mafft_alignment() {
   --sequences alignment/all_not_aligned.fasta \
   --reference-sequence "$refseq" \
   --output alignment/all_aligned.fasta \
-  --fill-gaps # Neta said not needed, but documentation says default is false
 }
 
 function results_report() {
