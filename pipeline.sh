@@ -179,8 +179,13 @@ function mafft_alignment() {
   augur align \
   --sequences alignment/all_not_aligned.fasta \
   --reference-sequence "$refseq" \
-  --output alignment/all_aligned.fasta \
+  --output alignment/all_aligned.fasta
 }
+
+function muttable() {
+    python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/muttable.csv
+}
+
 
 function results_report() {
   report=QC/report.txt
@@ -215,6 +220,7 @@ depth
 consensus
 change_fasta_header
 mafft_alignment
+muttable
 results_report
 wait
 echo "pipeline finished! (:"
