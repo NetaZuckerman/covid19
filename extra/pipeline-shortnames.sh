@@ -152,7 +152,7 @@ function consensus() {
     # ivar instead of bcftools:
     # CNS1
     file_name=`basename "$file" .mapped.sorted.bam`
-    file_name=$( echo "$file_name" | cut -d'_' -f 1 )
+    file_name=$( echo "$file_name" | cut -d'_' -f 1 ) # SHORT NAME
     samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name"
     # CNS5
     samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
@@ -164,14 +164,12 @@ function change_fasta_header() {
   for file in CNS/*.fa*; do
     # change header to sample name:
     name=`basename $file .fa`
-    #name=$( echo "$name" | cut -d'_' -f 1 )
     sed -i "s/>.*/>${name%%.*}/" "$file"
   done
 
   for file in CNS_5/*.fa*; do
     # change header to sample name:
     name=`basename $file .fa`
-    #name=$( echo "$name" | cut -d'_' -f 1 )
     sed -i "s/>.*/>${name%%.*}/" "$file"
   done
 }
