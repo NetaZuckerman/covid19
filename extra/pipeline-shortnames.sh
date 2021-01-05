@@ -156,6 +156,8 @@ function consensus() {
     samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name"
     # CNS5
     samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
+    # remove qual files:
+    rm CNS/*.qual.txt CNS_5/*.qual.txt
   done
 }
 

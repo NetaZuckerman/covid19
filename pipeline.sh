@@ -146,12 +146,15 @@ function depth() {
 function consensus() {
   mkdir -p CNS CNS_5
   for file in BAM/*.mapped.sorted.bam; do
-    sample_name=`basename $file .mapped.sorted.bam`
     # ivar instead of bcftools:
     # CNS1
-    samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/`basename "$file" .mapped.sorted.bam`
+    file_name=`basename "$file" .mapped.sorted.bam`
+    file_name=$( echo "$file_name" | cut -d'_' -f 1 ) # SHORT NAME
+    samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name"
     # CNS5
-    samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/`basename "$file" .mapped.sorted.bam`
+    samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
+    # remove qual files:
+    rm CNS/*.qual.txt CNS_5/*.qual.txt
   done
 }
 
