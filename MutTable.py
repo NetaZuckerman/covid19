@@ -1,8 +1,8 @@
 import pandas as pd
 from Bio import SeqIO
 from sys import argv
-# TODO: make general to pipeline - accept user input? or approach to aligned file in server.
-df = pd.read_csv("mutTable.csv")  # maybe pull from other source in the server?
+
+df = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")  # maybe pull from other source in the server?
 
 # argv[1] = input multi-fasta file (aligned by augur!)
 # argv[2] = output csv table of mutations in samples
