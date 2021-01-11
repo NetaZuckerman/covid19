@@ -157,8 +157,8 @@ function consensus() {
     # CNS5
     samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
     # remove qual files:
-    rm CNS/*.qual.txt CNS_5/*.qual.txt
   done
+  rm CNS/*.qual.txt CNS_5/*.qual.txt
 }
 
 # change fasta header from ref to sample name - not needed when using ivar
@@ -208,12 +208,12 @@ function results_report() {
     original_bam=${file/.mapped.sorted.bam/.bam} # {var/find/replace}
     tot_reads=$(samtools view -c "$original_bam") # do not use -@n when capturing output in variable
     coverage_stats=( $(samtools coverage -H "$file" | cut -f4,5,6) ) # number of mapped reads, covered bases, coverage
-    breadth_cns5=$(cut -f3 QC/depth/"$sample_name".txt | awk '$1>5{c++} END{print c+0}')
-    genome_size=$(cat QC/depth/"$sample_name".txt | wc -l)
+    breadth_cns5=$(cut -f3 QC/depth/`basename $file .mapped.sorted.bam`.txt | awk '$1>5{c++} END{print c+0}')
+    genome_size=$(cat QC/depth/`basename $file .mapped.sorted.bam`.txt | wc -l)
     coverage_cns5=$(echo "$breadth_cns5/$genome_size"*100 | bc -l)
     mapped_num=${coverage_stats[0]}
     percentage_mapped=$(awk -v m="$mapped_num" -v t="$tot_reads" 'BEGIN {print (m/t)*100}')
-    depths=$(awk '{if($3==0){next}; if(min==""){min=max=$3}; if($3>max) {max=$3}; if($3< min) {min=$3}; total+=$3; count+=1} END {print total/count"\t"max"\t"min}' QC/depth/"$sample_name".txt)
+    depths=$(awk '{if($3==0){next}; if(min==""){min=max=$3}; if($3>max) {max=$3}; if($3< min) {min=$3}; total+=$3; count+=1} END {print total/count"\t"max"\t"min}' QC/depth/`basename $file .mapped.sorted.bam`.txt)
     echo -e "${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${coverage_stats[1]}\t${coverage_stats[2]}\t${coverage_cns5}\t${depths}" >> "$report"
   done
 }
