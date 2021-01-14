@@ -198,8 +198,8 @@ if __name__ == '__main__':
                                           "requires -i path/to/fastqfiles, else will look for them in current "
                                           "directory.template.csv will be found in current working directory, or output"
                                           " path if provided by user. ", action="store_true")
-    group.add_argument("--crop", help="crop INT number of bases from end of all reads. Provide number of bases to "
-                                      "trim.", type=int, metavar="[INT]")
+    group.add_argument("--crop", help="crop INT number of bases from end of all reads. INT: number of bases to "
+                                      "keep.", type=int, metavar="[INT]")
 
     group.add_argument("-r", "--reports",  help="produce fastqc and multifastqc reports of all fastq.gz files in input "
                                                 "directory \nIf output path not provided (-o), default is QC/fastqc/. ",
