@@ -4,6 +4,7 @@ from sys import argv
 
 df = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")  # maybe pull from other source in the server?
 
+
 # argv[1] = input multi-fasta file (aligned by augur!)
 # argv[2] = output csv table of mutations in samples
 
@@ -22,5 +23,5 @@ for file, seqrecord in fastadict.items():
 
 # df['val'] = df.apply(lambda row: print(row), axis=1)
 varcol = df.apply(lambda row: row[5:].unique(), axis=1)
-df.insert(5, "var",varcol)
+df.insert(7, "var",varcol)
 df.to_csv(argv[2])

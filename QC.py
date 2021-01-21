@@ -71,6 +71,7 @@ def crop(numbases, path='fastq/raw/', prefix_out="fastq/trimmed/"):
         subprocess.call(command)
 
 
+
 def trim(flags_file, path='fastq/raw/', prefix_out="fastq/trimmed/"):
     """
     construct the trimmomatic command and execute it
