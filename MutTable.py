@@ -20,6 +20,7 @@ for file, seqrecord in fastadict.items():
         mutpositions.append(x)
     df[file] = mutpositions
 
+df["REF"] = df["REF"].str.upper()
 
 # df['val'] = df.apply(lambda row: print(row), axis=1)
 varcol = df.apply(lambda row: row[5:].unique(), axis=1)
