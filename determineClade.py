@@ -9,7 +9,11 @@ with open(json_path) as f:
 fastadict = SeqIO.to_dict(SeqIO.parse(argv[1], 'fasta'))
 fastadict.pop('NC_045512.2', None)  # lose ref-seq. If not there will do nothing
 fastadict.pop('REF_NC_045512.2', None)
-samples_dict = {id: data['nodes'][id]['clade_membership'] for id, seqrecord in fastadict.items()}
+
+samples_dict = {}
+for id, seqrecord in fastadict.items():
+    if id in data['nodes']:
+        samples_dict[id] = data['nodes'][id]['clade_membership']
 
 with open('results/clades.csv', 'w') as file:
     file.write('id,clade\n')
