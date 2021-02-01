@@ -12,7 +12,7 @@ rule all:
     input:
         "QC/report.txt",
         expand("CNS_5/{sample}_001.fa", sample=samples),
-        "alignment/all_aligned.fasta", "alignment/all_aligned.clustalout"
+        "alignment/NGS6_aligned.fasta", "alignment/all_aligned.clustalout"
 
 rule map_to_refseq:
     input:
@@ -75,7 +75,7 @@ rule mafft_fasta:
     input:
         "alignment/all_not_aligned.fasta"
     output:
-        "alignment/all_aligned.fasta"
+        "alignment/NGS6_aligned.fasta"
     shell:
         "mafft {input} > {output}"
 

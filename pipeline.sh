@@ -181,7 +181,7 @@ function mafft_alignment() {
   # https://towardsdatascience.com/how-to-perform-sequence-alignment-on-2019-ncov-with-mafft-96c1944da8c6
   cat CNS_5/*.fa* > alignment/all_not_aligned.fasta
 #  mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout
-#  mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta
+#  mafft alignment/all_not_aligned.fasta > alignment/NGS6_aligned.fasta
   augur align \
   --sequences alignment/all_not_aligned.fasta \
   --reference-sequence "$refseq" \
