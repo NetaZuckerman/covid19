@@ -2,8 +2,8 @@ from sys import argv
 from Bio import SeqIO
 import json
 
-json_path = "/data/proj "  # change later for pipeline
-with open("clades.json") as f:
+json_path = "/data/projects/Michal/nCoV2019/data/nextstrain_Israel/results/clades.json"  # change later for pipeline
+with open(json_path) as f:
     data = json.load(f)
 
 fastadict = SeqIO.to_dict(SeqIO.parse(argv[1], 'fasta'))
