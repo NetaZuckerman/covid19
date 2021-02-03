@@ -14,12 +14,12 @@ fastadict.pop('REF_NC_045512.2', None)
 
 for file, seqrecord in fastadict.items():
     seq = seqrecord.seq
-    # mutpositions = []
-    # for pos in df["nuc pos"]:
-    #     x = seq[int(pos)-1]
-    #     mutpositions.append(x)
-    # df[file] = mutpositions
-    df[file] = [seq[int(pos)-1] for pos in df["nuc pos"]]
+    mutpositions = []
+    for pos in df["nuc pos"]:
+        x = seq[int(pos)-1]
+        mutpositions.append(x)
+    df[file] = mutpositions
+    # df[file] = [seq[int(pos)-1] for pos in df["nuc pos"]]
 
 df["REF"] = df["REF"].str.upper()
 
