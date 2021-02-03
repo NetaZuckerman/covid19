@@ -57,7 +57,7 @@ fastadict = SeqIO.to_dict(SeqIO.parse(input_file, 'fasta')) # fastadict -> {id: 
 fastadict.pop('NC_045512.2', None)  # remove refseq from dictionary (if does not exist, will do nothing - no Error)
 fastadict.pop('REF_NC_045512.2', None)
 
-mutTable = pd.read_csv("novelMutTable.csv")
+
 mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
 
 
