@@ -1,0 +1,112 @@
+nuc,AA,gene,Lineage,Type,nuc pos,REF,Mut
+100 C-U,c100u,5' UTR,P.2- Rio de jeneiro,Non  ORF sub,100,C,t
+733 T-C,156,ORF1,P.1 - Manaus,Synonymous,733,T,c
+1059 C-T,T265I,ORF1,B.1.351 - SA,non -Synonymous,1059,C,t
+2749 C-T,828,ORF1,P.1 - Manaus,Synonymous,2749,C,t
+3267 C-T,T1001I,ORF1,B.1.1.7 - UK,non -Synonymous,3267,C,t
+3828 C-T,S1188L,ORF1,P.1 - Manaus,non -Synonymous,3828,C,t
+5230 G-T,K1655N,ORF1,B.1.351 - SA,non -Synonymous,5230,G,t
+5388 C-A,A1708D,ORF1,B.1.1.7 - UK,non -Synonymous,5388,C,a
+5648 A-C,K1795Q,ORF1,P.1 - Manaus,non -Synonymous,5648,A,c
+6954 T-C,I2230T,ORF1,B.1.1.7 - UK,non -Synonymous,6954,T,c
+10323 A-G,K3353R,ORF1,B.1.351 - SA,non -Synonymous,10323,A,g
+11288-11296,sgf3675-3677 ,ORF1,"B.1.1.7 - UK",Deletion,11288,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.1.7 - UK",Deletion,11289,C,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.1.7 - UK",Deletion,11290,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.1.7 - UK",Deletion,11291,G,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.1.7 - UK",Deletion,11292,G,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.1.7 - UK",Deletion,11293,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.1.7 - UK",Deletion,11294,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.1.7 - UK",Deletion,11295,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.1.7 - UK",Deletion,11296,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.351 - SA",Deletion,11288,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.351 - SA",Deletion,11289,C,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.351 - SA",Deletion,11290,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.351 - SA",Deletion,11291,G,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.351 - SA",Deletion,11292,G,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.351 - SA",Deletion,11293,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.351 - SA",Deletion,11294,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.351 - SA",Deletion,11295,T,-
+11288-11296,sgf3675-3677 ,ORF1,"B.1.351 - SA",Deletion,11296,T,-
+11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11288,T,-
+11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11289,C,-
+11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11290,T,-
+11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11291,G,-
+11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11292,G,-
+11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11293,T,-
+11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11294,T,-
+11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11295,T,-
+11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11296,T,-
+12778 C-T,4171,ORF1,P.1 - Manaus,Synonymous,12778,C,t
+13860 C-T,131,ORF1,P.1 - Manaus,Synonymous,13860,C,t
+17259 G-T,E1264D,ORF1,P.1 - Manaus,Synonymous,17259,G,t
+19955 C-T,T2163I,ORF1,Mink cluster 5,non -Synonymous,19955,C,t
+21614 C-T,L18F,S,P.1 - Manaus,non -Synonymous,21614,C,t
+21621 C-A,T20N,S,P.1 - Manaus,non -Synonymous,21621,C,a
+21638 C-T,P26S,S,P.1 - Manaus,non -Synonymous,21638,C,t
+21765-21770,hv69-70,S,"B.1.1.7 - UK",Deletion,21765,T,-
+21765-21770,hv69-70,S,"B.1.1.7 - UK",Deletion,21766,A,-
+21765-21770,hv69-70,S,"B.1.1.7 - UK",Deletion,21767,C,-
+21765-21770,hv69-70,S,"B.1.1.7 - UK",Deletion,21768,A,-
+21765-21770,hv69-70,S,"B.1.1.7 - UK",Deletion,21769,T,-
+21765-21770,hv69-70,S,"B.1.1.7 - UK",Deletion,21770,G,-
+21765-21770,hv69-70,S,"Mink cluster 5",Deletion,21765,T,-
+21765-21770,hv69-70,S,"Mink cluster 5",Deletion,21766,A,-
+21765-21770,hv69-70,S,"Mink cluster 5",Deletion,21767,C,-
+21765-21770,hv69-70,S,"Mink cluster 5",Deletion,21768,A,-
+21765-21770,hv69-70,S,"Mink cluster 5",Deletion,21769,T,-
+21765-21770,hv69-70,S,"Mink cluster 5",Deletion,21770,G,-
+21801 A-C,D80A,S,B.1.351 - SA,non -Synonymous,21801,A,c
+21974 G-T,D138Y,S,P.1 - Manaus,Synonymous,21974,G,t
+21991-21993,Y144,S,B.1.1.7 - UK,Deletion,21991,T,-
+21991-21993,Y144,S,B.1.1.7 - UK,Deletion,21992,T,-
+21991-21993,Y144,S,B.1.1.7 - UK,Deletion,21993,A,-
+22132 G-T,R190S,S,P.1 - Manaus,non -Synonymous,22132,G,t
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22286,C,-
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22287,T,-
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22288,T,-
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22289,G,-
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22290,C,-
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22291,T,-
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22292,T,-
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22293,T,-
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22294,A,-
+22812 A-C,K417T,S,P.1 - Manaus,non -Synonymous,22812,A,c
+22813 G-T,K417N,S,B.1.351 - SA,non -Synonymous,22813,G,t
+23012 G-A,E484K,S,"B.1.351 - SA",non -Synonymous,23012,G,a
+23012 G-A,E484K,S,"P.2- Rio de jeneiro",non -Synonymous,23012,G,a
+23012 G-A,E484K,S,"P.1 - Manaus",non -Synonymous,23012,G,a
+23063 A-T,N501Y,S,"B.1.1.7 - UK",non -Synonymous,23063,G,t
+23063 A-T,N501Y,S,"B.1.351 - SA",non -Synonymous,23063,G,t
+23063 A-T,N501Y,S,"P.1 - Manaus",non -Synonymous,23063,G,t
+23271 C-A,A570D,S,B.1.1.7 - UK,non -Synonymous,23271,C,a
+23525 C-T,H655Y,S,P.1 - Manaus,non -Synonymous,23525,C,t
+23636 A-G,M1229I,S,Mink cluster 5,,23636,A,g
+23664 G-T,A701V,S,B.1.351 - SA,non -Synonymous,23664,G,t
+23709 C-T,T716I,S,B.1.1.7 - UK,non -Synonymous,23709,C,t
+24506 T-G,S982A,S,B.1.1.7 - UK,non -Synonymous,24506,T,g
+24642 C-T,T1027I,S,P.1 - Manaus,non -Synonymous,24642,C,t
+24914 G-C,D1118H,S,B.1.1.7 - UK,non -Synonymous,24914,G,c
+25249 G-T,S1692V,S,Mink cluster 5,,25249,G,t
+25563 G-T,Q57H,ORF3a,B.1.351 - SA,non -Synonymous,25563,G,t
+25904 C-T,S171L,ORF3a,B.1.351 - SA,non -Synonymous,25904,C,t
+26004 C-T,c26004t,,Mink cluster 5,,26004,C,t
+26456 C-T,P71L,E,B.1.351 - SA,non -Synonymous,26456,C,t
+27972 C-T,Q27,ORF8,B.1.1.7 - UK,Stop codon,27972,C,t
+28048 G-T,R52I,ORF8,B.1.1.7 - UK,non -Synonymous,28048,G,t
+28111 A-G,Y73C,ORF8,B.1.1.7 - UK,non -Synonymous,28111,A,g
+28167 G-A,E92K,ORF8,P.1 - Manaus,non -Synonymous,28167,G,a
+28196 T-C,t28196c,,Australian 501 variant,,28196,T,c
+28253 C-U,F120 ,ORF8,P.2- Rio de jeneiro,Synonymous,28253,C,t
+28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28269,-,?
+28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28270,-,?
+28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28271,-,?
+28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28272,-,?
+28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28273,-,?
+28280 GAT-CTA,D3L,N,B.1.1.7 - UK,non -Synonymous,28280,A,t
+28512 C-G,P80R,N,P.1 - Manaus,non -Synonymous,28512,C,g
+28628 G-U,A119S,N,P.2- Rio de jeneiro,non -Synonymous,28628,G,t
+28887 C-T,T205I,N,B.1.351 - SA,non -Synonymous,28887,C,t
+28975 G-U,M234I,N,P.2- Rio de jeneiro,non -Synonymous,28975,G,t
+28977 C-T,S235F,N,B.1.1.7 - UK,non -Synonymous,28977,C,t
+29754 C-U,c29754u,3' UTR,P.2- Rio de jeneiro,Non  ORF sub,29754,C,t
