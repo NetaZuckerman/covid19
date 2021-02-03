@@ -19,7 +19,7 @@ muts = {
 }
 
 mutTable = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")
-mutTable = pd.read_csv("novelMutTable.csv")
+# mutTable = pd.read_csv("novelMutTable.csv")
 mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
 
 uk_muts = mutTable[mutTable["Lineage"] == "B.1.1.7 - UK"]["AA"].tolist()
