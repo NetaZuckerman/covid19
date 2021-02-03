@@ -2,9 +2,9 @@ import pandas as pd
 from Bio import SeqIO
 from sys import argv
 
-df = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")  # maybe pull from other source in the server?
+mutTable = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")  # maybe pull from other source in the server?
 # df = pd.read_csv("novelMutTable.csv")
-
+df = pd.DataFrame()
 # argv[1] = input multi-fasta file (aligned by augur!)
 # argv[2] = output csv table of mutations in samples
 
@@ -14,11 +14,12 @@ fastadict.pop('REF_NC_045512.2', None)
 
 for file, seqrecord in fastadict.items():
     seq = seqrecord.seq
-    mutpositions = []
-    for pos in df["nuc pos"]:
-        x = seq[int(pos)-1]
-        mutpositions.append(x)
-    df[file] = mutpositions
+    # mutpositions = []
+    # for pos in df["nuc pos"]:
+    #     x = seq[int(pos)-1]
+    #     mutpositions.append(x)
+    # df[file] = mutpositions
+    df[file] = [seq[int(pos)-1] for pos in df["nuc pos"]]
 
 df["REF"] = df["REF"].str.upper()
 

@@ -19,3 +19,5 @@ with open('results/clades.csv', 'w') as file:
     file.write('id,clade\n')
     for key, val in samples_dict.items():
         file.write(f'{key},{val}\n')
+
+
