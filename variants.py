@@ -4,7 +4,9 @@ import pandas as pd
 from sys import argv
 
 # TODO: Less hard coded!
-# TODO: add to pipeline!
+# CHECK RESULTS VS MUTATIONS TABLE?
+# TEST NGS-29 by writing down all UK variants and their mutations
+
 
 input_file = argv[1]
 output_file = argv[2]
