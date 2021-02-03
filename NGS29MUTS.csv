@@ -1,0 +1,86 @@
+Sample,Known Variant,Suspect,More Mutations,S Mutations
+3327-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3146-NGS29,no variant,suspect,"Q57H,insertion28269-28273,T265I,D3L","A701V,N501Y"
+3321-NGS29,no variant,suspect,"Q57H,insertion28269-28273,T265I,D3L","A701V,N501Y"
+3325-NGS29,no variant,suspect,"Q57H,insertion28269-28273,D3L","A701V,P26S,R190S,T20N,Y144,E484K,L18F,N501Y,242-244"
+3322-NGS29,no variant,suspect,"Q57H,insertion28269-28273,T265I,D3L","A701V,N501Y"
+3352-NGS29,no variant,suspect,"Q57H,insertion28269-28273,T265I,D3L","A701V,N501Y"
+3324-NGS29,no variant,suspect,"Q57H,insertion28269-28273,T265I,D3L","A701V,N501Y"
+3355-NGS29,no variant,suspect,"Q57H,insertion28269-28273,T265I,D3L","A701V,N501Y"
+3349-NGS29,no variant,suspect,"Q57H,insertion28269-28273,T265I,D3L","A701V,N501Y"
+3361-NGS29,no variant,suspect,"Q57H,insertion28269-28273,T265I,D3L","A701V,N501Y"
+3354-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3148-NGS29,no variant,suspect,"131,insertion28269-28273,D3L","A701V,N501Y"
+3316-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3320-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3329-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3403-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3144-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3319-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3336-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3145-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3318-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3309-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3306-NGS29,no variant,suspect,"insertion28269-28273,S171L,D3L","A701V,N501Y"
+3333-NGS29,no variant,suspect,"insertion28269-28273,S171L,D3L","A701V,N501Y"
+3410-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3313-NGS29,no variant,suspect,"insertion28269-28273,S171L,D3L","A701V,N501Y"
+3411-NGS29,no variant,suspect,"insertion28269-28273,S171L,D3L","A701V,N501Y"
+3328-NGS29,no variant,suspect,"K3353R,T265I,D3L,Q57H,insertion28269-28273","A701V,N501Y"
+3339-NGS29,no variant,suspect,"insertion28269-28273,M234I,D3L","A701V,N501Y"
+3137-NGS29,no variant,suspect,"insertion28269-28273,S171L,D3L","H655Y,A701V,N501Y"
+3304-NGS29,no variant,suspect,"insertion28269-28273,S171L,D3L","A701V,N501Y"
+3348-NGS29,no variant,suspect,"Q57H,insertion28269-28273,M234I,D3L","A701V,N501Y"
+3398-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3331-NGS29,no variant,suspect,"insertion28269-28273,S171L,D3L","A701V,N501Y"
+48229-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3136-NGS29,no variant,suspect,"insertion28269-28273,M234I,D3L","A701V,N501Y"
+3337-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3334-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,P26S,T20N,L18F,N501Y"
+3402-NGS29,no variant,suspect,"T1001I,D3L,insertion28269-28273,F120 ,sgf3675-3677 ","A701V,S982A,K417T,T1027I,P26S,R190S,T20N,H655Y,M1229I,K417N,E484K,L18F,T716I,N501Y,242-244"
+3308-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,P26S,T20N,L18F,N501Y"
+3311-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,P26S,T20N,L18F,N501Y"
+3314-NGS29,no variant,suspect,"insertion28269-28273,D3L","P26S,A701V,N501Y"
+3317-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,P26S,T20N,L18F,N501Y"
+3350-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,P26S,T20N,L18F,N501Y"
+3343-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,P26S,T20N,L18F,N501Y"
+3310-NGS29,no variant,suspect,"insertion28269-28273,D3L","A701V,N501Y"
+3132-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3133-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3140-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3147-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3135-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3344-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3330-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3356-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3345-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3138-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3141-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3139-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3323-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3341-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3151-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3150-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3406-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3143-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3149-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3401-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3407-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3396-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3305-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3347-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3404-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3335-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3338-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3134-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3307-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3332-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3342-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3397-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3405-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3142-NGS29,B.1.1.7 - UK,suspect,insertion28269-28273,A701V
+3312-NGS29,no variant,suspect,"insertion28269-28273,F120 ,D3L","A701V,N501Y"
+3315-NGS29,no variant,suspect,"insertion28269-28273,D3L","N501Y,A701V,hv69-70"
+3395-NGS29,no variant,suspect,"insertion28269-28273,D3L","N501Y,A701V,hv69-70"
+3326-NGS29,no variant,suspect,"Q57H,insertion28269-28273,D3L","A701V,S982A,P26S,R190S,T20N,S1692V,D1118H,L18F,T716I,N501Y,242-244"
+3340-NGS29,no variant,suspect,"156,I2230T,K1795Q,T265I,828,T1001I,c100u,S1188L,K1655N,A1708D","A701V,D138Y,D80A,R190S,E484K,D1118H,N501Y,K417T,P26S,A570D,Y144,T716I,hv69-70,242-244,S1692V,S982A,K417N,T1027I,T20N,H655Y,M1229I,L18F"

@@ -190,7 +190,7 @@ function mafft_alignment() {
 
 function muttable() {
     python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/muttable.csv
-    python /data/projects/Dana/scripts/covid19/variants.py alignemnt/all_aligned.fasta results/variants.csv
+    python /data/projects/Dana/scripts/covid19/variants.py alignment/all_aligned.fasta results/variants.csv
 }
 
 
