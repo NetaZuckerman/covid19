@@ -1,6 +1,7 @@
 from sys import argv
 from Bio import SeqIO
 import json
+# argv[1]: aligned fasta
 
 json_path = "/data/projects/Michal/nCoV2019/data/nextstrain_Israel/results/clades.json"  # change later for pipeline
 with open(json_path) as f:
