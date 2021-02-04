@@ -38,9 +38,12 @@ nuc,AA,gene,Lineage,Type,nuc pos,REF,Mut
 11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11295,T,-
 11288-11296,sgf3675-3677 ,ORF1,"P.1 - Manaus",Deletion,11296,T,-
 12778 C-T,4171,ORF1,P.1 - Manaus,Synonymous,12778,C,t
+12878 A-G,I4205V,ORF1,B.1.429- California,non -Synonymous,12878,A,g
 13860 C-T,131,ORF1,P.1 - Manaus,Synonymous,13860,C,t
+17014 G-T,D1183Y,ORF1,B.1.429- California,non -Synonymous,17014,G,t
 17259 G-T,E1264D,ORF1,P.1 - Manaus,Synonymous,17259,G,t
 19955 C-T,T2163I,ORF1,Mink cluster 5,non -Synonymous,19955,C,t
+21600 G-T,S13I,S,B.1.429- California,non -Synonymous,21600,G,t
 21614 C-T,L18F,S,P.1 - Manaus,non -Synonymous,21614,C,t
 21621 C-A,T20N,S,P.1 - Manaus,non -Synonymous,21621,C,a
 21638 C-T,P26S,S,P.1 - Manaus,non -Synonymous,21638,C,t
@@ -61,6 +64,7 @@ nuc,AA,gene,Lineage,Type,nuc pos,REF,Mut
 21991-21993,Y144,S,B.1.1.7 - UK,Deletion,21991,T,-
 21991-21993,Y144,S,B.1.1.7 - UK,Deletion,21992,T,-
 21991-21993,Y144,S,B.1.1.7 - UK,Deletion,21993,A,-
+22018 G-T,W182C,S,B.1.429- California,non -Synonymous,22018,G,t
 22132 G-T,R190S,S,P.1 - Manaus,non -Synonymous,22132,G,t
 22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22286,C,-
 22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22287,T,-
@@ -73,16 +77,19 @@ nuc,AA,gene,Lineage,Type,nuc pos,REF,Mut
 22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22294,A,-
 22812 A-C,K417T,S,P.1 - Manaus,non -Synonymous,22812,A,c
 22813 G-T,K417N,S,B.1.351 - SA,non -Synonymous,22813,G,t
+22917 T-G,L452R,S,B.1.429- California,non -Synonymous,22917,T,g
 23012 G-A,E484K,S,"B.1.351 - SA",non -Synonymous,23012,G,a
 23012 G-A,E484K,S,"P.2- Rio de jeneiro",non -Synonymous,23012,G,a
 23012 G-A,E484K,S,"P.1 - Manaus",non -Synonymous,23012,G,a
-23063 A-T,N501Y,S,"B.1.1.7 - UK",non -Synonymous,23063,G,t
-23063 A-T,N501Y,S,"B.1.351 - SA",non -Synonymous,23063,G,t
-23063 A-T,N501Y,S,"P.1 - Manaus",non -Synonymous,23063,G,t
+23063 A-T,N501Y,S,"B.1.1.7 - UK",non -Synonymous,23063,A,t
+23063 A-T,N501Y,S,"B.1.351 - SA",non -Synonymous,23063,A,t
+23063 A-T,N501Y,S,"P.1 - Manaus",non -Synonymous,23063,A,t
 23271 C-A,A570D,S,B.1.1.7 - UK,non -Synonymous,23271,C,a
 23525 C-T,H655Y,S,P.1 - Manaus,non -Synonymous,23525,C,t
+23604 C-A,P681H,S,B.1.1.7 - UK,non -Synonymous,23604,C,a
+23604 C-A,P681H,S,B.1.1.207 - Nigerian mutation,non -synonymous,23604,C,a
 23636 A-G,M1229I,S,Mink cluster 5,,23636,A,g
-23664 G-T,A701V,S,B.1.351 - SA,non -Synonymous,23664,G,t
+23664 C-T,A701V,S,B.1.351 - SA,non -Synonymous,23664,C,t
 23709 C-T,T716I,S,B.1.1.7 - UK,non -Synonymous,23709,C,t
 24506 T-G,S982A,S,B.1.1.7 - UK,non -Synonymous,24506,T,g
 24642 C-T,T1027I,S,P.1 - Manaus,non -Synonymous,24642,C,t
@@ -98,12 +105,11 @@ nuc,AA,gene,Lineage,Type,nuc pos,REF,Mut
 28167 G-A,E92K,ORF8,P.1 - Manaus,non -Synonymous,28167,G,a
 28196 T-C,t28196c,,Australian 501 variant,,28196,T,c
 28253 C-U,F120 ,ORF8,P.2- Rio de jeneiro,Synonymous,28253,C,t
-28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28269,-,?
-28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28270,-,?
-28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28271,-,?
-28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28272,-,?
-28269-28273,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28273,-,?
-28280 GAT-CTA,D3L,N,B.1.1.7 - UK,non -Synonymous,28280,A,t
+28269-28272,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28269,-,A
+28269-28272,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28270,-,A
+28269-28272,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28271,-,A
+28269-28272,insertion28269-28273,ORF8,P.1 - Manaus,Insertion,28272,-,C
+28280 GAT-CTA,D3L,N,B.1.1.7 - UK,non -Synonymous,28280,G,c
 28512 C-G,P80R,N,P.1 - Manaus,non -Synonymous,28512,C,g
 28628 G-U,A119S,N,P.2- Rio de jeneiro,non -Synonymous,28628,G,t
 28887 C-T,T205I,N,B.1.351 - SA,non -Synonymous,28887,C,t
