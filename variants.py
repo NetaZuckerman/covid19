@@ -21,8 +21,9 @@ variantNames = {
     "California": "B.1.429- California"
 }
 
-mutTable = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")
 # mutTable = pd.read_csv("novelMutTable.csv")
+mutTable = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv") ############### TODO!
+
 mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
 mutTable["Mut"] = mutTable["Mut"].apply(lambda x: x.upper())
 
@@ -125,8 +126,12 @@ for id, seqrecord in fastadict.items():
         extraMuts = [x for x in extraMuts if x not in cali_muts]
         sMuts = [x for x in sMuts if x not in cali_muts]
 
-    extraMuts = set(extraMuts)  # unique mutations
+
+
+    # extraMuts = set(extraMuts)  # unique mutations
+    extraMuts = set([x + '(' + set(mutTable[mutTable["AA"] == x]["gene"]).pop() + ')' for x in extraMuts])
     sMuts = set(sMuts)
+
 
     line = {
             "Sample": id,
