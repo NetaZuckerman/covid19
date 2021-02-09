@@ -6,7 +6,7 @@ newfasta = argv[2]
 id_toremove = ['s6831','s6933', 's6912']
 
 
-with open(multifasta) as original, open(newfasta) as corrected:
+with open(multifasta) as original, open(newfasta, 'w') as corrected:
     records = SeqIO.parse(original, "fasta")
     for record in records:
         if record.id not in id_toremove:
