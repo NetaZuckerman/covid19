@@ -3,7 +3,7 @@ from sys import argv
 
 multifasta = argv[1]
 newfasta = argv[2]
-id_toremove = ['s6831','s6933', 's6912']
+id_toremove = ['426']
 
 
 with open(multifasta) as original, open(newfasta, 'w') as corrected:
