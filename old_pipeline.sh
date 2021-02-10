@@ -116,3 +116,21 @@ for file in BAM/*.mapped.sorted.bam; do
   perl /data/projects/Michal/nCoV2019/code/weeSAMv.pl -b $file -out QC/CoverageStats/`basename $file .mapped.sorted.bam`.CoverageStats.txt
 done
 #/usr/local/bin/perl /data/projects/Michal/nCoV2019/code/weeSAMv.pl -b $file -out QC/CoverageStats/`basename $file .mapped.sorted.bam`.CoverageStats.txt  #local computer
+
+###########
+
+# try parallel for loops
+cores=3
+
+for r1 in fastq/raw/*R1*.fastq.gz; do
+    r2=${r1/R1/R2}
+    output=${r1/_R1/}
+    output=${output/_paired/}
+    output=${output/.gz/}
+    bwa mem -v1 refs/REF_NC_045512.fasta "$r1" "$r2" | samtools view -b - > BAM/`basename $output.fastq`.bam &
+
+    background=( $(jobs -p) )
+    if (( ${#background[@]} == cores )); then
+        wait -n
+    fi
+done
