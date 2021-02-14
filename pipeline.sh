@@ -191,6 +191,12 @@ function mafft_alignment() {
 function muttable() {
     python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/muttable.csv
     python /data/projects/Dana/scripts/covid19/variants.py alignment/all_aligned.fasta results/variants.csv
+
+#    mkdir -p BAM/readcounts
+#    for file in BAM/*.mapped.sorted.bam; do
+#      bam-readcount -f "$refseq" "$file" -w 1 > BAM/readcounts/`basename "$file" .mapped.sorted.bam`.txt
+#    done
+    # add python script here to parse whole BAM/readcounts directory
 }
 
 

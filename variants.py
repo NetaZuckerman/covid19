@@ -6,7 +6,7 @@ from sys import argv
 # TODO: Less hard coded!
 # CHECK RESULTS VS MUTATIONS TABLE?
 # TEST NGS-29 by writing down all UK variants and their mutations
-
+# update new mutations
 
 input_file = argv[1]
 output_file = argv[2]
@@ -18,7 +18,8 @@ variantNames = {
     "Rio": "P.2- Rio de jeneiro",
     "Mink": "Mink cluster 5",
     "Aus": "Australian 501 variant",
-    "California": "B.1.429- California"
+    "California": "B.1.429- California",
+    "B525": "B.1.525"
 }
 
 # mutTable = pd.read_csv("novelMutTable.csv")
@@ -35,6 +36,7 @@ rio_muts = mutTable[mutTable["Lineage"] == "P.2- Rio de jeneiro"]["AA"].tolist()
 mink_muts = mutTable[mutTable["Lineage"] == "Mink cluster 5"]["AA"].tolist()
 aus_muts = mutTable[mutTable["Lineage"] == "Australian 501 variant"]["AA"].tolist()
 cali_muts = mutTable[mutTable["Lineage"] == "B.1.429- California"]["AA"].tolist()
+b525_muts = mutTable[mutTable["Lineage"] == "B.1.525"]["AA"].tolist()
 
 
 def isVar(seq, var, muttable=mutTable, vardict=variantNames):
@@ -92,11 +94,12 @@ for id, seqrecord in fastadict.items():
     minkVar, minkMuts, mink_s, mink_diff = isVar(seq, "Mink")
     ausVar, ausMuts, aus_s, aus_diff = isVar(seq, "Aus")
     caliVar, caliMuts, cali_s, cali_diff = isVar(seq, "California")
+    b525Var, b525Muts, b525_s, b525_diff = isVar(seq, "B525")
 
     known = ""
-    extraMuts = ukMuts + saMuts + manausMuts + rioMuts + minkMuts + ausMuts + caliMuts
-    sMuts = uk_s + sa_s + manaus_s + rio_s + mink_s + aus_s + cali_s
-    different_muts = uk_diff + sa_diff + manaus_diff + rio_diff + mink_diff + aus_diff + cali_diff
+    extraMuts = ukMuts + saMuts + manausMuts + rioMuts + minkMuts + ausMuts + caliMuts + b525Muts
+    sMuts = uk_s + sa_s + manaus_s + rio_s + mink_s + aus_s + cali_s + b525_s
+    different_muts = uk_diff + sa_diff + manaus_diff + rio_diff + mink_diff + aus_diff + cali_diff + b525_diff
     if ukVar:
         known = variantNames["UK"]
         extraMuts = [x for x in extraMuts if x not in uk_muts]
@@ -125,13 +128,14 @@ for id, seqrecord in fastadict.items():
         known = variantNames["California"]
         extraMuts = [x for x in extraMuts if x not in cali_muts]
         sMuts = [x for x in sMuts if x not in cali_muts]
-
-
+    elif b525Var:
+        known = variantNames["B525"]
+        extraMuts = [x for x in extraMuts if x not in b525_muts]
+        sMuts = [x for x in sMuts if x not in b525_muts]
 
     # extraMuts = set(extraMuts)  # unique mutations
     extraMuts = set([x + '(' + set(mutTable[mutTable["AA"] == x]["gene"]).pop() + ')' for x in extraMuts])
     sMuts = set(sMuts)
-
 
     line = {
             "Sample": id,
