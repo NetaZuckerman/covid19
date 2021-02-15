@@ -28,4 +28,6 @@ varcol = df.apply(lambda row: row[5:].unique(), axis=1)
 df.insert(7, "var",varcol)
 df = df.sort_values("Lineage")
 
+
 df.to_csv(argv[2])
+# df.style?

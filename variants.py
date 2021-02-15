@@ -22,8 +22,8 @@ variantNames = {
     "B525": "B.1.525"
 }
 
-# mutTable = pd.read_csv("novelMutTable.csv")
-mutTable = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv") ############### TODO!
+# mutTable = pd.read_csv("novelMutTable.csv") # for local check on my pc
+mutTable = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv") ###############
 
 mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
 mutTable["Mut"] = mutTable["Mut"].apply(lambda x: x.upper())
