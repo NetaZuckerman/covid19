@@ -10,6 +10,8 @@
 
 # requirements: samtools v1.10, bcftools v1.9, ivar v. 1.2.2, mafft v7.215
 trap "kill 0" EXIT
+eval "$(conda shell.bash hook)"
+conda activate CoronaPipeline
 #set -e
 # keep track of the last executed command
 #trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
@@ -191,7 +193,8 @@ function mafft_alignment() {
 function muttable() {
   # run pangolin
 #    conda activate pangolin # instead: try running whole script with pangolin
-    eval "$(conda shell.bash hook)"
+    conda deactivate
+
     conda activate pangolin
     pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv
     conda deactivate
