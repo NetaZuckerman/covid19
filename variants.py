@@ -10,6 +10,9 @@ from sys import argv
 
 input_file = argv[1]
 output_file = argv[2]
+pangolin_file = argv[3]
+
+pangolinTalbe = pd.read_csv(pangolin_file)
 
 variantNames = {
     "UK": "B.1.1.7 - UK",
@@ -143,13 +146,17 @@ for id, seqrecord in fastadict.items():
             "Suspect": "suspect" if (extraMuts or sMuts or different_muts) else "-",
             "More Mutations": ','.join(extraMuts),
             "S Not Covered": ','.join(sMuts),
-            "non-Table Mutations": ','.join(different_muts)
+            "non-Table Mutations": ','.join(different_muts),
+            "pangolin_clade": pangolinTalbe[pangolinTalbe.taxon == id].lineage,
+            "status": pangolinTalbe[pangolinTalbe.taxon == id].status,
+            "note": pangolinTalbe[pangolinTalbe.taxon == id].note
             }
     finalTable.append(line)
 
 
 with open(output_file, 'w') as outflie:
-    fieldsnames = ["Sample", "Known Variant", "Suspect", "More Mutations", "S Not Covered", "non-Table Mutations"]
+    fieldsnames = ["Sample", "Known Variant", "Suspect", "More Mutations", "S Not Covered", "non-Table Mutations",
+                   "pangolin_clade", "status", "note"]
     writer = csv.DictWriter(outflie, fieldsnames,  lineterminator='\n')
     writer.writeheader()
     for line in finalTable:
