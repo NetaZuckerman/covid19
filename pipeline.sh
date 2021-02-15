@@ -191,7 +191,10 @@ function mafft_alignment() {
 function muttable() {
   # run pangolin
 #    conda activate pangolin # instead: try running whole script with pangolin
+    eval "$(conda shell.bash hook)"
+    conda activate pangolin
     pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv
+    conda deactivate
 #    conda deactivate
 
     python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/muttable.csv
