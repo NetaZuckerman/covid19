@@ -1,8 +1,8 @@
 import pandas as pd
 from Bio import SeqIO
 from sys import argv
-import xlsxwriter
-import numpy as np
+# import xlsxwriter
+# import numpy as np
 
 df = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")  # maybe pull from other source in the server?
 # df = pd.read_csv("novelMutTable.csv")
