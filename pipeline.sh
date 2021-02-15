@@ -200,7 +200,6 @@ function muttable() {
     conda deactivate
 
     conda activate CoronaPipeline
-#    conda deactivate
 
     python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/muttable.csv
     python /data/projects/Dana/scripts/covid19/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv

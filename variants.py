@@ -147,9 +147,9 @@ for id, seqrecord in fastadict.items():
             "More Mutations": ','.join(extraMuts),
             "S Not Covered": ','.join(sMuts),
             "non-Table Mutations": ','.join(different_muts),
-            "pangolin_clade": pangolinTalbe[pangolinTalbe.taxon == id].lineage,
-            "status": pangolinTalbe[pangolinTalbe.taxon == id].status,
-            "note": pangolinTalbe[pangolinTalbe.taxon == id].note
+            "pangolin_clade": pangolinTalbe.lineage[pangolinTalbe.taxon == id],
+            "status": pangolinTalbe.status[pangolinTalbe.taxon == id],
+            "note": pangolinTalbe.note[pangolinTalbe.taxon == id]
             }
     finalTable.append(line)
 
