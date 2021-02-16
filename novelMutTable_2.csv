@@ -1,4 +1,4 @@
-nucleotide,aa,gene,lineage,type,pos,REF,mut
+nucleotide,AA,gene,lineage,type,pos,REF,mut
 100 C-U,,5' UTR,P.2- Rio de jeneiro,Non  ORF sub,100,C,T
 733 T-C,156,ORF1,P.1 - Manaus,Synonymous ,733,T,C
 1059 C-T,T265I,ORF1,B.1.351 - SA,non -Synonymous ,1059,C,T
@@ -16,15 +16,15 @@ nucleotide,aa,gene,lineage,type,pos,REF,mut
 8593 T-C,,,B.1.525,Synonymous ,8593,T,C
 9565 C-T,,,B.1.525,Synonymous ,9565,C,T
 10323 A-G,K3353R,ORF1,B.1.351 - SA,non -Synonymous ,10323,A,G
-11288–11296,sgf3675–3677 ,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11288,,-
-11288–11297,sgf3675–3678,ORF2,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.526",Deletion,11289,,-
-11288–11298,sgf3675–3679,ORF3,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.527",Deletion,11290,,-
-11288–11299,sgf3675–3680,ORF4,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.528",Deletion,11291,,-
-11288–11300,sgf3675–3681,ORF5,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.529",Deletion,11292,,-
-11288–11301,sgf3675–3682,ORF6,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.530",Deletion,11293,,-
-11288–11302,sgf3675–3683,ORF7,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.531",Deletion,11294,,-
-11288–11303,sgf3675–3684,ORF8,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.532",Deletion,11295,,-
-11288–11304,sgf3675–3685,ORF9,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.533",Deletion,11296,,-
+11288â€“11296,sgf3675â€“3677 ,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11288,T,-
+11288â€“11297,sgf3675â€“3678,ORF2,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11289,C,-
+11288â€“11298,sgf3675â€“3679,ORF3,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11290,T,-
+11288â€“11299,sgf3675â€“3680,ORF4,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11291,G,-
+11288â€“11300,sgf3675â€“3681,ORF5,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11292,G,-
+11288â€“11301,sgf3675â€“3682,ORF6,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11293,T,-
+11288â€“11302,sgf3675â€“3683,ORF7,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11294,T,-
+11288â€“11303,sgf3675â€“3684,ORF8,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11295,T,-
+11288â€“11304,sgf3675â€“3685,ORF9,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525",Deletion,11296,T,-
 12778 C-T,4171,ORF1,P.1 - Manaus,Synonymous ,12778,C,T
 12878 a-g,I4205V,ORF1,B.1.429- California,non -Synonymous ,12878,A,G
 13860 C-T,131,ORF1,P.1 - Manaus,Synonymous ,13860,C,T
@@ -40,30 +40,28 @@ nucleotide,aa,gene,lineage,type,pos,REF,mut
 21638 C-T,P26S,S,P.1 - Manaus,non -Synonymous ,21638,C,T
 21717 A-G,Q52R,,B.1.525,non -Synonymous ,21717,A,G
 21762 C-T,A67V,S,B.1.525,non -Synonymous ,21762,C,T
-21765–21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21763,,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21764,,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21765,,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21766,,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21767,,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21768,,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21769,,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21770,,-
+21765â€“21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21765,T,-
+21765â€“21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21766,A,-
+21765â€“21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21767,C,-
+21765â€“21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21768,A,-
+21765â€“21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21769,T,-
+21765â€“21770,hv69-70,S,"B.1.1.7 - UK, Mink cluster 5, B.1.525",Deletion,21770,G,-
 21801 A-C,D80A,S,B.1.351 - SA,non -Synonymous ,21801,A,C
 21974 G-T,D138Y,S,P.1 - Manaus,Synonymous ,21974,G,T
-21992–21994,Y144,S,"B.1.1.7 - UK, B.1.525",Deletion,21992,,-
-21992–21994,Y144,S,"B.1.1.7 - UK, B.1.526",Deletion,21993,,-
-21992–21994,Y144,S,"B.1.1.7 - UK, B.1.527",Deletion,21994,,-
-22018 g-t,W152C,S,B.1.429- California,non -Synonymous ,22018,G,T
+21992â€“21994,Y144,S,"B.1.1.7 - UK, B.1.525",Deletion,21992,T,-
+21992â€“21994,Y144,S,"B.1.1.7 - UK, B.1.525",Deletion,21993,A,-
+21992â€“21994,Y144,S,"B.1.1.7 - UK, B.1.525",Deletion,21994,T,-
+22018 g-t,W152C,S,B.1.429- California,non -Synonymous,22018,G,T
 22132 G-T,R190S,S,P.1 - Manaus,non -Synonymous ,22132,G,T
-22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22286,,-
-22286-22295,242-244,S,B.1.351 - SA,Deletion,22287,,-
-22286-22296,242-244,S,B.1.351 - SA,Deletion,22288,,-
-22286-22297,242-244,S,B.1.351 - SA,Deletion,22289,,-
-22286-22298,242-244,S,B.1.351 - SA,Deletion,22290,,-
-22286-22299,242-244,S,B.1.351 - SA,Deletion,22291,,-
-22286-22300,242-244,S,B.1.351 - SA,Deletion,22292,,-
-22286-22301,242-244,S,B.1.351 - SA,Deletion,22293,,-
-22286-22302,242-244,S,B.1.351 - SA,Deletion,22294,,-
+22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22286,C,-
+22286-22294,242-244,S,B.1.351 - SA,Deletion,22287,T,-
+22286-22294,242-244,S,B.1.351 - SA,Deletion,22288,T,-
+22286-22294,242-244,S,B.1.351 - SA,Deletion,22289,G,-
+22286-22294,242-244,S,B.1.351 - SA,Deletion,22290,C,-
+22286-22294,242-244,S,B.1.351 - SA,Deletion,22291,T,-
+22286-22294,242-244,S,B.1.351 - SA,Deletion,22292,T,-
+22286-22294,242-244,S,B.1.351 - SA,Deletion,22293,T,-
+22286-22294,242-244,S,B.1.351 - SA,Deletion,22294,A,-
 22812 A-C,K417T,S,P.1 - Manaus,non -Synonymous ,22812,A,C
 22813 G-T,K417N,S,B.1.351 - SA,non -Synonymous ,22813,G,T
 22917 t-g,L452R,S,B.1.429- California,non -Synonymous ,22917,T,G
@@ -88,9 +86,9 @@ nucleotide,aa,gene,lineage,type,pos,REF,mut
 26305 C-T,L21F,E,B.1.525,non -Synonymous ,26305,C,T
 26456 C-T,P71L,E,B.1.351 - SA,non -Synonymous ,26456,C,T
 26767 T-C,I82T,M,B.1.525,non -Synonymous ,26767,T,C
-27205-27207 ,F2,ORF6,B.1.525,Deletion,27205,,-
-27205-27207 ,F2,ORF6,B.1.525,Deletion,27206,,-
-27205-27207 ,F2,ORF6,B.1.525,Deletion,27207,,-
+27205-27207 ,F2,ORF6,B.1.525,Deletion,27205,T,-
+27205-27207 ,F2,ORF6,B.1.525,Deletion,27206,T,-
+27205-27207 ,F2,ORF6,B.1.525,Deletion,27207,C,-
 27972 C-T,Q27,ORF8,B.1.1.7 - UK,Stop codon,27972,C,T
 28048 G-T,R52I,ORF8,B.1.1.7 - UK,non -Synonymous ,28048,G,T
 28111 A-G,Y73C,ORF8,B.1.1.7 - UK,non -Synonymous ,28111,A,G

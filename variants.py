@@ -78,7 +78,7 @@ def isVar(seq, var, muttable=mutTable, vardict=variantNames):
     return is_var, var_mutations, s_notCovered, diff_mutations
 
 
-fastadict = SeqIO.to_dict(SeqIO.parse(input_file, 'fasta')) # fastadict -> {id: seq object}
+fastadict = SeqIO.to_dict(SeqIO.parse(input_file, 'fasta'))  # fastadict -> {id: seq object}
 fastadict.pop('NC_045512.2', None)  # remove refseq from dictionary (if does not exist, will do nothing - no Error)
 fastadict.pop('REF_NC_045512.2', None)
 
