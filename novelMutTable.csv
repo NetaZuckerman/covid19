@@ -87,12 +87,12 @@ nuc,AA,gene,Lineage,Type,nuc pos,REF,Mut
 21765-21770,hv69-70,S,"B.1.525",Deletion,21770,G,-
 21801 A-C,D80A,S,B.1.351 - SA,non -Synonymous,21801,A,c
 21974 G-T,D138Y,S,P.1 - Manaus,Synonymous,21974,G,t
-21991-21993,Y144,S,"B.1.525",Deletion,21991,T,-
-21991-21993,Y144,S,"B.1.525",Deletion,21992,T,-
-21991-21993,Y144,S,"B.1.525",Deletion,21993,A,-
-21991-21993,Y144,S,"B.1.525",Deletion,21991,T,-
-21991-21993,Y144,S,"B.1.525",Deletion,21992,T,-
-21991-21993,Y144,S,"B.1.525",Deletion,21993,A,-
+21992-21994,Y144,S,"B.1.525",Deletion,21992,T,-
+21992-21994,Y144,S,"B.1.525",Deletion,21993,T,-
+21992-21994,Y144,S,"B.1.525",Deletion,21994,A,-
+21992-21994,Y144,S,"B.1.1.7 - UK",Deletion,21992,T,-
+21992-21994,Y144,S,"B.1.1.7 - UK",Deletion,21993,T,-
+21992-21994,Y144,S,"B.1.1.7 - UK",Deletion,21994,A,-
 22018 G-T,W182C,S,B.1.429- California,non -Synonymous,22018,G,t
 22132 G-T,R190S,S,P.1 - Manaus,non -Synonymous,22132,G,t
 22286-22294 ,242-244,S,B.1.351 - SA,Deletion,22286,C,-
