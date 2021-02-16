@@ -28,10 +28,10 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 12778 C-T,4171,ORF1,P.1 - Manaus,Synonymous ,12778,C,T
 12878 a-g,I4205V,ORF1,B.1.429- California,non -Synonymous ,12878,A,G
 13860 C-T,131,ORF1,P.1 - Manaus,Synonymous ,13860,C,T
-14407 C-T,P314F,,B.1.525,non -Synonymous ,14407,C,T
+14407 C-T,P314F,'',B.1.525,non -Synonymous ,14407,C,T
 17014 g-t,D1183Y,ORF1,B.1.429- California,non -Synonymous ,17014,G,T
 17259 G-T,E1264D,ORF1,P.1 - Manaus,Synonymous ,17259,G,T
-18171 C-T,c18171t,,B.1.525,Synonymous ,18171,C,T
+18171 C-T,c18171t,'',B.1.525,Synonymous ,18171,C,T
 19955 C-T,T2163I,ORF1,Mink cluster 5,non -Synonymous ,19955,C,T
 20724 A-G,a20724g,'',B.1.525,Synonymous ,20724,A,G
 21600 g-t,S13I,S,B.1.429- California,non -Synonymous ,21600,G,T
