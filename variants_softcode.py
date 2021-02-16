@@ -14,6 +14,9 @@ import operator
 
 alignment_file = argv[1]
 output_file = argv[2]
+pangolin_file = argv[3]
+
+pangolinTable = pd.read_csv(pangolin_file)
 # mutTable = pd.read_csv("novelMutTable_2.csv")
 mutTable = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable_2.csv") # TODO: change to novelMutTable, change table itself
 
@@ -102,13 +105,15 @@ for sample, sample_mutlist in samples_mutations.items():
         "Suspect": suspect if more_muts or samples_s_not_covered[sample] or unexpected_mutations[sample] else '',
         "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] + ")" for x in more_muts])),
         "S Not Covered": ';'.join(samples_s_not_covered[sample]),
-        "non-Table Mutations": ';'.join(unexpected_mutations[sample])
+        "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
+        "status": pangolinTable[pangolinTable.taxon == sample].status.values[0],
+        "pangolin-note": pangolinTable[pangolinTable.taxon == sample].note.values[0]
     }
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
     filednames = ["Sample", "Known Variant", "Suspect", "More Mutations", "S Not Covered",
-                  "non-Table Mutations"]
+                  "non-Table Mutations", "status", "pangolin-note"]
     writer = csv.DictWriter(outfile, filednames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:
