@@ -74,7 +74,7 @@ for sample, sample_mutlist in samples_mutations.items():
             known_variant = lin
         elif len(linmuts) != len(temp):  # some mutations do exist
             more_muts += temp_mutes
-            lin_percentages[lin] = len(temp_mutes) / len(linmuts) * 100
+            lin_percentages[lin] = round(len(temp_mutes) / len(linmuts) * 100, 2)
 
     if known_variant:
         more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
