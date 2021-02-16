@@ -106,6 +106,7 @@ for sample, sample_mutlist in samples_mutations.items():
         "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] + ")" for x in more_muts])),
         "S Not Covered": ';'.join(samples_s_not_covered[sample]),
         "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
+        "pangolin_clade": pangolinTable[pangolinTable.taxon == sample].lineage.values[0],
         "status": pangolinTable[pangolinTable.taxon == sample].status.values[0],
         "pangolin-note": pangolinTable[pangolinTable.taxon == sample].note.values[0]
     }
@@ -113,7 +114,7 @@ for sample, sample_mutlist in samples_mutations.items():
 
 with open(output_file, 'w') as outfile:
     filednames = ["Sample", "Known Variant", "Suspect", "More Mutations", "S Not Covered",
-                  "non-Table Mutations", "status", "pangolin-note"]
+                  "non-Table Mutations", "pangolin_clade", "status", "pangolin-note"]
     writer = csv.DictWriter(outfile, filednames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:
