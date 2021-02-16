@@ -51,10 +51,6 @@ for sample, record in alignment.items():
 
 
 unique_lineages = set(lineages_list)
-print(unique_lineages)
-# mutations_by_lineage = {x: [] for x in unique_lineages}
-# for key, ls in mutations_by_lineage.items():
-#     lin_muts = mutTable[(mutTable.lineage.str.contains(key))].AA.tolist()
 
 mutations_by_lineage = {x: mutTable[mutTable.lineage.str.contains(x)].AA.tolist() for x in unique_lineages}
 
@@ -99,7 +95,6 @@ for sample, sample_mutlist in samples_mutations.items():
     more_muts = set(more_muts)
     if not suspect and (more_muts or samples_s_not_covered[sample] or unexpected_mutations[sample]):
         suspect = 'suspect'
-
 
     line = {
         "Sample": sample,
