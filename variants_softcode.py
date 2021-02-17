@@ -40,9 +40,9 @@ def specific_cases(unexpected_muts_dict, sample, variant):
     new_unexpected = unexpected_muts_dict.copy() # create shallow copy to avoid changing the original
 
     for x in unexpected_muts_dict[sample]:
-        if "P981R" in x and variant == "B.1.1.7 - UK":
+        if "P681R" in x and variant == "B.1.1.7 - UK":
             new_unexpected[sample].remove(x)
-        elif "P981H" in x and variant == "A.23.1 Uganda":
+        elif "P681H" in x and variant == "A.23.1 Uganda":
             new_unexpected[sample].remove(x)
         elif "M234I" in x and variant in ["B.1.526 New york", "P.2- Rio de jeneiro"]:
             new_unexpected[sample].reomve(x)
