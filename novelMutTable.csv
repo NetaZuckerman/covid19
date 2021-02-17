@@ -115,7 +115,6 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 28048 G-T,R52I,ORF8,B.1.1.7 - UK,non -Synonymous ,28048,G,T
 28111 A-G,Y73C,ORF8,B.1.1.7 - UK,non -Synonymous ,28111,A,G
 28167 G-A,E92K,ORF8,"P.1 - Manaus, A.23.1 Uganda",non -Synonymous ,28167,G,A
-28196 T-C,t28196c,'',Australian 501 variant,,28196,T,C
 28253 C-U,F120 ,ORF8,P.2- Rio de jeneiro,Synonymous ,28253,C,T
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28269,-,A
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28270,-,A
