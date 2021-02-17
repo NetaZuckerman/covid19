@@ -61,9 +61,9 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 21846 C-T,T95I,S,B.1.526 New york,non -Synonymous ,21846,C,T
 21867 G-T,R102I,S,A.23.1 Uganda,non -Synonymous ,21867,G,T
 21974 G-T,D138Y,S,P.1 - Manaus,Synonymous ,21974,G,T
-21992–21994,Y144,S,"B.1.1.7 - UK, B.1.525",Deletion,21992,T,-
-21992–21994,Y144,S,"B.1.1.7 - UK, B.1.525",Deletion,21993,A,-
-21992–21994,Y144,S,"B.1.1.7 - UK, B.1.525",Deletion,21994,T,-
+21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525",Deletion,21992,T,-
+21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525",Deletion,21993,A,-
+21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525",Deletion,21994,T,-
 22000 C-T,c22000t,S,A.23.1 Uganda,Synonymous ,22000,C,T
 22018 g-t,W152C,S,B.1.429- California,non -Synonymous,22018,G,T
 22033 C-A,F157L,S,A.23.1 Uganda,non -Synonymous ,22033,C,A
@@ -93,7 +93,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 23636 A-G,M1229I,S,Mink cluster 5,non -Synonymous ,23636,A,G
 23664 C-T,A701V,S,"B.1.351 - SA, B.1.526 New york",non -Synonymous ,23664,C,T
 23709 C- T,T716I,S,B.1.1.7 - UK,non -Synonymous ,23709,C,T
-24097 T-C,t24097c,S,A.23.1 Uganda,Synonymous ,T,C
+24097 T-C,t24097c,S,A.23.1 Uganda,Synonymous ,24097,T,C
 24224 T-C,F888L,S,B.1.525,non -Synonymous ,24224,T,C
 24506 T-G,S982A,S,B.1.1.7 - UK,non -Synonymous ,24506,T,G
 24642 C-T,T1027I,S,P.1 - Manaus,non -Synonymous ,24642,C,T
