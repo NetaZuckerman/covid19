@@ -21,15 +21,15 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 10747 C-T,c10747t,ORF1,A.23.1 Uganda,Synonymous ,10747,C,T
 11230 G-T,M3651I,ORF1,A.23.1 Uganda,non -Synonymous ,11230,G,T
 11266 G-T,L3667F,ORF1,A.23.1 Uganda,non -Synonymous ,11266,G,T
-11288–11296,sgf3675–3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11288,T,-
-11288–11296,sgf3675–3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11289,C,-
-11288–11296,sgf3675–3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11290,T,-
-11288–11296,sgf3675–3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11291,G,-
-11288–11296,sgf3675–3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11292,G,-
-11288–11296,sgf3675–3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11293,T,-
-11288–11296,sgf3675–3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11294,T,-
-11288–11296,sgf3675–3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11295,T,-
-11288–11296,sgf3675–3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11296,T,-
+11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11288,T,-
+11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11289,C,-
+11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11290,T,-
+11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11291,G,-
+11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11292,G,-
+11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11293,T,-
+11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11294,T,-
+11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11295,T,-
+11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11296,T,-
 11521 G-T,M3752I,ORF1,A.23.1 Uganda,non -Synonymous ,11521,G,T
 12778 C-T,4171,ORF1,P.1 - Manaus,Synonymous ,12778,C,T
 12878 a-g,I4205V,ORF1,B.1.429- California,non -Synonymous ,12878,A,G
