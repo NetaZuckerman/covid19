@@ -12,11 +12,8 @@
 trap "kill 0" EXIT
 eval "$(conda shell.bash hook)"
 conda activate CoronaPipeline
-#set -e
-# keep track of the last executed command
-#trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
-# echo an error message before exiting
-#trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+
+# TODO: keep errors in log file to review later
 
 function initialize_globals() {
   dirs_flag=false
@@ -200,10 +197,8 @@ function muttable() {
     conda deactivate
 
     conda activate CoronaPipeline
-#    conda deactivate
-
     python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/muttable.csv
-    python /data/projects/Dana/scripts/covid19/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
+    python /data/projects/Dana/scripts/covid19/variants_softcode.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
 
 
 #    mkdir -p BAM/readcounts
@@ -256,5 +251,6 @@ mafft_alignment
 muttable
 results_report
 wait
+conda deactivate
 echo "pipeline finished! (:"
 
