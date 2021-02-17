@@ -4,8 +4,9 @@ from sys import argv
 # import xlsxwriter
 # import numpy as np
 
-df = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")  # maybe pull from other source in the server?
 # df = pd.read_csv("novelMutTable.csv")
+df = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv"
+
 
 # argv[1] = input multi-fasta file (aligned by augur!)
 # argv[2] = output csv table of mutations in samples
@@ -19,7 +20,7 @@ for file, seqrecord in fastadict.items():
     seq = seqrecord.seq
     samples.append(file)
     mutpositions = []
-    for pos in df["nuc pos"]:
+    for pos in df["pos"]:
         x = seq[int(pos)-1]
         mutpositions.append(x)
     df[file] = mutpositions
