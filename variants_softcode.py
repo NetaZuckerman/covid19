@@ -22,6 +22,34 @@ alignment.pop('NC_045512.2', None)
 alignment.pop('REF_NC_045512.2', None)
 
 
+def specific_cases(unexpected_muts_dict, sample, variant):
+    """
+    remove double mutations from unexpected mutations dictionary.
+    double mutations:
+        1. P681H(UK) P981R(Uganda) pos 23604
+        2. M234I G-T(Rio), G-A(NY) pos 28975
+
+    :param more_muts_list: extra mutations, more than variant
+    :param unexpected_muts_list: mutations that are different from ref but also from mutations table
+    :param variant: which variant already chosen
+    :return: more_muts_list and unexpected_muts_list updated.
+    """
+    if variant not in ["B.1.1.7 - UK","A.23.1 Uganda" ,"P.2- Rio de jeneiro", "B.1.526 New york"]:
+        return unexpected_muts_dict
+
+    new_unexpected = unexpected_muts_dict.copy() # create shallow copy to avoid changing the original
+
+    for x in unexpected_muts_dict[sample]:
+        if "P981R" in x and variant == "B.1.1.7 - UK":
+            new_unexpected[sample].remove(x)
+        elif "P981H" in x and variant == "A.23.1 Uganda":
+            new_unexpected[sample].remove(x)
+        elif "M234I" in x and variant in ["B.1.526 New york", "P.2- Rio de jeneiro"]:
+            new_unexpected[sample].reomve(x)
+
+    return new_unexpected
+
+
 samples_mutations = {id: [] for id in alignment}
 samples_s_not_covered = {id: [] for id in alignment}
 unexpected_mutations = {id: [] for id in alignment}
@@ -87,14 +115,17 @@ for sample, sample_mutlist in samples_mutations.items():
             known_variant = var
             suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
 
+    unexpected_mutations = specific_cases(unexpected_mutations, sample, known_variant)
+
     more_muts = set(more_muts)
     if not suspect and (more_muts or samples_s_not_covered[sample] or unexpected_mutations[sample]):
         suspect = 'suspect'
 
+
     line = {
         "Sample": sample,
         "Known Variant": known_variant if known_variant else 'no variant',
-        "Suspect": suspect if more_muts or samples_s_not_covered[sample] or unexpected_mutations[sample] else '',
+        "Suspect": suspect,
         "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] + ")" for x in more_muts])),
         "S Not Covered": ';'.join(samples_s_not_covered[sample]),
         "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
