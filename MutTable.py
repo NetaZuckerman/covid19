@@ -5,7 +5,7 @@ from sys import argv
 # import numpy as np
 
 # df = pd.read_csv("novelMutTable.csv")
-df = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv"
+df = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")
 
 
 # argv[1] = input multi-fasta file (aligned by augur!)
