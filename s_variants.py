@@ -3,24 +3,19 @@ import csv
 import pandas as pd
 from sys import argv
 
-# TODO: specify mutations that share location: ignore and do not add to 'non table mutations'!
-# TODO: create more functions based code, with main
 alignment_file = argv[1]
 output_file = argv[2]
-pangolin_file = argv[3]
 
-pangolinTable = pd.read_csv(pangolin_file)
-# mutTable = pd.read_csv("novelMutTable.csv")
-if len(argv) > 4:
-    muttable_path = argv[4]
+if len(argv) > 3:
+    muttable_path = argv[3]
 else:
-    muttable_path = "/data/projects/Dana/scripts/covid19/novelMutTable.csv"
+    muttable_path = "/data/projects/Dana/scripts/covid19/s_MutTable.csv"
+
 mutTable = pd.read_csv(muttable_path)
 
 mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
 mutTable["mut"] = mutTable["mut"].apply(lambda x: x.upper())
 mutTable = mutTable[mutTable.type != 'Insertion']  # Ignore insertions for now
-
 
 alignment = SeqIO.to_dict(SeqIO.parse(alignment_file, 'fasta'))  # fasta-dict -> {id: seq object}
 alignment.pop('NC_045512.2', None)
@@ -132,16 +127,13 @@ for sample, sample_mutlist in samples_mutations.items():
         "Suspect": suspect,
         "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] + ")" for x in more_muts])),
         "S Not Covered": ';'.join(samples_s_not_covered[sample]),
-        "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
-        "pangolin_clade": pangolinTable[pangolinTable.taxon == sample].lineage.values[0],
-        "status": pangolinTable[pangolinTable.taxon == sample].status.values[0],
-        "pangolin-note": pangolinTable[pangolinTable.taxon == sample].note.values[0]
+        "non-Table Mutations": ';'.join(unexpected_mutations[sample])
     }
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
     filednames = ["Sample", "Known Variant", "Suspect", "More Mutations", "S Not Covered",
-                  "non-Table Mutations", "pangolin_clade", "status", "pangolin-note"]
+                  "non-Table Mutations"]
     writer = csv.DictWriter(outfile, filednames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:
