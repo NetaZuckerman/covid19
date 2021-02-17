@@ -100,7 +100,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 24748 C-T,c24748t,S,B.1.525,Synonymous ,24748,C,T
 24914 G-C,D1118H,S,B.1.1.7 - UK,non -Synonymous ,24914,G,C
 25249 G-T,S1692V,S,Mink cluster 5,,25249,G,T
-25517 C-T,P42L,ORF3a,B.1.526 New york,non -Synonymous ,C,T
+25517 C-T,P42L,ORF3a,B.1.526 New york,non -Synonymous ,25517,C,T
 25563 G-T,Q57H,ORF3a,B.1.351 - SA,non -Synonymous ,25563,G,T
 25904 C-T,S171L,ORF3a,B.1.351 - SA,non -Synonymous ,25904,C,T
 26004 C-T,c26004t,'',Mink cluster 5,,26004,C,T
