@@ -42,7 +42,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 23401 G-T,Q613H,S,A.23.1 Uganda,non -Synonymous ,23401,G,T
 23525 C-T,H655Y,S,P.1 - Manaus,non -Synonymous ,23525,C,T
 23593 G-C,Q677H,S,B.1.525,non -Synonymous ,23593,G,C
-23604 C- A,P681H,S,B.1.1.7 - UK,non -Synonymous ,23604,C,A
+23604 C- A,P681H,S,"B.1.1.7 - UK",non -Synonymous ,23604,C,A
 23604 C-G,P681R,S,A.23.1 Uganda,non -Synonymous ,23604,C,G
 23636 A-G,M1229I,S,Mink cluster 5,non -Synonymous ,23636,A,G
 23664 C-T,A701V,S,"B.1.351 - SA, B.1.526 New york",non -Synonymous ,23664,C,T
