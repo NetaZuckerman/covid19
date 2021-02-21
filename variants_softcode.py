@@ -118,7 +118,8 @@ for sample, sample_mutlist in samples_mutations.items():
                 var = key
         if flag:
             known_variant = var
-        suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
+        if var:
+            suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
 
     unexpected_mutations = specific_cases(unexpected_mutations, sample, known_variant)
 
