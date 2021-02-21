@@ -39,10 +39,11 @@ def specific_cases(unexpected_muts_dict, sample, variant):
     :param variant: which variant already chosen
     :return: more_muts_list and unexpected_muts_list updated.
     """
-    if variant not in ["B.1.1.7 - UK","A.23.1 Uganda" ,"P.2- Rio de jeneiro", "B.1.526 New york"]:
+    if variant not in ["B.1.1.7 - UK", "A.23.1 Uganda", "P.2- Rio de jeneiro", "B.1.526 New york",
+                       "VOI-18.02-WHO"]:
         return unexpected_muts_dict
 
-    new_unexpected = unexpected_muts_dict.copy() # create shallow copy to avoid changing the original
+    new_unexpected = unexpected_muts_dict.copy()  # create shallow copy to avoid changing the original
 
     for x in unexpected_muts_dict[sample]:
         if "P681R" in x and variant == "B.1.1.7 - UK":
@@ -51,6 +52,8 @@ def specific_cases(unexpected_muts_dict, sample, variant):
             new_unexpected[sample].remove(x)
         elif "M234I" in x and variant in ["B.1.526 New york", "P.2- Rio de jeneiro"]:
             new_unexpected[sample].reomve(x)
+        elif "Q677H" in x and variant in ["VOI-18.02-WHO", "B.1.1.7 - UK"]:
+            new_unexpected[sample].remove(x)
 
     return new_unexpected
 
