@@ -29,8 +29,8 @@ for file, seqrecord in fastadict.items():
 df["REF"] = df["REF"].str.upper()
 
 # df['val'] = df.apply(lambda row: print(row), axis=1)
-varcol = df.apply(lambda row: row[5:].unique(), axis=1)
-df.insert(7, "var",varcol)
+varcol = df.apply(lambda row: row[9:].unique(), axis=1)
+df.insert(7, "var", varcol)
 df = df.sort_values(by=["gene", "lineage"], ascending=[False, True]) # check!
 
 df.to_csv(argv[2])
