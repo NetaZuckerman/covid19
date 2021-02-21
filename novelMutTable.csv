@@ -1,9 +1,12 @@
 nucleotide,AA,gene,lineage,type,pos,REF,mut
 100 C-U,c100t,5' UTR,P.2- Rio de jeneiro,Non  ORF sub,100,C,T
+361 A-G,a361g,ORF1,VOI-18.02-WHO,Synonymous ,361,A,G
 733 T-C,156,ORF1,P.1 - Manaus,Synonymous ,733,T,C
 1059 C-T,T265I,ORF1,B.1.351 - SA,non -Synonymous ,1059,C,T
+1122 C-T,P286I,ORf1,VOI-18.02-WHO,Synonymous ,1122,C,T
 1498 C-T,c1498t,ORF1,B.1.525,Synonymous ,1498,C,T
 1807 A-G,a1807g,ORF1,B.1.525,Synonymous ,1807,A,G
+2509 C-T,c2509t,ORF1,VOI-18.02-WHO,Synonymous ,2509,C,T
 2659 G-A,g2659a,ORF1,B.1.525,Synonymous ,2659,G,A
 2749 C-T,828,ORF1,P.1 - Manaus,Synonymous ,2749,C,T
 3267 C- T,T1001I,ORF1,B.1.1.7 - UK,non -Synonymous ,3267,C,T
@@ -15,10 +18,12 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 6285 C-T,T2007I,ORF1,B.1.525,non -Synonymous ,6285,C,T
 6954 T-C,I2230T,ORF1,B.1.1.7 - UK,non -Synonymous ,6954,T,C
 8593 T-C,t8593c,'',B.1.525,Synonymous ,8593,T,C
+9204 A-G,D2980G,ORF1,VOI-18.02-WHO,Synonymous ,9204,A,G
 9565 C-T,c9565t,'',B.1.525,Synonymous ,9565,C,T
 9867 T-C,L3201T,ORF1,B.1.526 New york,non -Synonymous ,9867,T,C
 10323 A-G,K3353R,ORF1,B.1.351 - SA,non -Synonymous ,10323,A,G
 10747 C-T,c10747t,ORF1,A.23.1 Uganda,Synonymous ,10747,C,T
+11217 A-G,N3651S,ORF1,VOI-18.02-WHO,non -Synonymous,11217,A,G
 11230 G-T,M36551I,ORF1,A.23.1 Uganda,non -Synonymous ,11230,G,T
 11266 G-T,L3667F,ORF1,A.23.1 Uganda,non -Synonymous ,11266,G,T
 11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11288,T,-
@@ -35,18 +40,20 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 12878 a-g,I4205V,ORF1,B.1.429- California,non -Synonymous ,12878,A,G
 13860 C-T,131,ORF1,P.1 - Manaus,Synonymous ,13860,C,T
 14407 C-T,P314F,'',B.1.525,non -Synonymous ,14407,C,T
+16466 C-T,P1000L,ORF1,VOI-18.02-WHO,non -Synonymous ,16466,C,T
 16500 A-C,Q1011H,ORF1,B.1.526 New york,non -Synonymous ,16500,A,C
 16575 C-T,c16575t,ORF1,A.23.1 Uganda,Synonymous ,16575,C,T
 17014 g-t,D1183Y,ORF1,B.1.429- California,non -Synonymous ,17014,G,T
 17259 G-T,E1264D,ORF1,P.1 - Manaus,Synonymous ,17259,G,T
 17745 C-T,c17745t,ORF1,A.23.1 Uganda,Synonymous ,17745,C,T
 18171 C-T,c18171t,'',B.1.525,Synonymous ,18171,C,T
+18366 A-G,a18366g,ORF1,VOI-18.02-WHO,Synonymous ,18366,A,G
 19955 C-T,T2163I,ORF1,Mink cluster 5,non -Synonymous ,19955,C,T
-20262 A-G,a20262g,ORF1,B.1.526 New york,Synonymous ,20262,A,G
+20262 A-G,a20262g,ORF1,"B.1.526 New york, VOI-18.02-WHO",Synonymous ,20262,A,G
 20724 A-G,a20724g,'',B.1.525,Synonymous ,20724,A,G
 21575 C-T,L5F,S,B.1.526 New york,non -Synonymous ,21575,C,T
 21600 g-t,S13I,S,B.1.429- California,non -Synonymous ,21600,G,T
-21614 C-T,L18F,S,P.1 - Manaus,non -Synonymous ,21614,C,T
+21614 C-T,L18F,S,"P.1 - Manaus, VOI-18.02-WHO",non -Synonymous ,21614,C,T
 21621 C-A,T20N,S,P.1 - Manaus,non -Synonymous ,21621,C,A
 21638 C-T,P26S,S,P.1 - Manaus,non -Synonymous ,21638,C,T
 21717 A-G,Q52R,'',B.1.525,non -Synonymous ,21717,A,G
@@ -78,29 +85,34 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22293,T,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22294,A,-
 22320 A-G,D253G,S,B.1.526 New york,non -Synonymous ,22320,A,G
+22468 G-T,g22468t,S,VOI-18.02-WHO,Synonymous ,22468,G,T
 22661 G-T,V367F,S,A.23.1 Uganda,non -Synonymous ,22661,G,T
 22812 A-C,K417T,S,P.1 - Manaus,non -Synonymous ,22812,A,C
 22813 G-T,K417N,S,B.1.351 - SA,non -Synonymous ,22813,G,T
-22917 t-g,L452R,S,B.1.429- California,non -Synonymous ,22917,T,G
+22917 t-g,L452R,S,"B.1.429- California, VOI-18.02-WHO",non -Synonymous ,22917,T,G
 23012 G-A,E484K,S,"B.1.351 - SA, P.2- Rio de jeneiro, P.1 - Manaus, B.1.525, B.1.526 New york",non -Synonymous ,23012,G,A
-23063 A-T,N501Y,S,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus",non -Synonymous ,23063,A,T
+23063 A-T,N501Y,S,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, VOI-18.02-WHO",non -Synonymous ,23063,A,T
 23271 C- A,A570D,S,B.1.1.7 - UK,non -Synonymous ,23271,C,A
 23401 G-T,Q613H,S,A.23.1 Uganda,non -Synonymous ,23401,G,T
-23525 C-T,H655Y,S,P.1 - Manaus,non -Synonymous ,23525,C,T
+23525 C-T,H655Y,S,"P.1 - Manaus, VOI-18.02-WHO",non -Synonymous ,23525,C,T
 23593 G-C,Q677H,S,B.1.525,non -Synonymous ,23593,G,C
-23604 C- A,P681H,S,"B.1.1.7 - UK",non -Synonymous ,23604,C,A
+23593 G-T,Q677H,S,VOI-18.02-WHO,non -Synonymous ,23593,G,T
+23604 C-A,P681H,S,"B.1.1.7 - UK",non -Synonymous ,23604,C,A
 23604 C-G,P681R,S,A.23.1 Uganda,non -Synonymous ,23604,C,G
 23636 A-G,M1229I,S,Mink cluster 5,non -Synonymous ,23636,A,G
 23664 C-T,A701V,S,"B.1.351 - SA, B.1.526 New york",non -Synonymous ,23664,C,T
 23709 C- T,T716I,S,B.1.1.7 - UK,non -Synonymous ,23709,C,T
+23948 G-T,D796YS,S,VOI-18.02-WHO,non -Synonymous ,23948,G,T
 24097 T-C,t24097c,S,A.23.1 Uganda,Synonymous ,24097,T,C
 24224 T-C,F888L,S,B.1.525,non -Synonymous ,24224,T,C
 24506 T-G,S982A,S,B.1.1.7 - UK,non -Synonymous ,24506,T,G
 24642 C-T,T1027I,S,P.1 - Manaus,non -Synonymous ,24642,C,T
 24748 C-T,c24748t,S,B.1.525,Synonymous ,24748,C,T
 24914 G-C,D1118H,S,B.1.1.7 - UK,non -Synonymous ,24914,G,C
+25218 G-T,G1219V,S,VOI-18.02-WHO,non -Synonymous ,25218,G,T
 25249 G-T,S1692V,S,Mink cluster 5,,25249,G,T
 25517 C-T,P42L,ORF3a,B.1.526 New york,non -Synonymous ,25517,C,T
+25541 T-C,V50A,ORF3a,VOI-18.02-WHO,non -Synonymous ,25541,T,C
 25563 G-T,Q57H,ORF3a,B.1.351 - SA,non -Synonymous ,25563,G,T
 25904 C-T,S171L,ORF3a,B.1.351 - SA,non -Synonymous ,25904,C,T
 26004 C-T,c26004t,'',Mink cluster 5,,26004,C,T
@@ -110,11 +122,20 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 27205-27207,F2Del,ORF6,B.1.525,Deletion,27205,T,-
 27205-27207,F2Del,ORF6,B.1.525,Deletion,27206,T,-
 27205-27207,F2Del,ORF6,B.1.525,Deletion,27207,T,-
+27247 C-T,c24247t,'',VOI-18.02-WHO,Synonymous ,27247,C,T
+27388,27338Del,'',VOI-18.02-WHO,Deletion,27388,A,-
 27925 C-T,T11I,ORF8,B.1.526 New york,non -Synonymous ,27925,C,T
 27972 C-T,Q27,ORF8,B.1.1.7 - UK,Stop codon,27972,C,T
 28048 G-T,R52I,ORF8,B.1.1.7 - UK,non -Synonymous ,28048,G,T
 28111 A-G,Y73C,ORF8,B.1.1.7 - UK,non -Synonymous ,28111,A,G
 28167 G-A,E92K,ORF8,"P.1 - Manaus, A.23.1 Uganda",non -Synonymous ,28167,G,A
+28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28248,G,-
+28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28249,A,-
+28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28250,T,-
+28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28251,T,-
+28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28252,T,-
+28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28253,C,-
+28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28254,A,-
 28253 C-U,F120 ,ORF8,P.2- Rio de jeneiro,Synonymous ,28253,C,T
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28269,-,A
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28270,-,A

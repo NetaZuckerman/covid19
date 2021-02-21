@@ -29,16 +29,15 @@ for file, seqrecord in fastadict.items():
 df["REF"] = df["REF"].str.upper()
 df = df[df.type != 'Insertion']
 # df['val'] = df.apply(lambda row: print(row), axis=1)
-varcol = df.apply(lambda row: row[9:].unique(), axis=1)
-df.insert(7, "var", varcol)
+varcol = df.apply(lambda row: row[8:].unique(), axis=1)
+df.insert(6, "var", varcol)
 df = df.sort_values(by=["gene", "lineage"], ascending=[False, True]) # check!
 
 df = df.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'})
 
-df_part1 = df[:9]
-df_part2 = df[9:]
-df_part1 = df_part1[['nuc pos', 'nuc name', 'type', 'gene', 'var', 'name', 'lineage', 'REF', 'mut']]
-df = pd.concat(df_part1, df_part2)
+# change order of columns
+sorted_cols = ['nuc pos', 'nuc name', 'type', 'gene', 'var', 'name', 'lineage', 'REF', 'mut']
+df = df[sorted_cols + [col for col in df.columns if col not in sorted_cols]]
 
 df.to_csv(argv[2], index=False)
 
