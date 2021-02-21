@@ -33,7 +33,7 @@ varcol = df.apply(lambda row: row[9:].unique(), axis=1)
 df.insert(7, "var", varcol)
 df = df.sort_values(by=["gene", "lineage"], ascending=[False, True]) # check!
 
-df.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'})
+df = df.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'})
 df = df[['nuc pos', 'nuc name', 'type', 'gene', 'var', 'name', 'AA', 'lineage', 'REF', 'mut']]
 
 df.to_csv(argv[2], index=False)
