@@ -146,3 +146,4 @@ with open(output_file, 'w') as outfile:
     writer.writeheader()
     for line in final_table:
         writer.writerow(line)
+
