@@ -34,7 +34,11 @@ df.insert(7, "var", varcol)
 df = df.sort_values(by=["gene", "lineage"], ascending=[False, True]) # check!
 
 df = df.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'})
-df = df[['nuc pos', 'nuc name', 'type', 'gene', 'var', 'name', 'AA', 'lineage', 'REF', 'mut']]
+
+df_part1 = df[:9]
+df_part2 = df[9:]
+df_part1 = df_part1[['nuc pos', 'nuc name', 'type', 'gene', 'var', 'name', 'lineage', 'REF', 'mut']]
+df = pd.concat(df_part1, df_part2)
 
 df.to_csv(argv[2], index=False)
 
