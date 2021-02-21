@@ -27,13 +27,16 @@ for file, seqrecord in fastadict.items():
     # df[file] = [seq[int(pos)-1] for pos in df["nuc pos"]]
 
 df["REF"] = df["REF"].str.upper()
-
+df = df[df.type != 'Insertion']
 # df['val'] = df.apply(lambda row: print(row), axis=1)
 varcol = df.apply(lambda row: row[9:].unique(), axis=1)
 df.insert(7, "var", varcol)
 df = df.sort_values(by=["gene", "lineage"], ascending=[False, True]) # check!
 
-df.to_csv(argv[2])
+df.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'})
+df = df[['nuc pos', 'nuc name', 'type', 'gene', 'var', 'name', 'AA', 'lineage', 'REF', 'mut']]
+
+df.to_csv(argv[2], index=False)
 
 #
 # def function(x):
