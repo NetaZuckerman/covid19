@@ -4,9 +4,15 @@ from sys import argv
 # import xlsxwriter
 # import numpy as np
 
+
+def highlight_row(row):
+    ref = row.REF
+    color_list = [""] * 9 + ["background-color: yellow" if x!=ref else "" for x in row[9:]]
+    return color_list
+
+
 # df = pd.read_csv("novelMutTable.csv")
 df = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")
-
 
 # argv[1] = input multi-fasta file (aligned by augur!)
 # argv[2] = output csv table of mutations in samples
@@ -38,14 +44,5 @@ df = df.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'
 # change order of columns
 sorted_cols = ['nuc pos', 'nuc name', 'type', 'gene', 'var', 'name', 'lineage', 'REF', 'mut']
 df = df[sorted_cols + [col for col in df.columns if col not in sorted_cols]]
-
-df.to_csv(argv[2], index=False)
-
-#
-# def function(x):
-#     df1 = pd.DataFrame('background-color: ', index=x.index, columns=x.columns)
-#     for s in samples:
-#         m1 = x[s] != x["REF"]
-#         df1[s] = np.where(m1,'background-color: {}'.format('yellow'), df1[s])
-#
-# df.style.apply(function,)
+# write to file
+df.style.apply(highlight_row, axis=1).to_excel(argv[2], index=False)
