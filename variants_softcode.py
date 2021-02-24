@@ -93,6 +93,7 @@ for sample, sample_mutlist in samples_mutations.items():
     notes = ''
     suspect = ''
     lin_percentages = {}
+    lin_number = {}
     for lin, linmuts in mutations_by_lineage.items():
         temp = [x for x in linmuts]
         temp_mutes = []
@@ -106,6 +107,7 @@ for sample, sample_mutlist in samples_mutations.items():
         elif len(linmuts) != len(temp):  # some mutations do exist
             more_muts += temp_mutes
             lin_percentages[lin] = round(len(temp_mutes) / len(linmuts) * 100, 2)
+            lin_number[lin] = (len(temp_mutes), len(linmuts))  # tuple: (#mutation_sample, #tot_lin_mutations)
 
     if known_variant:
         more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
@@ -113,7 +115,14 @@ for sample, sample_mutlist in samples_mutations.items():
         max=0
         var = ''
         flag = False
-        for key, val in lin_percentages.items():
+        # for key, val in lin_percentages.items():
+        #     if val >= 70:
+        #         flag = True
+        #     if val > max:
+        #         max = val
+        #         var = key
+        for key, tup in lin_number.items():
+            val = round((tup[0] / tup[1])*100, 2)
             if val >= 70:
                 flag = True
             if val > max:
@@ -121,7 +130,7 @@ for sample, sample_mutlist in samples_mutations.items():
                 var = key
         if flag:
             known_variant = var
-        if var:
+        if var and lin_number[var][0] >= 2:
             suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
 
     unexpected_mutations = specific_cases(unexpected_mutations, sample, known_variant)
