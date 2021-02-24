@@ -130,6 +130,7 @@ for sample, sample_mutlist in samples_mutations.items():
                 var = key
         if flag:
             known_variant = var
+            more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
         if var and lin_number[var][0] >= 2:
             suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
 
