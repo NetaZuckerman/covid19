@@ -40,7 +40,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 12878 a-g,I4205V,ORF1,B.1.429- California,non -Synonymous ,12878,A,G
 13860 C-T,131,ORF1,P.1 - Manaus,Synonymous ,13860,C,T
 14407 C-T,P314F,ORF1,B.1.525,non -Synonymous ,14407,C,T
-16466 C-T,P1000L,ORF1,VOI-18.02-WHO,non -Synonymous ,16466,C,T
+16466 C-T,P1000L,ORF1b,VOI-18.02-WHO,non -Synonymous ,16466,C,T
 16500 A-C,Q1011H,ORF1,B.1.526 New york,non -Synonymous ,16500,A,C
 16575 C-T,c16575t,ORF1,A.23.1 Uganda,Synonymous ,16575,C,T
 17014 g-t,D1183Y,ORF1b,B.1.429- California,non -Synonymous ,17014,G,T

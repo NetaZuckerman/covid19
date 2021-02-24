@@ -197,9 +197,9 @@ function muttable() {
     conda deactivate
 
     conda activate CoronaPipeline
-    python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/muttable.xlsx
+    python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
+    python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/AA_muttable.xlsx /data/projects/Dana/scripts/covid19/regions.csv
     python /data/projects/Dana/scripts/covid19/variants_softcode.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
-
 
 #    mkdir -p BAM/readcounts
 #    for file in BAM/*.mapped.sorted.bam; do
