@@ -115,6 +115,7 @@ for sample, sample_mutlist in samples_mutations.items():
         max=0
         var = ''
         flag = False
+        val = 0
         # for key, val in lin_percentages.items():
         #     if val >= 70:
         #         flag = True
@@ -131,9 +132,11 @@ for sample, sample_mutlist in samples_mutations.items():
         if flag:
             known_variant = var
             more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
+        elif val >= 50 and var:  # and < 70
+            more_muts = [x for x in more_muts if x not in mutations_by_lineage[var]]
+
         if var and lin_number[var][0] >= 2:
             suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
-
     unexpected_mutations = specific_cases(unexpected_mutations, sample, known_variant)
 
     more_muts = set(more_muts)
