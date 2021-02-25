@@ -31,8 +31,8 @@ def highlight_row(row):
 codon_map = {
     "TTT": "F", "TTC": "F", "TTA": "L", "TTG": "L",
     "TCT": "S", "TCC": "S", "TCA": "S", "TCG": "S",
-    "TAT": "Y", "TAC": "Y", "TAA": "STOP", "TAG": "STOP",
-    "TGT": "C", "TGC": "C", "TGA": "STOP", "TGG": "W",
+    "TAT": "Y", "TAC": "Y", "TAA": "*", "TAG": "*",
+    "TGT": "C", "TGC": "C", "TGA": "*", "TGG": "W",
     "CTT": "L", "CTC": "L", "CTA": "L", "CTG": "L",
     "CCT": "P", "CCC": "P", "CCA": "P", "CCG": "P",
     "CAT": "H", "CAC": "H", "CAA": "Q", "CAG": "Q",
