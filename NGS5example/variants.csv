@@ -1,0 +1,11 @@
+Sample,Known Variant,Suspect,More Mutations,S Not Covered,non-Table Mutations,pangolin_clade,status,note
+709,no variant,suspect,,,F2(alt:T),B.1.177,passed_qc,nan
+876,no variant,suspect,T265I(ORF1),"A701V,T1027I,N501Y,S1692V,D1118H,T716I","131(alt:A),F2(alt:T)",B,passed_qc,nan
+708,no variant,suspect,,,"131(alt:A),F2(alt:T)",B.1.1.50,passed_qc,nan
+705,no variant,suspect,"T265I(ORF1),Q57H(ORF3a)",T716I,"131(alt:A),F2(alt:T)",B.1.362,passed_qc,nan
+707,no variant,suspect,"T265I(ORF1),Q57H(ORF3a)","T716I,N501Y,T1027I,S1692V","131(alt:A),F2(alt:T)",B.1.362,passed_qc,nan
+710,no variant,suspect,,N501Y,"131(alt:A),F2(alt:T)",B.1.1.294,passed_qc,nan
+704,no variant,suspect,"T265I(ORF1),Q57H(ORF3a)","T1027I,N501Y,S1692V,D1118H,T716I","131(alt:M),F2(alt:T)",B.1.362,passed_qc,nan
+922,no variant,suspect,,"T716I,A701V,N501Y,S1692V",F2(alt:T),B.1.1.74,passed_qc,nan
+779,no variant,suspect,"S982A(S),Y73C(ORF8),Q27(ORF8),S235F(N),T1001I(ORF1),sgf3675-3677 (ORF1),hv69-70(S),A1708D(ORF1),D1118H(S),Y144(S),D3L(N),A570D(S),P681H(S)","T716I,N501Y","131(alt:A),F2(alt:T)",B.1.1.7,passed_qc,10/17 B.1.1.7 SNPs
+711,no variant,suspect,,"T716I,A701V,S1692V","131(alt:A),F2(alt:T)",B.1,passed_qc,nan

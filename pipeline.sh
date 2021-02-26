@@ -10,11 +10,10 @@
 
 # requirements: samtools v1.10, bcftools v1.9, ivar v. 1.2.2, mafft v7.215
 trap "kill 0" EXIT
-#set -e
-# keep track of the last executed command
-#trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
-# echo an error message before exiting
-#trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+eval "$(conda shell.bash hook)"
+conda activate CoronaPipeline
+
+# TODO: keep errors in log file to review later
 
 function initialize_globals() {
   dirs_flag=false
@@ -189,8 +188,24 @@ function mafft_alignment() {
 }
 
 function muttable() {
-    python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/muttable.csv
-    python /data/projects/Dana/scripts/covid19/variants.py alignment/all_aligned.fasta results/variants.csv
+  # run pangolin
+#    conda activate pangolin # instead: try running whole script with pangolin
+    conda deactivate
+
+    conda activate pangolin
+    pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv
+    conda deactivate
+
+    conda activate CoronaPipeline
+    python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
+    python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/AA_muttable.xlsx /data/projects/Dana/scripts/covid19/regions.csv
+    python /data/projects/Dana/scripts/covid19/variants_softcode.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
+
+#    mkdir -p BAM/readcounts
+#    for file in BAM/*.mapped.sorted.bam; do
+#      bam-readcount -f "$refseq" "$file" -w 1 > BAM/readcounts/`basename "$file" .mapped.sorted.bam`.txt
+#    done
+    # add python script here to parse whole BAM/readcounts directory
 }
 
 function quazitable() {
@@ -244,5 +259,6 @@ mafft_alignment
 muttable
 results_report
 wait
+conda deactivate
 echo "pipeline finished! (:"
 

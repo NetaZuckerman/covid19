@@ -1,0 +1,23 @@
+# FastQC v0.11.3
+# MultiQC v1.9
+samples=[] # ADD SAMPLES NAMES HERE  * without .fastq.gz suffix * without prefix
+
+rule all:
+    input:
+        'QC/multiqc_report.html'
+
+rule fastqc:
+    input:
+         'fastq/raw/{sample}.fastq.gz'
+    output:
+          'QC/fastqc/{sample}_fastqc.html'
+    shell:
+         'fastqc {input} --outdir=QC/fastqc/'
+
+rule multiqc:
+    input:
+         expand('QC/fastqc/{sample}_fastqc.html', sample=samples)
+    output:
+        'QC/multiqc_report.html'
+    shell:
+         'multiqc QC/fastqc -o QC/'
