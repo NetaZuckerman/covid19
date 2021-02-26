@@ -18,9 +18,6 @@ for r1 in fastq/raw/*R1*.fastq.gz; do
 done
 
 
-
-
-
 #  (4) SAM to BAM
 #(the command) samtools view -Sb SAM/s11.sam  >  BAM/s11.bam
 for file in SAM/*.sam; do
@@ -43,7 +40,7 @@ done
 # (the command) samtools sort BAM/s11.mapped.bam BAM/s11.mapped.sorted
 for file in BAM/*.mapped.bam; do
   echo `basename $file`
-  $old_samtools sort $file BAM/`basename $file .mapped.bam`.mapped.sorted
+  samtools sort $file > BAM/`basename $file .mapped.bam`.mapped.sorted
 done
 
 # INDEX
@@ -57,9 +54,12 @@ done
 # (7) CREATE CONSENSUS SEQUENCE
 # https://github.com/samtools/bcftools/wiki/HOWTOs#consensus-calling
 # http://samtools.github.io/bcftools/howtos/consensus-sequence.html
+# bcftools has to be new - commands not in the old version at all. the old here is the use of samtools mpileup instead of bcftools mpileup command.
+# maybe Ns missing are in BCFtools and not samtools command. However, bcftools consensus gets a bed file with locations to add Ns, that is depth from samtools
+# but only lines that has depth 0 (3rd col).
 
 for file in BAM/*.mapped.sorted.bam; do
-  echo `basename $file`
+  echo `basen ame $file`
   samtools mpileup -uf refs/REF_NC_045512.2.fasta $file | bcftools call -mv -Oz -o CNS/calls.vcf.gz
   bcftools index CNS/calls.vcf.gz
   cat refs/REF_NC_045512.2.fasta | bcftools consensus CNS/calls.vcf.gz > CNS/`basename $file .mapped.sorted.bam`.fastq

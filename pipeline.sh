@@ -193,6 +193,14 @@ function muttable() {
     python /data/projects/Dana/scripts/covid19/variants.py alignment/all_aligned.fasta results/variants.csv
 }
 
+function quazitable() {
+  mkdir -p BAM/readcounts
+  for file in BAM/*.mapped.sorted.bam; do
+    file_name=$( echo "$file" | cut -d'_' -f1 )
+    bam-readcount -f "$refseq" "$file" -w1 > BAM/readcounts`basename "$file_name"`.txt
+  done
+  # now call python script to analyse files and produce table
+}
 
 function results_report() {
   report=QC/report.txt
