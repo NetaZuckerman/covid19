@@ -3,7 +3,6 @@ import csv
 import pandas as pd
 from sys import argv
 
-# TODO: specify mutations that share location: ignore and do not add to 'non table mutations'!
 # TODO: create more functions based code, with main
 alignment_file = argv[1]
 output_file = argv[2]
@@ -59,7 +58,8 @@ def specific_cases(unexpected_muts_dict, sample, variant):
 
 
 samples_mutations = {id: [] for id in alignment}
-samples_s_not_covered = {id: [] for id in alignment}
+# samples_s_not_covered = {id: [] for id in alignment}
+samples_not_covered = {id: [] for id in alignment}
 unexpected_mutations = {id: [] for id in alignment}
 lineages_list = []
 for sample, record in alignment.items():
@@ -73,8 +73,9 @@ for sample, record in alignment.items():
         lineages_list += [x.strip() for x in lineage.split(',')]
         mutation_name = row[1][1] if row[1][1] else row[1][0]  # if no AA name take nucleotide name
         if alt != table_mut or alt == 'N':
-            if alt == 'N' and gene == 'S':
-                samples_s_not_covered[sample].append(mutation_name)
+            if alt == 'N':  # and gene == 'S':
+                # samples_s_not_covered[sample].append(mutation_name)
+                samples_not_covered[sample].append(mutation_name)
             elif alt != ref and alt != 'N':  # alt is not the expected mut. and is covered in sequencing
                 unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
         else:  # some variant mutation
@@ -86,7 +87,7 @@ unique_lineages = set(lineages_list)
 mutations_by_lineage = {x: mutTable[mutTable.lineage.str.contains(x)].AA.tolist() for x in unique_lineages}
 
 final_table = []
-
+pangolin_dict = {}  # TODO: check for QC fails in advance
 for sample, sample_mutlist in samples_mutations.items():
     known_variant = ""
     more_muts = []
@@ -124,7 +125,7 @@ for sample, sample_mutlist in samples_mutations.items():
         #         var = key
         for key, tup in lin_number.items():
             val = round((tup[0] / tup[1])*100, 2)
-            if val >= 70:
+            if val >= 60:
                 flag = True
             if val > max:
                 max = val
@@ -140,7 +141,8 @@ for sample, sample_mutlist in samples_mutations.items():
     unexpected_mutations = specific_cases(unexpected_mutations, sample, known_variant)
 
     more_muts = set(more_muts)
-    if not suspect and (more_muts or samples_s_not_covered[sample] or unexpected_mutations[sample]):
+    # if not suspect and (more_muts or samples_s_not_covered[sample] or unexpected_mutations[sample]):
+    if not suspect and (more_muts or samples_not_covered[sample] or unexpected_mutations[sample]):
         suspect = 'suspect'
 
     line = {
@@ -148,16 +150,17 @@ for sample, sample_mutlist in samples_mutations.items():
         "Known Variant": known_variant if known_variant else 'no variant',
         "Suspect": suspect,
         "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] + ")" for x in more_muts])),
-        "S Not Covered": ';'.join(samples_s_not_covered[sample]),
+        # "S Not Covered": ';'.join(samples_s_not_covered[sample]),
+        "Not Covered": ';'.join(samples_not_covered[sample]),
         "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
-        "pangolin_clade": pangolinTable[pangolinTable.taxon == sample].lineage.values[0],
-        "status": pangolinTable[pangolinTable.taxon == sample].status.values[0],
-        "pangolin-note": pangolinTable[pangolinTable.taxon == sample].note.values[0]
+        "pangolin_clade": pangolinTable[pangolinTable.taxon == sample].lineage.values[0] if pangolinTable[pangolinTable.taxon == sample].lineage.values else 'not found',
+        "status": pangolinTable[pangolinTable.taxon == sample].status.values[0] if pangolinTable[pangolinTable.taxon == sample].status.values else 'not found',
+        "pangolin-note": pangolinTable[pangolinTable.taxon == sample].note.values[0] if pangolinTable[pangolinTable.taxon == sample].note.values else 'not found'
     }
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
-    filednames = ["Sample", "Known Variant", "Suspect", "More Mutations", "S Not Covered",
+    filednames = ["Sample", "Known Variant", "Suspect", "More Mutations", "Not Covered",  # 'S Not Covered'
                   "non-Table Mutations", "pangolin_clade", "status", "pangolin-note"]
     writer = csv.DictWriter(outfile, filednames, lineterminator='\n')
     writer.writeheader()
