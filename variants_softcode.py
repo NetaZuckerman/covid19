@@ -87,7 +87,7 @@ unique_lineages = set(lineages_list)
 mutations_by_lineage = {x: mutTable[mutTable.lineage.str.contains(x)].AA.tolist() for x in unique_lineages}
 
 final_table = []
-pangolin_dict = {}  # TODO: check for QC fails in advance
+
 for sample, sample_mutlist in samples_mutations.items():
     known_variant = ""
     more_muts = []
@@ -144,7 +144,14 @@ for sample, sample_mutlist in samples_mutations.items():
     # if not suspect and (more_muts or samples_s_not_covered[sample] or unexpected_mutations[sample]):
     if not suspect and (more_muts or samples_not_covered[sample] or unexpected_mutations[sample]):
         suspect = 'suspect'
-
+    try:
+        pangolin_clade = pangolinTable[pangolinTable.taxon == sample].lineage.values[0]
+        pangolin_status = pangolinTable[pangolinTable.taxon == sample].status.values[0]
+        pangolin_note = pangolinTable[pangolinTable.taxon == sample].note.values[0]
+    except:
+        pangolin_clade = '-'
+        pangolin_status = ''
+        pangolin_note = ''
     line = {
         "Sample": sample,
         "Known Variant": known_variant if known_variant else 'no variant',
@@ -153,9 +160,9 @@ for sample, sample_mutlist in samples_mutations.items():
         # "S Not Covered": ';'.join(samples_s_not_covered[sample]),
         "Not Covered": ';'.join(samples_not_covered[sample]),
         "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
-        "pangolin_clade": pangolinTable[pangolinTable.taxon == sample].lineage.values[0] if pangolinTable[pangolinTable.taxon == sample].lineage.values else 'not found',
-        "status": pangolinTable[pangolinTable.taxon == sample].status.values[0] if pangolinTable[pangolinTable.taxon == sample].status.values else 'not found',
-        "pangolin-note": pangolinTable[pangolinTable.taxon == sample].note.values[0] if pangolinTable[pangolinTable.taxon == sample].note.values else 'not found'
+        "pangolin_clade": pangolin_clade,
+        "status": pangolin_status,
+        "pangolin-note": pangolin_note
     }
     final_table.append(line)
 
