@@ -13,7 +13,7 @@ regions_table_path = argv[3]
 
 
 def highlight_row(row):
-    colors_list = [""] * 7 + ["background-color: grey"] * 2
+    colors_list = [""] * 7 + ["background-color: silver"] * 2
     mut = row["mut"]
     ref = row["REF"]
 
@@ -22,7 +22,7 @@ def highlight_row(row):
             if samp == mut:
                 color = "background-color: yellow"
             elif samp != 'X':
-                color = "background-color: lightyellow"
+                color = "background-color: #fffe0"
             else:  # samp == 'X' -> do not color
                 color = ''
         else:
