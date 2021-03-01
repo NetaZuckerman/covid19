@@ -20,8 +20,8 @@ def highlight_row(row):
         if samp != ref:
             if samp == mut:
                 color = "background-color: yellow"
-            else:
-                color = "background-color: teal" if samp == 'X' else "background-color: green"
+            elif samp != 'X':
+                color = "background-color: lightyellow"
         else:
             color = ''
         colors_list.append(color)
