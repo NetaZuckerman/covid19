@@ -16,7 +16,7 @@ def highlight_row(row):
     colors_list = [""] * 7 + ["background-color: grey"] * 2
     mut = row["mut"]
     ref = row["REF"]
-    color = ''
+
     for samp in row[9:]:
         if samp != ref:
             if samp == mut:
