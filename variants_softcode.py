@@ -50,7 +50,7 @@ def specific_cases(unexpected_muts_dict, sample, variant):
         elif "P681H" in x and variant == "A.23.1 - Uganda":
             new_unexpected[sample].remove(x)
         elif "M234I" in x and variant in ["B.1.526 - New york", "P.2 - Rio de jeneiro"]:
-            new_unexpected[sample].reomve(x)
+            new_unexpected[sample].remove(x)
         elif "Q677H" in x and variant in ["VOI-18.02 - WHO", "B.1.1.7 - UK"]:
             new_unexpected[sample].remove(x)
 
