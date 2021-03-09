@@ -1,14 +1,14 @@
 nucleotide,AA,gene,lineage,type,pos,REF,mut
 100 C-U,c100t,5' UTR,P.2 - Rio de jeneiro,Non  ORF sub,100,C,T
 361 A-G,a361g,ORF1,VOI-18.02 - WHO,Synonymous ,361,A,G
-733 T-C,156,ORF1,P.1 - Manaus,Synonymous ,733,T,C
+733 T-C,t733c,ORF1,P.1 - Manaus,Synonymous ,733,T,C
 1059 C-T,T265I,ORF1,B.1.351 - SA,non -Synonymous ,1059,C,T
 1122 C-T,P286I,ORf1,VOI-18.02 - WHO,Synonymous ,1122,C,T
 1498 C-T,c1498t,ORF1,B.1.525,Synonymous ,1498,C,T
 1807 A-G,a1807g,ORF1,B.1.525,Synonymous ,1807,A,G
 2509 C-T,c2509t,ORF1,VOI-18.02 - WHO,Synonymous ,2509,C,T
 2659 G-A,g2659a,ORF1,B.1.525,Synonymous ,2659,G,A
-2749 C-T,828,ORF1,P.1 - Manaus,Synonymous ,2749,C,T
+2749 C-T,c2749t,ORF1,P.1 - Manaus,Synonymous ,2749,C,T
 3267 C- T,T1001I,ORF1,B.1.1.7 - UK,non -Synonymous ,3267,C,T
 3828 C-T,S1188L,ORF1,P.1 - Manaus,non -Synonymous ,3828,C,T
 4573 C-T,c4573t,ORF1,A.23.1 - Uganda,Synonymous ,4573,C,T
@@ -36,10 +36,10 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 - New york",Deletion,11295,T,-
 11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 - New york",Deletion,11296,T,-
 11521 G-T,M3752I,ORF1,A.23.1 - Uganda,non -Synonymous ,11521,G,T
-12778 C-T,4171,ORF1,P.1 - Manaus,Synonymous ,12778,C,T
+12778 C-T,c12778t,ORF1,P.1 - Manaus,Synonymous ,12778,C,T
 12878 a-g,I4205V,ORF1,B.1.429 - California,non -Synonymous ,12878,A,G
 13821 C-T,c13821t,ORF1b,VUI_P681H_Israel,Synonymous ,13821,C,T
-13860 C-T,131,ORF1,P.1 - Manaus,Synonymous ,13860,C,T
+13860 C-T,c13860t,ORF1,P.1 - Manaus,Synonymous ,13860,C,T
 14407 C-T,P314F,ORF1,B.1.525,non -Synonymous ,14407,C,T
 16466 C-T,P1000L,ORF1b,VOI-18.02 - WHO,non -Synonymous ,16466,C,T
 16500 A-C,Q1011H,ORF1,B.1.526 - New york,non -Synonymous ,16500,A,C
@@ -139,7 +139,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28252,T,-
 28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28253,C,-
 28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28254,A,-
-28253 C-U,F120 ,ORF8,P.2 - Rio de jeneiro,Synonymous ,28253,C,T
+28253 C-U,c28253u ,ORF8,P.2 - Rio de jeneiro,Synonymous ,28253,C,T
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28269,-,A
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28270,-,A
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28271,-,A
