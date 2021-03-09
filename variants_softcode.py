@@ -152,6 +152,22 @@ for sample, sample_mutlist in samples_mutations.items():
         pangolin_note = ''
     QCfail = True if pangolin_status == 'fail' else False
 
+    temp = unexpected_mutations[sample].copy()
+    for x in temp:
+        short_name = x.split('(')[0]
+        if 'P681' in short_name:
+            if short_name == 'P681R' and 'P681H' in more_muts:
+                unexpected_mutations[sample].remove(x)
+            elif short_name == 'P681H' and 'P681R' in more_muts:
+                unexpected_mutations[sample].remove(x)
+        elif short_name == 'M234I':
+            if 'M234I' in more_muts:
+                unexpected_mutations[sample].remove(x)
+        elif short_name == 'Q677H':
+            if 'Q677H' in more_muts:
+                unexpected_mutations[sample].remove(x)
+
+
     line = {
         "Sample": sample,
         "Known Variant": known_variant if known_variant and not QCfail else 'no variant',
