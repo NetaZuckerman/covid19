@@ -141,6 +141,7 @@ for sample, sample_mutlist in samples_mutations.items():
     unexpected_mutations = specific_cases(unexpected_mutations, sample, known_variant)
 
     more_muts = set(more_muts)
+    samples_not_covered = set(samples_not_covered)
     # if not suspect and (more_muts or samples_s_not_covered[sample] or unexpected_mutations[sample]):
     if not suspect and (more_muts or samples_not_covered[sample] or unexpected_mutations[sample]):
         suspect = 'suspect'
