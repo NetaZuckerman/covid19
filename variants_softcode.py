@@ -154,14 +154,14 @@ for sample, sample_mutlist in samples_mutations.items():
         pangolin_status = ''
         pangolin_note = ''
     QCfail = True if pangolin_status == 'fail' else False
-    samples_not_covered = set(samples_not_covered)
+
     line = {
         "Sample": sample,
         "Known Variant": known_variant if known_variant and not QCfail else 'no variant',
         "Suspect": suspect,
         "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] + ")" for x in more_muts])),
         # "S Not Covered": ';'.join(samples_s_not_covered[sample]),
-        "Not Covered": ';'.join(samples_not_covered[sample]) if not QCfail else '',
+        "Not Covered": ';'.join(set(samples_not_covered[sample])) if not QCfail else '',
         "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
         "pangolin_clade": pangolin_clade,
         "status": pangolin_status,
