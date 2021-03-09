@@ -1,7 +1,6 @@
 from Bio import SeqIO
 import pandas as pd
 from sys import argv
-
 # get uk fasta
 #
 # uk_headers = open("../uk_names.txt")
@@ -11,7 +10,7 @@ from sys import argv
 #
 # all_fasta = SeqIO.to_dict(SeqIO.parse("../NGS29_aligned.fasta", 'fasta'))
 #
-# found = []
+# found = []cd
 # with open("uk_all_aligned.fasta", 'w') as outfile:
 #     for name, seqrecord in all_fasta.items():
 #         if name in uk_names:
@@ -72,10 +71,7 @@ from sys import argv
 #     records = SeqIO.parse(adistern, "fasta")
 #     for recorn in records:
 #         outfile.write(f'{recorn.id}\n')
+muttable = pd.read_csv("../novelMutTable.csv")
+print(pd.unique(muttable.lineage))
 
-list = []
-with open('adinames.txt') as adi_toremove:
-    for line in adi_toremove:
-        list.append(line.strip())
 
-print(list)
