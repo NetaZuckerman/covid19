@@ -152,12 +152,6 @@ for sample, sample_mutlist in samples_mutations.items():
         pangolin_note = ''
     QCfail = True if pangolin_status == 'fail' else False
 
-    temp = samples_not_covered[sample].copy()
-    for s in temp:
-        short_name = s.split('(')[0]
-        if short_name in [x.split('(') for x in more_muts]:
-            samples_not_covered[sample].remove(s)
-
     line = {
         "Sample": sample,
         "Known Variant": known_variant if known_variant and not QCfail else 'no variant',
