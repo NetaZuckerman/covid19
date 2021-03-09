@@ -117,12 +117,7 @@ for sample, sample_mutlist in samples_mutations.items():
         var = ''
         flag = False
         val = 0
-        # for key, val in lin_percentages.items():
-        #     if val >= 70:
-        #         flag = True
-        #     if val > max:
-        #         max = val
-        #         var = key
+        british_over_50 = False
         for key, tup in lin_number.items():
             val = round((tup[0] / tup[1])*100, 2)
             if val >= 60:
@@ -135,6 +130,8 @@ for sample, sample_mutlist in samples_mutations.items():
             more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
         elif val >= 50 and var:  # and < 70
             more_muts = [x for x in more_muts if x not in mutations_by_lineage[var]]
+            if var == "B.1.1.7 - UK":
+                known_variant = var  # for british variant only: over 50% is enough to determine variant
 
         if var and lin_number[var][0] >= 2:
             suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
