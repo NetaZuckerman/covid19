@@ -7,7 +7,7 @@ from sys import argv
 
 def highlight_row(row):
     mut = row.mut
-    color_list = [""] * 7 + ["background-color: grey"] * 2 + ["background-color: yellow" if x == mut and x != 'N' else "" for x in row[9:]]
+    color_list = [""] * 7 + ["background-color: silver"] * 2 + ["background-color: yellow" if x == mut and x != 'N' else "" for x in row[9:]]
     return color_list
 
 
