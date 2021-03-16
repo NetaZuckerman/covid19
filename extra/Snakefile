@@ -1,5 +1,0 @@
-from sys import argv
-# write argsparse function to get user input and add more features
-
-reference_sequence = argv[1]
-

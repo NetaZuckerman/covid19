@@ -71,7 +71,6 @@ def crop(numbases, path='fastq/raw/', prefix_out="fastq/trimmed/"):
         subprocess.call(command)
 
 
-
 def trim(flags_file, path='fastq/raw/', prefix_out="fastq/trimmed/"):
     """
     construct the trimmomatic command and execute it
@@ -142,7 +141,6 @@ def create_dirs(location):  # assuming location ends with '/' or empty, assuming
         pathlib.Path(path).mkdir(parents=True, exist_ok=True)  # mkdir -p
 
 
-
 # produce a template csv file used in trimming
 def template_csv(fq_path='fastq/raw/', out_loc=''):
     """
@@ -205,7 +203,8 @@ if __name__ == '__main__':
     group.add_argument("-r", "--reports",  help="produce fastqc and multifastqc reports of all fastq.gz files in input "
                                                 "directory \nIf output path not provided (-o), default is QC/fastqc/. ",
                        action='store_true')
-    group.add_argument("--dirs", help="create all project's recommended directories in current working directory, or in"
+
+    group.add_argument("--dirs", help="create all project's recommended directories in current working directory, or in" 
                                       " output path if provided", action="store_true")
 
     parser.add_argument("-i", help="input files path. \noptional, default is current directory",
@@ -247,19 +246,6 @@ if __name__ == '__main__':
 
     elif args.reports:  # reports
         print('reports')
-        # if wd and out_path:
-        #     fastqc_reports(out_dir=out_path, in_dir=wd)
-        #     multiqc_report(out_path)
-        # elif wd or out_path:
-        #     if wd:
-        #         fastqc_reports(in_dir=wd)
-        #         multiqc_report()
-        #     else:
-        #         fastqc_reports(out_dir=out_path)
-        #         multiqc_report(out_path)
-        # else:  # all default
-        #     fastqc_reports()
-        #     multiqc_report()
         fastqc_reports(out_dir=out_path, in_dir=wd)
         multiqc_report(out_dir=out_path)
 

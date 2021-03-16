@@ -190,8 +190,7 @@ function mafft_alignment() {
 }
 
 function muttable() {
-  # run pangolin
-#    conda activate pangolin # instead: try running whole script with pangolin
+    # run pangolin
     conda deactivate
 
     conda activate pangolin
@@ -201,7 +200,7 @@ function muttable() {
     conda activate CoronaPipeline
     python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
     python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv
-    python "$path"/variants_softcode.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
+    python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
 
 #    mkdir -p BAM/readcounts
 #    for file in BAM/*.mapped.sorted.bam; do

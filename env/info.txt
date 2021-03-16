@@ -1,0 +1,6 @@
+To install environment to conda:
+
+    1. Make sure conda is installed.
+        miniconda: https://docs.conda.io/en/latest/miniconda.html
+    2. on bash run:
+            conda env create -f /yourpath/CoronaPipeline.yml
