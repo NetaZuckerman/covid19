@@ -13,6 +13,8 @@ trap "kill 0" EXIT
 eval "$(conda shell.bash hook)"
 conda activate CoronaPipeline
 
+path=`dirname "${0}"`
+
 # TODO: keep errors in log file to review later
 
 function initialize_globals() {
@@ -197,9 +199,9 @@ function muttable() {
     conda deactivate
 
     conda activate CoronaPipeline
-    python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
-    python /data/projects/Dana/scripts/covid19/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx /data/projects/Dana/scripts/covid19/regions.csv
-    python /data/projects/Dana/scripts/covid19/variants_softcode.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
+    python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
+    python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv
+    python "$path"/variants_softcode.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
 
 #    mkdir -p BAM/readcounts
 #    for file in BAM/*.mapped.sorted.bam; do
