@@ -49,7 +49,6 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 17745 C-T,c17745t,ORF1,A.23.1 - Uganda,Synonymous ,17745,C,T
 18171 C-T,c18171t,'',B.1.525 - Global,Synonymous ,18171,C,T
 18366 A-G,a18366g,ORF1,VOI-18.02 - WHO,Synonymous ,18366,A,G
-20002 G-T,D2179Y,ORF1b,VUI_L452R/L1063F_Israel,non -Synonymous ,20002,G,T
 20262 A-G,a20262g,ORF1,"B.1.526 - New york, VOI-18.02 - WHO",Synonymous ,20262,A,G
 20724 A-G,a20724g,'',B.1.525 - Global,Synonymous ,20724,A,G
 21575 C-T,L5F,S,B.1.526 - New york,non -Synonymous ,21575,C,T
@@ -118,7 +117,6 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 25904 C-T,S171L,ORF3a,B.1.351 - SA,non -Synonymous ,25904,C,T
 26305 C-T,L21F,E,B.1.525 - Global,non -Synonymous ,26305,C,T
 26456 C-T,P71L,E,B.1.351 - SA,non -Synonymous ,26456,C,T
-26840 G-A,g26840a,M,VUI_L452R/L1063F_Israel,Synonymous ,26840,G,A
 26767 T-C,I82T,M,B.1.525 - Global,non -Synonymous ,26767,T,C
 27205-27207,F2Del,ORF6,B.1.525 - Global,Deletion,27205,T,-
 27205-27207,F2Del,ORF6,B.1.525 - Global,Deletion,27206,T,-
