@@ -108,7 +108,7 @@ function map_to_ref() {
   if [ -d CNS_5/ ]; then
     rm CNS_5/* 2> /dev/null
   fi
-  mkdir -p BAM CNS alignment results Trees
+  mkdir -p BAM CNS alignment results
 
   for r1 in "$input_path"*R1*.fastq*; do
     if [[ $r1 == *Undetermined*.fastq* || $r1 == *unpaired*.fastq*  || $r1 == *singletons* ]]; then # ignore undetermined and singletons
