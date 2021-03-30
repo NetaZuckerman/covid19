@@ -56,6 +56,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 21621 C-A,T20N,S,P.1 - Manaus,non -Synonymous ,21621,C,A
 21638 C-T,P26S,S,P.1 - Manaus,non -Synonymous ,21638,C,T
 21717 A-G,Q52R,S,B.1.525 - Global,non -Synonymous ,21717,A,G
+21758 C-G,H66D,S,20C/H655Y - Brittany,non -Synonymous ,21758,C,G
 21762 C-T,A67V,S,B.1.525 - Global,non -Synonymous ,21762,C,T
 21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21765,T,-
 21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21766,A,-
@@ -67,13 +68,15 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 21846 C-T,T95I,S,B.1.526 - New york,non -Synonymous ,21846,C,T
 21867 G-T,R102I,S,A.23.1 - Uganda,non -Synonymous ,21867,G,T
 21974 G-T,D138Y,S,P.1 - Manaus,Synonymous ,21974,G,T
-21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21992,T,-
-21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21993,A,-
-21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21994,T,-
+21986 G-T,G142V,S,20C/H655Y - Brittany,non -Synonymous ,21986,G,T
+21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21992,T,-
+21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21993,A,-
+21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21994,T,-
 22000 C-T,c22000t,S,A.23.1 - Uganda,Synonymous ,22000,C,T
 22018 g-t,W152C,S,B.1.429 - California,non -Synonymous,22018,G,T
 22033 C-A,F157L,S,A.23.1 - Uganda,non -Synonymous ,22033,C,A
 22132 G-T,R190S,S,P.1 - Manaus,non -Synonymous ,22132,G,T
+22206 A-G,D215G,S,20C/H655Y - Brittany,non -Synonymous,22206,A,G
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22286,C,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22287,T,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22288,T,-
@@ -90,11 +93,13 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 22813 G-T,K417N,S,B.1.351 - SA,non -Synonymous ,22813,G,T
 22917 T-G,L452R,S,"B.1.429 - California, VOI-18.02 - WHO, VUI_L452R/L1063F_Israel",non -Synonymous ,22917,T,G
 23005 T-A,N481K,S,VUI_N481K_Israel,non - Synonymous ,23005,T,A
+23010 T-C,V483A,S,20C/H655Y - Brittany,non -Synonymous ,23010,T,C
 23012 G-A,E484K,S,"B.1.351 - SA, P.2 - Rio de jeneiro, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",non -Synonymous ,23012,G,A
 23063 A-T,N501Y,S,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, VOI-18.02 - WHO",non -Synonymous ,23063,A,T
 23271 C- A,A570D,S,B.1.1.7 - UK,non -Synonymous ,23271,C,A
 23401 G-T,Q613H,S,A.23.1 - Uganda,non -Synonymous ,23401,G,T
-23525 C-T,H655Y,S,"P.1 - Manaus, VOI-18.02 - WHO",non -Synonymous ,23525,C,T
+23525 C-T,H655Y,S,"P.1 - Manaus, VOI-18.02 - WHO, 20C/H655Y - Brittany",non -Synonymous ,23525,C,T
+23567 G-A,G669S,S,20C/H655Y - Brittany,non -Synonymous ,23567,G,A
 23593 G-C,Q677H,S,B.1.525 - Global,non -Synonymous ,23593,G,C
 23593 G-T,Q677H,S,VOI-18.02 - WHO,non -Synonymous ,23593,G,T
 23604 C-A,P681H,S,"B.1.1.7 - UK, VUI_P681H_Israel",non -Synonymous ,23604,C,A
@@ -104,11 +109,13 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 23948 G-T,D796Y,S,VOI-18.02 - WHO,non -Synonymous ,23948,G,T
 24097 T-C,t24097c,S,A.23.1 - Uganda,Synonymous ,24097,T,C
 24224 T-C,F888L,S,B.1.525 - Global,non -Synonymous ,24224,T,C
+24409 A-G,Q949R,S,20C/H655Y - Brittany,non -Synonymous ,24409,A,G
 24506 T-G,S982A,S,B.1.1.7 - UK,non -Synonymous ,24506,T,G
 24642 C-T,T1027I,S,P.1 - Manaus,non -Synonymous ,24642,C,T
 24748 C-T,c24748t,S,B.1.525 - Global,Synonymous ,24748,C,T
 24751 G-T,L1063F,S,VUI_L452R/L1063F_Israel,non -Synonymous ,24751,G,T
 24914 G-C,D1118H,S,B.1.1.7 - UK,non -Synonymous ,24914,G,C
+25121 A-G,N1187D,S,20C/H655Y - Brittany,non -Synonymous ,25121,A,G
 25218 G-T,G1219V,S,VOI-18.02 - WHO,non -Synonymous ,25218,G,T
 25517 C-T,P42L,ORF3a,B.1.526 - New york,non -Synonymous ,25517,C,T
 25541 T-C,V50A,ORF3a,VOI-18.02 - WHO,non -Synonymous ,25541,T,C
