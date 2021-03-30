@@ -22,6 +22,7 @@ function initialize_globals() {
   dirs_flag=false
   threads=32
   input_path=""
+  sewer_flag=false
 }
 
 # parse input with flags
@@ -37,6 +38,8 @@ required: [-h | -d | -i AND -r]
 
 optional:
 --threads       [int]           number of threads. default: 32
+--sewer                         add sewer output table.
+
 EOF
 exit 0
 }
@@ -65,6 +68,10 @@ function get_user_input() {
         ;;
       -h|--help)
         usage
+        shift
+        ;;
+      --sewer)
+        sewer_flag=true
         shift
         ;;
       -*|--*=)
@@ -248,6 +255,9 @@ function results_report() {
   done
 }
 
+function sewer() {
+  echo "sewer"
+}
 ########################### MAIN ###############################
 # call all functions
 # user input:
@@ -265,6 +275,9 @@ mafft_alignment
 muttable
 results_report
 wait
+if [ "$sewer_flag" = true ]; then
+  sewer
+fi
 conda deactivate
 echo "pipeline finished! (:"
 
