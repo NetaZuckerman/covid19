@@ -76,7 +76,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 22018 g-t,W152C,S,B.1.429 - California,non -Synonymous,22018,G,T
 22033 C-A,F157L,S,A.23.1 - Uganda,non -Synonymous ,22033,C,A
 22132 G-T,R190S,S,P.1 - Manaus,non -Synonymous ,22132,G,T
-22206 A-G,D215G,S,20C/H655Y - Brittany,non -Synonymous,22206,A,G
+22206 A-G,D215G,S,"B.1.351 - SA, 20C/H655Y - Brittany",non -Synonymous,22206,A,G
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22286,C,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22287,T,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22288,T,-
