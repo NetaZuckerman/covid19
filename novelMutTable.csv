@@ -156,7 +156,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 28869 C-T,P199L,N,B.1.526 - New york,non -Synonymous ,28869,C,T
 28887 C-T,T205I,N,"B.1.351 - SA, B.1.525 - Global",non -Synonymous ,28887,C,T
 28975 G-U,M234I,N,P.2 - Rio de jeneiro,non -Synonymous ,28975,G,T
-28975 G-A,M234I,N,B.1.526 - New york,non -Synonymous ,28975,G,Aגג
+28975 G-A,M234I,N,B.1.526 - New york,non -Synonymous ,28975,G,A
 28977 C-T,S235F,N,B.1.1.7 - UK,non -Synonymous ,28977,C,T
 29543 G-T,g29543t,'',B.1.525 - Global,Synonymous ,29543,G,T
 29545 C-A,c29545a,'',VUI_P681H_Israel,Synonymous ,29545,C,A
