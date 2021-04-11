@@ -73,10 +73,10 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21993,A,-
 21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21994,T,-
 22000 C-T,c22000t,S,A.23.1 - Uganda,Synonymous ,22000,C,T
-22018 g-t,W152C,S,B.1.429 - California,non -Synonymous,22018,G,T
+22018 g-t,W152C,S,B.1.429 - California,non -Synonymous ,22018,G,T
 22033 C-A,F157L,S,A.23.1 - Uganda,non -Synonymous ,22033,C,A
 22132 G-T,R190S,S,P.1 - Manaus,non -Synonymous ,22132,G,T
-22206 A-G,D215G,S,"B.1.351 - SA, 20C/H655Y - Brittany",non -Synonymous,22206,A,G
+22206 A-G,D215G,S,"B.1.351 - SA, 20C/H655Y - Brittany",non -Synonymous ,22206,A,G
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22286,C,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22287,T,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22288,T,-
@@ -92,7 +92,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 22812 A-C,K417T,S,P.1 - Manaus,non -Synonymous ,22812,A,C
 22813 G-T,K417N,S,B.1.351 - SA,non -Synonymous ,22813,G,T
 22917 T-G,L452R,S,"B.1.429 - California, VOI-18.02 - WHO, VUI_L452R/L1063F_Israel",non -Synonymous ,22917,T,G
-23005 T-A,N481K,S,VUI_N481K_Israel,non - Synonymous ,23005,T,A
+23005 T-A,N481K,S,VUI_N481K_Israel,non -Synonymous ,23005,T,A
 23010 T-C,V483A,S,20C/H655Y - Brittany,non -Synonymous ,23010,T,C
 23012 G-A,E484K,S,"B.1.351 - SA, P.2 - Rio de jeneiro, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",non -Synonymous ,23012,G,A
 23063 A-T,N501Y,S,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, VOI-18.02 - WHO",non -Synonymous ,23063,A,T
