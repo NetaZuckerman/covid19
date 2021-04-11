@@ -13,12 +13,16 @@ trap "kill 0" EXIT
 eval "$(conda shell.bash hook)"
 conda activate CoronaPipeline
 
+path=`dirname "${0}"`
+
 # TODO: keep errors in log file to review later
+# TODO: add sewer flag + code
 
 function initialize_globals() {
   dirs_flag=false
   threads=32
   input_path=""
+  sewer_flag=false
 }
 
 # parse input with flags
@@ -34,6 +38,8 @@ required: [-h | -d | -i AND -r]
 
 optional:
 --threads       [int]           number of threads. default: 32
+--sewer                         add sewer output table.
+
 EOF
 exit 0
 }
@@ -62,6 +68,10 @@ function get_user_input() {
         ;;
       -h|--help)
         usage
+        shift
+        ;;
+      --sewer)
+        sewer_flag=true
         shift
         ;;
       -*|--*=)
@@ -106,7 +116,7 @@ function map_to_ref() {
   if [ -d CNS_5/ ]; then
     rm CNS_5/* 2> /dev/null
   fi
-  mkdir -p BAM CNS alignment results Trees
+  mkdir -p BAM CNS alignment results
 
   for r1 in "$input_path"*R1*.fastq*; do
     if [[ $r1 == *Undetermined*.fastq* || $r1 == *unpaired*.fastq*  || $r1 == *singletons* ]]; then # ignore undetermined and singletons
@@ -115,8 +125,15 @@ function map_to_ref() {
     r2=${r1/R1/R2}
     output=${r1/_R1/}
     output=${output/_paired/}
-    output=${output/.gz/}
-    bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > BAM/`basename $output .fastq`.bam
+    output=`basename ${output/.gz/}`
+    # replace to short name:
+    if [[ $output == Sh_* ]]; then
+      output=${output/Sh_/}
+    fi
+    output=$( echo "$output" | cut -d'_' -f 1 )  # SHORT NAME
+    output=BAM/$output.bam
+
+    bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > $output
   done
 }
 
@@ -148,10 +165,7 @@ function consensus() {
     # ivar instead of bcftools:
     # CNS1
     file_name=`basename "$file" .mapped.sorted.bam`
-    if [[ $file_name == Sh_* ]]; then
-      file_name=${file_name/Sh_/}
-    fi
-    file_name=$( echo "$file_name" | cut -d'_' -f 1 ) # SHORT NAME
+
     samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name"
     # CNS5
     samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
@@ -188,8 +202,7 @@ function mafft_alignment() {
 }
 
 function muttable() {
-  # run pangolin
-#    conda activate pangolin # instead: try running whole script with pangolin
+    # run pangolin
     conda deactivate
 
     conda activate pangolin
@@ -197,9 +210,9 @@ function muttable() {
     conda deactivate
 
     conda activate CoronaPipeline
-    python /data/projects/Dana/scripts/covid19/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
-    python /data/projects/Dana/scripts/covid19/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx /data/projects/Dana/scripts/covid19/regions.csv
-    python /data/projects/Dana/scripts/covid19/variants_softcode.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
+    python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
+    python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv
+    python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
 
 #    mkdir -p BAM/readcounts
 #    for file in BAM/*.mapped.sorted.bam; do
@@ -242,6 +255,9 @@ function results_report() {
   done
 }
 
+function sewer() {
+  echo "sewer"
+}
 ########################### MAIN ###############################
 # call all functions
 # user input:
@@ -259,6 +275,9 @@ mafft_alignment
 muttable
 results_report
 wait
+if [ "$sewer_flag" = true ]; then
+  sewer
+fi
 conda deactivate
 echo "pipeline finished! (:"
 

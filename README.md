@@ -1,5 +1,8 @@
 # covid19
-
+### CoronaPipeline conda environment
+* In orders to install all dependencies using conda, run: \
+    `conda env create -f <your/covid19/path>/env/CoronaPipeline.yml`
+* We use pangolin environment, so make sure pangolin + its environment is also installed. https://github.com/stevenlovegrove/Pangolin
 ## Suggested Workflow Using QC.py and pipeline.sh
 1. Create project's directories - Optional. \
 `python3 QC.py --dirs` \
@@ -12,7 +15,10 @@ from that working directory.
 Check out the [directories hierarchy](#directories-hierarchy).
 
 2. Produce reports for each fastq file in fastq/raw (or any other location of your choice) \
+`conda activate CoronaPipeline`\
 `python3 QC.py --reports -i fastq/raw/`
+
+If trimming is not necessary skip to step 6. 
 
 3. Create template csv file for convenient trimming. See details at Template. \
 `python3 QC.py --template -i fastq/raw/ ` \
@@ -25,14 +31,20 @@ Scroll down to read more about the csv file.
 5. Produce second reports to make sure you're happy with the trimming results. \
 `python3 QC.py --reports -i /trimmed/path -o /output/fastqc/2/path` \
 Be sure to provide the path to the trimmed fastq files this time. Repeat steps 2-5 if more trimming is needed.
+   
 
 6. Run pipeline to produce consensus sequences for your samples, and get additional info such as number of reads, depth, 
 coverage, etc. in results/report.txt. Run the pipeline on the trimmed fastq files (the pipeline uses 
 the paired files, ignoring singletons). \
--i: input fastq files path
+-i: input fastq files path \
+   * **Be sure to deactivate environment before running the pipeline.sh!** Conda is automatically activated in the pipeline as well as pangolins environment.
+    
+   `conda deactivate`\
 `bash pipeline.sh -i fastq/trimmed/ -r /refs/refseq.fa` 
 
-# QC.py
+
+
+## Additional info: QC.py
 ### Usage:
 `python QC.py [-h] [-t [CSV] | --template | -r] [-i WD] [-o OUTPUT_PATH]`
 #### -r | --reports : QC Reports
@@ -98,7 +110,7 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 >http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf,
 >http://www.usadellab.org/cms/?page=trimmomatic
 ---------------
-# pipeline.sh
+# Additional Info: pipeline.sh
 ### Usage:
  `bash pipeline.sh [-h | -r [REFSEQ_PATH] [-i WD] [-o OUTPUT_PATH]`
 ### options:
@@ -141,12 +153,13 @@ If you choose to use ` bash pipeline.sh -d` to create directories, the hierarchy
 ![alt text](https://github.com/ShebaVirals/covid19/blob/master/Directories_Hierarchy.png?raw=true)
 
 ### Pipeline's Basic Steps
+`conda activate CoronaPipeline`
 1. Index the reference sequence. \
 `bwa index /refseq/path`
 
 2. For each fastq sample - map to reference and keep as bam file. \
 For each fastq file run: \
-    `bwa mem /refseq/path sample_R1 sample_R2 | samtools view -Sb - > BAM/sample_name.bam` \
+    `bwa mem /refseq/path sample_R1 sample_R2 | samtools view -b - > BAM/sample_name.bam` \
 R1 and R2: forward and reverse paired ends.
   
 3. Keep only mapped reads of each sample. \
@@ -155,31 +168,40 @@ For each bam file run: \
 
 4. Sort and index each sample in BAM. \
 For each mapped bam file run:
-    `samtools sort file_name.mapped.bam file_name.mapped.sorted`
+    `samtools sort BAM/file_name.mapped.bam BAM/file_name.mapped.sorted.bam`
 
 5. Create consensus files for each sample. \
 For each mapped and sorted bam file run:
-    `samtools mpileup -uf /refseq/path file_name.mapped.sorted.bam | bcftools call -mv -Oz -o CNS/sample_name.vcf.gz` \
-    `bcftools index CNS/sample` \
-    `bcftools consensus -f /refseq/pah CNS/samples_name.vcf.gz > CNS/sample_name.fasta` \
-    `rm CNS/sample_name.vcf.gz CNS/sample_name.vcf.gz.csi`
+    `samtools mpileup -A  BAM/file_name.mapped.sorted.bam | ivar consensus -m 5 -p CNS5/file_name`
 
-6. Change consensus header name (instead of reference sequence name) \
-For eah fasta consensus in CNS run: \
-    `sed -i "s/>.*/>${new_name%%.*}/" "$CNS/sample_name.fasta"`
-
-7. Align all consensus sequences and references sequence: \
+6. Align all consensus sequences and references sequence: \
 Gather all fasta sequences (consensus + reference): \
-    `cat CNS/*.fasta /refseq/path > alignment/all_not_aligned.fasta` \
-Align with mafft and save output in alignment/ directory: \
-    `mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout` 
-    `mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta`
+    `cat CNS5/*.fasta /refseq/path > alignment/all_not_aligned.fasta` \
+Align with augur (mafft based) and save output in alignment/ directory: \
+  ` augur align \
+  --sequences alignment/all_not_aligned.fasta \
+  --reference-sequence /refseq/path \
+  --output alignment/all_aligned.fasta`
 
-8. Report.txt: \
+7. Classify mutations with pangolin: \
+`conda deactivate` \
+`conda activate pangolin` \
+   `pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv` \
+   `conda deactivate`
+
+8. Check for mutations and variants: \
+    `conda activate CoronaPipeline` \
+    `python MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx` \
+    `python translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx regions.csv` \
+    `python variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv`
+    
+
+9. Report.txt: \
     some coverage statistics and number of mapped reads: `samtools coverage -H BAM/sample_name.mapped.sorted.bam`  \
     total number of reads in sample: `samtools view -c BAM/sample_name.bam` \
     depth of each position in sample: `samtools depth BAM/sample_name.mapped.sorted.bam`  \
 Check out pipeline.sh code for specifics.
+   
 ---------------
 Dana Bar-Ilan. 
-21/07/2020
+updated: 2021-03-16

@@ -1,80 +1,82 @@
 nucleotide,AA,gene,lineage,type,pos,REF,mut
-100 C-U,c100t,5' UTR,P.2- Rio de jeneiro,Non  ORF sub,100,C,T
-361 A-G,a361g,ORF1,VOI-18.02-WHO,Synonymous ,361,A,G
-733 T-C,156,ORF1,P.1 - Manaus,Synonymous ,733,T,C
-1059 C-T,T265I,ORF1,B.1.351 - SA,non -Synonymous ,1059,C,T
-1122 C-T,P286I,ORf1,VOI-18.02-WHO,Synonymous ,1122,C,T
-1498 C-T,c1498t,ORF1,B.1.525,Synonymous ,1498,C,T
-1807 A-G,a1807g,ORF1,B.1.525,Synonymous ,1807,A,G
-2509 C-T,c2509t,ORF1,VOI-18.02-WHO,Synonymous ,2509,C,T
-2659 G-A,g2659a,ORF1,B.1.525,Synonymous ,2659,G,A
-2749 C-T,828,ORF1,P.1 - Manaus,Synonymous ,2749,C,T
+100 C-U,c100t,5' UTR,P.2 - Rio de jeneiro,Non  ORF sub,100,C,T
+361 A-G,a361g,ORF1,VOI-18.02 - WHO,Synonymous ,361,A,G
+733 T-C,t733c,ORF1,P.1 - Manaus,Synonymous ,733,T,C
+1122 C-T,P286I,ORf1,VOI-18.02 - WHO,Synonymous ,1122,C,T
+1498 C-T,c1498t,ORF1,B.1.525 - Global,Synonymous ,1498,C,T
+1807 A-G,a1807g,ORF1,B.1.525 - Global,Synonymous ,1807,A,G
+2509 C-T,c2509t,ORF1,VOI-18.02 - WHO,Synonymous ,2509,C,T
+2659 G-A,g2659a,ORF1,B.1.525 - Global,Synonymous ,2659,G,A
+2749 C-T,c2749t,ORF1,P.1 - Manaus,Synonymous ,2749,C,T
 3267 C- T,T1001I,ORF1,B.1.1.7 - UK,non -Synonymous ,3267,C,T
 3828 C-T,S1188L,ORF1,P.1 - Manaus,non -Synonymous ,3828,C,T
-4573 C-T,c4573t,ORF1,A.23.1 Uganda,Synonymous ,4573,C,T
+4573 C-T,c4573t,ORF1,A.23.1 - Uganda,Synonymous ,4573,C,T
 5230 G-T,K1655N,ORF1,B.1.351 - SA,non -Synonymous ,5230,G,T
 5388 C- A,A1708D,ORF1,B.1.1.7 - UK,non -Synonymous ,5388,C,A
 5648 A-C,K1795Q,ORF1,P.1 - Manaus,non -Synonymous ,5648,A,C
-6285 C-T,T2007I,ORF1,B.1.525,non -Synonymous ,6285,C,T
+6285 C-T,T2007I,ORF1,B.1.525 - Global,non -Synonymous ,6285,C,T
 6954 T-C,I2230T,ORF1,B.1.1.7 - UK,non -Synonymous ,6954,T,C
-8593 T-C,t8593c,'',B.1.525,Synonymous ,8593,T,C
-9204 A-G,D2980G,ORF1,VOI-18.02-WHO,Synonymous ,9204,A,G
-9565 C-T,c9565t,'',B.1.525,Synonymous ,9565,C,T
-9867 T-C,L3201T,ORF1,B.1.526 New york,non -Synonymous ,9867,T,C
+8593 T-C,t8593c,'',B.1.525 - Global,Synonymous ,8593,T,C
+9204 A-G,D2980G,ORF1,VOI-18.02 - WHO,Synonymous ,9204,A,G
+9565 C-T,c9565t,'',B.1.525 - Global,Synonymous ,9565,C,T
+9867 T-C,L3201T,ORF1,B.1.526 - New york,non -Synonymous ,9867,T,C
 10323 A-G,K3353R,ORF1,B.1.351 - SA,non -Synonymous ,10323,A,G
-10747 C-T,c10747t,ORF1,A.23.1 Uganda,Synonymous ,10747,C,T
-11217 A-G,N3651S,ORF1,VOI-18.02-WHO,non -Synonymous,11217,A,G
-11230 G-T,M3655I,ORF1,A.23.1 Uganda,non -Synonymous ,11230,G,T
-11266 G-T,L3667F,ORF1,A.23.1 Uganda,non -Synonymous ,11266,G,T
-11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11288,T,-
-11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11289,C,-
-11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11290,T,-
-11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11291,G,-
-11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11292,G,-
-11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11293,T,-
-11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11294,T,-
-11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11295,T,-
-11288–11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525, B.1.526 New york",Deletion,11296,T,-
-11521 G-T,M3752I,ORF1,A.23.1 Uganda,non -Synonymous ,11521,G,T
-12778 C-T,4171,ORF1,P.1 - Manaus,Synonymous ,12778,C,T
-12878 a-g,I4205V,ORF1,B.1.429- California,non -Synonymous ,12878,A,G
+10747 C-T,c10747t,ORF1,A.23.1 - Uganda,Synonymous ,10747,C,T
+11217 A-G,N3651S,ORF1,VOI-18.02 - WHO,non -Synonymous,11217,A,G
+11230 G-T,M3655I,ORF1,A.23.1 - Uganda,non -Synonymous ,11230,G,T
+11266 G-T,L3667F,ORF1,A.23.1 - Uganda,non -Synonymous ,11266,G,T
+11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11288,T,-
+11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11289,C,-
+11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11290,T,-
+11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11291,G,-
+11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11292,G,-
+11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11293,T,-
+11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11294,T,-
+11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11295,T,-
+11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11296,T,-
+11521 G-T,M3752I,ORF1,A.23.1 - Uganda,non -Synonymous ,11521,G,T
+12778 C-T,c12778t,ORF1,P.1 - Manaus,Synonymous ,12778,C,T
+12878 a-g,I4205V,ORF1,B.1.429 - California,non -Synonymous ,12878,A,G
 13821 C-T,c13821t,ORF1b,VUI_P681H_Israel,Synonymous ,13821,C,T
-13860 C-T,131,ORF1,P.1 - Manaus,Synonymous ,13860,C,T
-14407 C-T,P314F,ORF1,B.1.525,non -Synonymous ,14407,C,T
-16466 C-T,P1000L,ORF1b,VOI-18.02-WHO,non -Synonymous ,16466,C,T
-16500 A-C,Q1011H,ORF1,B.1.526 New york,non -Synonymous ,16500,A,C
-16575 C-T,c16575t,ORF1,A.23.1 Uganda,Synonymous ,16575,C,T
-17014 g-t,D1183Y,ORF1b,B.1.429- California,non -Synonymous ,17014,G,T
+13860 C-T,c13860t,ORF1,P.1 - Manaus,Synonymous ,13860,C,T
+14407 C-T,P314F,ORF1,B.1.525 - Global,non -Synonymous ,14407,C,T
+16466 C-T,P1000L,ORF1b,VOI-18.02 - WHO,non -Synonymous ,16466,C,T
+16500 A-C,Q1011H,ORF1,B.1.526 - New york,non -Synonymous ,16500,A,C
+16575 C-T,c16575t,ORF1,A.23.1 - Uganda,Synonymous ,16575,C,T
+17014 g-t,D1183Y,ORF1b,B.1.429 - California,non -Synonymous ,17014,G,T
 17259 G-T,E1264D,ORF1,P.1 - Manaus,Synonymous ,17259,G,T
-17745 C-T,c17745t,ORF1,A.23.1 Uganda,Synonymous ,17745,C,T
-18171 C-T,c18171t,'',B.1.525,Synonymous ,18171,C,T
-18366 A-G,a18366g,ORF1,VOI-18.02-WHO,Synonymous ,18366,A,G
-20262 A-G,a20262g,ORF1,"B.1.526 New york, VOI-18.02-WHO",Synonymous ,20262,A,G
-20724 A-G,a20724g,'',B.1.525,Synonymous ,20724,A,G
-21575 C-T,L5F,S,B.1.526 New york,non -Synonymous ,21575,C,T
-21600 g-t,S13I,S,B.1.429- California,non -Synonymous ,21600,G,T
-21614 C-T,L18F,S,"P.1 - Manaus, VOI-18.02-WHO",non -Synonymous ,21614,C,T
+17745 C-T,c17745t,ORF1,A.23.1 - Uganda,Synonymous ,17745,C,T
+18171 C-T,c18171t,'',B.1.525 - Global,Synonymous ,18171,C,T
+18366 A-G,a18366g,ORF1,VOI-18.02 - WHO,Synonymous ,18366,A,G
+20262 A-G,a20262g,ORF1,"B.1.526 - New york, VOI-18.02 - WHO",Synonymous ,20262,A,G
+20724 A-G,a20724g,'',B.1.525 - Global,Synonymous ,20724,A,G
+21575 C-T,L5F,S,B.1.526 - New york,non -Synonymous ,21575,C,T
+21600 g-t,S13I,S,B.1.429 - California,non -Synonymous ,21600,G,T
+21614 C-T,L18F,S,"P.1 - Manaus, VOI-18.02 - WHO",non -Synonymous ,21614,C,T
 21621 C-A,T20N,S,P.1 - Manaus,non -Synonymous ,21621,C,A
 21638 C-T,P26S,S,P.1 - Manaus,non -Synonymous ,21638,C,T
-21717 A-G,Q52R,S,B.1.525,non -Synonymous ,21717,A,G
-21762 C-T,A67V,S,B.1.525,non -Synonymous ,21762,C,T
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525",Deletion,21765,T,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525",Deletion,21766,A,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525",Deletion,21767,C,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525",Deletion,21768,A,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525",Deletion,21769,T,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525",Deletion,21770,G,-
+21717 A-G,Q52R,S,B.1.525 - Global,non -Synonymous ,21717,A,G
+21758 C-G,H66D,S,20C/H655Y - Brittany,non -Synonymous ,21758,C,G
+21762 C-T,A67V,S,B.1.525 - Global,non -Synonymous ,21762,C,T
+21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21765,T,-
+21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21766,A,-
+21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21767,C,-
+21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21768,A,-
+21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21769,T,-
+21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21770,G,-
 21801 A-C,D80A,S,B.1.351 - SA,non -Synonymous ,21801,A,C
-21846 C-T,T95I,S,B.1.526 New york,non -Synonymous ,21846,C,T
-21867 G-T,R102I,S,A.23.1 Uganda,non -Synonymous ,21867,G,T
+21846 C-T,T95I,S,B.1.526 - New york,non -Synonymous ,21846,C,T
+21867 G-T,R102I,S,A.23.1 - Uganda,non -Synonymous ,21867,G,T
 21974 G-T,D138Y,S,P.1 - Manaus,Synonymous ,21974,G,T
-21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525",Deletion,21992,T,-
-21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525",Deletion,21993,A,-
-21992–21994,Y144Del,S,"B.1.1.7 - UK, B.1.525",Deletion,21994,T,-
-22000 C-T,c22000t,S,A.23.1 Uganda,Synonymous ,22000,C,T
-22018 g-t,W152C,S,B.1.429- California,non -Synonymous,22018,G,T
-22033 C-A,F157L,S,A.23.1 Uganda,non -Synonymous ,22033,C,A
+21986 G-T,G142V,S,20C/H655Y - Brittany,non -Synonymous ,21986,G,T
+21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21992,T,-
+21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21993,A,-
+21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21994,T,-
+22000 C-T,c22000t,S,A.23.1 - Uganda,Synonymous ,22000,C,T
+22018 g-t,W152C,S,B.1.429 - California,non -Synonymous,22018,G,T
+22033 C-A,F157L,S,A.23.1 - Uganda,non -Synonymous ,22033,C,A
 22132 G-T,R190S,S,P.1 - Manaus,non -Synonymous ,22132,G,T
+22206 A-G,D215G,S,"B.1.351 - SA, 20C/H655Y - Brittany",non -Synonymous,22206,A,G
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22286,C,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22287,T,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22288,T,-
@@ -84,75 +86,78 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22292,T,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22293,T,-
 22286-22294,242-244,S,B.1.351 - SA,Deletion,22294,A,-
-22320 A-G,D253G,S,B.1.526 New york,non -Synonymous ,22320,A,G
-22468 G-T,g22468t,S,VOI-18.02-WHO,Synonymous ,22468,G,T
-22661 G-T,V367F,S,A.23.1 Uganda,non -Synonymous ,22661,G,T
+22320 A-G,D253G,S,B.1.526 - New york,non -Synonymous ,22320,A,G
+22468 G-T,g22468t,S,VOI-18.02 - WHO,Synonymous ,22468,G,T
+22661 G-T,V367F,S,A.23.1 - Uganda,non -Synonymous ,22661,G,T
 22812 A-C,K417T,S,P.1 - Manaus,non -Synonymous ,22812,A,C
 22813 G-T,K417N,S,B.1.351 - SA,non -Synonymous ,22813,G,T
-22917 T-G,L452R,S,"B.1.429- California, VOI-18.02-WHO, VUI_L452R/L1063F_Israel",non -Synonymous ,22917,T,G
+22917 T-G,L452R,S,"B.1.429 - California, VOI-18.02 - WHO, VUI_L452R/L1063F_Israel",non -Synonymous ,22917,T,G
 23005 T-A,N481K,S,VUI_N481K_Israel,non - Synonymous ,23005,T,A
-23012 G-A,E484K,S,"B.1.351 - SA, P.2- Rio de jeneiro, P.1 - Manaus, B.1.525, B.1.526 New york",non -Synonymous ,23012,G,A
-23063 A-T,N501Y,S,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, VOI-18.02-WHO",non -Synonymous ,23063,A,T
+23010 T-C,V483A,S,20C/H655Y - Brittany,non -Synonymous ,23010,T,C
+23012 G-A,E484K,S,"B.1.351 - SA, P.2 - Rio de jeneiro, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",non -Synonymous ,23012,G,A
+23063 A-T,N501Y,S,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, VOI-18.02 - WHO",non -Synonymous ,23063,A,T
 23271 C- A,A570D,S,B.1.1.7 - UK,non -Synonymous ,23271,C,A
-23401 G-T,Q613H,S,A.23.1 Uganda,non -Synonymous ,23401,G,T
-23525 C-T,H655Y,S,"P.1 - Manaus, VOI-18.02-WHO",non -Synonymous ,23525,C,T
-23593 G-C,Q677H,S,B.1.525,non -Synonymous ,23593,G,C
-23593 G-T,Q677H,S,VOI-18.02-WHO,non -Synonymous ,23593,G,T
+23401 G-T,Q613H,S,A.23.1 - Uganda,non -Synonymous ,23401,G,T
+23525 C-T,H655Y,S,"P.1 - Manaus, VOI-18.02 - WHO, 20C/H655Y - Brittany",non -Synonymous ,23525,C,T
+23567 G-A,G669S,S,20C/H655Y - Brittany,non -Synonymous ,23567,G,A
+23593 G-C,Q677H,S,B.1.525 - Global,non -Synonymous ,23593,G,C
+23593 G-T,Q677H,S,VOI-18.02 - WHO,non -Synonymous ,23593,G,T
 23604 C-A,P681H,S,"B.1.1.7 - UK, VUI_P681H_Israel",non -Synonymous ,23604,C,A
-23604 C-G,P681R,S,A.23.1 Uganda,non -Synonymous ,23604,C,G
-23664 C-T,A701V,S,"B.1.351 - SA, B.1.526 New york",non -Synonymous ,23664,C,T
+23604 C-G,P681R,S,A.23.1 - Uganda,non -Synonymous ,23604,C,G
+23664 C-T,A701V,S,"B.1.351 - SA, B.1.526 - New york",non -Synonymous ,23664,C,T
 23709 C- T,T716I,S,B.1.1.7 - UK,non -Synonymous ,23709,C,T
-23948 G-T,D796Y,S,VOI-18.02-WHO,non -Synonymous ,23948,G,T
-24097 T-C,t24097c,S,A.23.1 Uganda,Synonymous ,24097,T,C
-24224 T-C,F888L,S,B.1.525,non -Synonymous ,24224,T,C
+23948 G-T,D796Y,S,VOI-18.02 - WHO,non -Synonymous ,23948,G,T
+24097 T-C,t24097c,S,A.23.1 - Uganda,Synonymous ,24097,T,C
+24224 T-C,F888L,S,B.1.525 - Global,non -Synonymous ,24224,T,C
+24409 A-G,Q949R,S,20C/H655Y - Brittany,non -Synonymous ,24409,A,G
 24506 T-G,S982A,S,B.1.1.7 - UK,non -Synonymous ,24506,T,G
 24642 C-T,T1027I,S,P.1 - Manaus,non -Synonymous ,24642,C,T
-24748 C-T,c24748t,S,B.1.525,Synonymous ,24748,C,T
+24748 C-T,c24748t,S,B.1.525 - Global,Synonymous ,24748,C,T
 24751 G-T,L1063F,S,VUI_L452R/L1063F_Israel,non -Synonymous ,24751,G,T
 24914 G-C,D1118H,S,B.1.1.7 - UK,non -Synonymous ,24914,G,C
-25218 G-T,G1219V,S,VOI-18.02-WHO,non -Synonymous ,25218,G,T
-25517 C-T,P42L,ORF3a,B.1.526 New york,non -Synonymous ,25517,C,T
-25541 T-C,V50A,ORF3a,VOI-18.02-WHO,non -Synonymous ,25541,T,C
-25563 G-T,Q57H,ORF3a,B.1.351 - SA,non -Synonymous ,25563,G,T
+25121 A-G,N1187D,S,20C/H655Y - Brittany,non -Synonymous ,25121,A,G
+25218 G-T,G1219V,S,VOI-18.02 - WHO,non -Synonymous ,25218,G,T
+25517 C-T,P42L,ORF3a,B.1.526 - New york,non -Synonymous ,25517,C,T
+25541 T-C,V50A,ORF3a,VOI-18.02 - WHO,non -Synonymous ,25541,T,C
 25904 C-T,S171L,ORF3a,B.1.351 - SA,non -Synonymous ,25904,C,T
-26305 C-T,L21F,E,B.1.525,non -Synonymous ,26305,C,T
+26305 C-T,L21F,E,B.1.525 - Global,non -Synonymous ,26305,C,T
 26456 C-T,P71L,E,B.1.351 - SA,non -Synonymous ,26456,C,T
-26767 T-C,I82T,M,B.1.525,non -Synonymous ,26767,T,C
-27205-27207,F2Del,ORF6,B.1.525,Deletion,27205,T,-
-27205-27207,F2Del,ORF6,B.1.525,Deletion,27206,T,-
-27205-27207,F2Del,ORF6,B.1.525,Deletion,27207,T,-
+26767 T-C,I82T,M,B.1.525 - Global,non -Synonymous ,26767,T,C
+27205-27207,F2Del,ORF6,B.1.525 - Global,Deletion,27205,T,-
+27205-27207,F2Del,ORF6,B.1.525 - Global,Deletion,27206,T,-
+27205-27207,F2Del,ORF6,B.1.525 - Global,Deletion,27207,T,-
 27240 G-T,E13D,ORF6,VUI_N481K_Israel,non -Synonymous ,27240,G,T
-27247 C-T,c24247t,'',VOI-18.02-WHO,Synonymous ,27247,C,T
-27388,27338Del,'',VOI-18.02-WHO,Deletion,27388,A,-
+27247 C-T,c24247t,'',VOI-18.02 - WHO,Synonymous ,27247,C,T
+27388,27338Del,'',VOI-18.02 - WHO,Deletion,27388,A,-
 27746 G-T,R118I,ORF7a,VUI_N481K_Israel,non -Synonymous ,27746,G,T
-27925 C-T,T11I,ORF8,B.1.526 New york,non -Synonymous ,27925,C,T
+27925 C-T,T11I,ORF8,B.1.526 - New york,non -Synonymous ,27925,C,T
 27972 C-T,Q27,ORF8,B.1.1.7 - UK,Stop codon,27972,C,T
 28048 G-T,R52I,ORF8,B.1.1.7 - UK,non -Synonymous ,28048,G,T
 28111 A-G,Y73C,ORF8,B.1.1.7 - UK,non -Synonymous ,28111,A,G
-28167 G-A,E92K,ORF8,"P.1 - Manaus, A.23.1 Uganda",non -Synonymous ,28167,G,A
-28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28248,G,-
-28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28249,A,-
-28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28250,T,-
-28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28251,T,-
-28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28252,T,-
-28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28253,C,-
-28248-28254,28248-28254,ORF8,VOI-18.02-WHO,Deletion,28254,A,-
-28253 C-U,F120 ,ORF8,P.2- Rio de jeneiro,Synonymous ,28253,C,T
+28167 G-A,E92K,ORF8,"P.1 - Manaus, A.23.1 - Uganda",non -Synonymous ,28167,G,A
+28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28248,G,-
+28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28249,A,-
+28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28250,T,-
+28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28251,T,-
+28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28252,T,-
+28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28253,C,-
+28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28254,A,-
+28253 C-U,c28253u ,ORF8,P.2 - Rio de jeneiro,Synonymous ,28253,C,T
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28269,-,A
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28270,-,A
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28271,-,A
 28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28272,-,C
 28280 GAT-CTA,D3L,N,B.1.1.7 - UK,non -Synonymous ,28280,G,C
-28308 C-G,A12G,N,B.1.525,non -Synonymous ,28308,C,G
-28378 G-C,R32P,N,A.23.1 Uganda,non -Synonymous ,28378,G,C
+28308 C-G,A12G,N,B.1.525 - Global,non -Synonymous ,28308,C,G
+28378 G-C,R32P,N,A.23.1 - Uganda,non -Synonymous ,28378,G,C
 28512 C-G,P80R,N,P.1 - Manaus,non -Synonymous ,28512,C,G
-28628 G- U,A119S,N,P.2- Rio de jeneiro,non -Synonymous ,28628,G,T
-28699 A-G,a28699g,N,B.1.525,Synonymous ,28699,A,G
-28869 C-T,P199L,N,B.1.526 New york,non -Synonymous ,28869,C,T
-28887 C-T,T205I,N,"B.1.351 - SA, B.1.525",non -Synonymous ,28887,C,T
-28975 G-U,M234I,N,P.2- Rio de jeneiro,non -Synonymous ,28975,G,T
-28975 G-A,M234I,N,B.1.526 New york,non -Synonymous ,28975,G,A
+28628 G- U,A119S,N,P.2 - Rio de jeneiro,non -Synonymous ,28628,G,T
+28699 A-G,a28699g,N,B.1.525 - Global,Synonymous ,28699,A,G
+28869 C-T,P199L,N,B.1.526 - New york,non -Synonymous ,28869,C,T
+28887 C-T,T205I,N,"B.1.351 - SA, B.1.525 - Global",non -Synonymous ,28887,C,T
+28975 G-U,M234I,N,P.2 - Rio de jeneiro,non -Synonymous ,28975,G,T
+28975 G-A,M234I,N,B.1.526 - New york,non -Synonymous ,28975,G,Aגג
 28977 C-T,S235F,N,B.1.1.7 - UK,non -Synonymous ,28977,C,T
-29543 G-T,g29543t,'',B.1.525,Synonymous ,29543,G,T
+29543 G-T,g29543t,'',B.1.525 - Global,Synonymous ,29543,G,T
 29545 C-A,c29545a,'',VUI_P681H_Israel,Synonymous ,29545,C,A
-29754 C-U,c29754t,3' UTR,P.2- Rio de jeneiro,Non  ORF sub,29754,C,T
+29754 C-U,c29754t,3' UTR,P.2 - Rio de jeneiro,Non  ORF sub,29754,C,T
