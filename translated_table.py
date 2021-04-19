@@ -1,10 +1,8 @@
 from sys import argv
 from Bio import SeqIO, Seq, AlignIO
 import pandas as pd
-from Bio.Seq import translate
-from Bio.Alphabet import Gapped, generic_dna, IUPAC
+
 # import xlsxwriter
-import Bio
 
 # user input:
 aligned_fasta_path = argv[1]
@@ -99,6 +97,7 @@ multifasta.pop('NC_045512.2', None)
 multifasta.pop('REF_NC_045512.2', None)
 
 mutTable = pd.read_csv("/data/projects/Dana/scripts/covid19/novelMutTable.csv")
+# mutTable = pd.read_csv("novelMutTable.csv")
 # 2. keep only non-synonymous mutations
 mutTable = mutTable[mutTable.type == 'non -Synonymous ']
 finalTable = mutTable

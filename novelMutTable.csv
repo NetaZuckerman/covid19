@@ -2,7 +2,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 100 C-U,c100t,5' UTR,P.2 - Rio de jeneiro,Non  ORF sub,100,C,T
 361 A-G,a361g,ORF1,VOI-18.02 - WHO,Synonymous ,361,A,G
 733 T-C,t733c,ORF1,P.1 - Manaus,Synonymous ,733,T,C
-1122 C-T,P286I,ORf1,VOI-18.02 - WHO,non -Synonymous ,1122,C,T
+1122 C-T,P286I,ORF1,VOI-18.02 - WHO,non -Synonymous ,1122,C,T
 1498 C-T,c1498t,ORF1,B.1.525 - Global,Synonymous ,1498,C,T
 1807 A-G,a1807g,ORF1,B.1.525 - Global,Synonymous ,1807,A,G
 2509 C-T,c2509t,ORF1,VOI-18.02 - WHO,Synonymous ,2509,C,T
