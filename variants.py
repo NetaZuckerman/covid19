@@ -120,7 +120,7 @@ for sample, sample_mutlist in samples_mutations.items():
         british_over_50 = False
         for key, tup in lin_number.items():
             val = round((tup[0] / tup[1])*100, 2)
-            if val >= 60:
+            if val >= 60:  # 60%
                 flag = True
             if val > max:
                 max = val

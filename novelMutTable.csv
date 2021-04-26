@@ -1,163 +1,457 @@
 nucleotide,AA,gene,lineage,type,pos,REF,mut
-100 C-U,c100t,5' UTR,P.2 - Rio de jeneiro,Non  ORF sub,100,C,T
-361 A-G,a361g,ORF1,VOI-18.02 - WHO,Synonymous ,361,A,G
-733 T-C,t733c,ORF1,P.1 - Manaus,Synonymous ,733,T,C
-1122 C-T,P286I,ORF1,VOI-18.02 - WHO,non -Synonymous ,1122,C,T
-1498 C-T,c1498t,ORF1,B.1.525 - Global,Synonymous ,1498,C,T
-1807 A-G,a1807g,ORF1,B.1.525 - Global,Synonymous ,1807,A,G
-2509 C-T,c2509t,ORF1,VOI-18.02 - WHO,Synonymous ,2509,C,T
-2659 G-A,g2659a,ORF1,B.1.525 - Global,Synonymous ,2659,G,A
-2749 C-T,c2749t,ORF1,P.1 - Manaus,Synonymous ,2749,C,T
-3267 C- T,T1001I,ORF1,B.1.1.7 - UK,non -Synonymous ,3267,C,T
-3828 C-T,S1188L,ORF1,P.1 - Manaus,non -Synonymous ,3828,C,T
-4573 C-T,c4573t,ORF1,A.23.1 - Uganda,Synonymous ,4573,C,T
-5230 G-T,K1655N,ORF1,B.1.351 - SA,non -Synonymous ,5230,G,T
-5388 C- A,A1708D,ORF1,B.1.1.7 - UK,non -Synonymous ,5388,C,A
-5648 A-C,K1795Q,ORF1,P.1 - Manaus,non -Synonymous ,5648,A,C
-6285 C-T,T2007I,ORF1,B.1.525 - Global,non -Synonymous ,6285,C,T
-6954 T-C,I2230T,ORF1,B.1.1.7 - UK,non -Synonymous ,6954,T,C
-8593 T-C,t8593c,'',B.1.525 - Global,Synonymous ,8593,T,C
-9204 A-G,D2980G,ORF1,VOI-18.02 - WHO,non -Synonymous ,9204,A,G
-9565 C-T,c9565t,'',B.1.525 - Global,Synonymous ,9565,C,T
-9867 T-C,L3201T,ORF1,B.1.526 - New york,non -Synonymous ,9867,T,C
-10323 A-G,K3353R,ORF1,B.1.351 - SA,non -Synonymous ,10323,A,G
-10747 C-T,c10747t,ORF1,A.23.1 - Uganda,Synonymous ,10747,C,T
-11217 A-G,N3651S,ORF1,VOI-18.02 - WHO,non -Synonymous,11217,A,G
-11230 G-T,M3655I,ORF1,A.23.1 - Uganda,non -Synonymous ,11230,G,T
-11266 G-T,L3667F,ORF1,A.23.1 - Uganda,non -Synonymous ,11266,G,T
-11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11288,T,-
-11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11289,C,-
-11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11290,T,-
-11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11291,G,-
-11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11292,G,-
-11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11293,T,-
-11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11294,T,-
-11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11295,T,-
-11288-11296,sgf3675-3677,ORF1,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",Deletion,11296,T,-
-11521 G-T,M3752I,ORF1,A.23.1 - Uganda,non -Synonymous ,11521,G,T
-12778 C-T,c12778t,ORF1,P.1 - Manaus,Synonymous ,12778,C,T
-12878 a-g,I4205V,ORF1,B.1.429 - California,non -Synonymous ,12878,A,G
-13821 C-T,c13821t,ORF1b,VUI_P681H_Israel,Synonymous ,13821,C,T
-13860 C-T,c13860t,ORF1,P.1 - Manaus,Synonymous ,13860,C,T
-14407 C-T,P314F,ORF1,B.1.525 - Global,non -Synonymous ,14407,C,T
-16466 C-T,P1000L,ORF1b,VOI-18.02 - WHO,non -Synonymous ,16466,C,T
-16500 A-C,Q1011H,ORF1,B.1.526 - New york,non -Synonymous ,16500,A,C
-16575 C-T,c16575t,ORF1,A.23.1 - Uganda,Synonymous ,16575,C,T
-17014 g-t,D1183Y,ORF1b,B.1.429 - California,non -Synonymous ,17014,G,T
-17259 G-T,E1264D,ORF1,P.1 - Manaus,non -Synonymous ,17259,G,T
-17745 C-T,c17745t,ORF1,A.23.1 - Uganda,Synonymous ,17745,C,T
-18171 C-T,c18171t,'',B.1.525 - Global,Synonymous ,18171,C,T
-18366 A-G,a18366g,ORF1,VOI-18.02 - WHO,Synonymous ,18366,A,G
-20262 A-G,a20262g,ORF1,"B.1.526 - New york, VOI-18.02 - WHO",Synonymous ,20262,A,G
-20724 A-G,a20724g,'',B.1.525 - Global,Synonymous ,20724,A,G
-21575 C-T,L5F,S,B.1.526 - New york,non -Synonymous ,21575,C,T
-21600 g-t,S13I,S,B.1.429 - California,non -Synonymous ,21600,G,T
-21614 C-T,L18F,S,"P.1 - Manaus, VOI-18.02 - WHO",non -Synonymous ,21614,C,T
-21621 C-A,T20N,S,P.1 - Manaus,non -Synonymous ,21621,C,A
-21638 C-T,P26S,S,P.1 - Manaus,non -Synonymous ,21638,C,T
-21717 A-G,Q52R,S,B.1.525 - Global,non -Synonymous ,21717,A,G
-21758 C-G,H66D,S,20C/H655Y - Brittany,non -Synonymous ,21758,C,G
-21762 C-T,A67V,S,B.1.525 - Global,non -Synonymous ,21762,C,T
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21765,T,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21766,A,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21767,C,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21768,A,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21769,T,-
-21765–21770,hv69-70,S,"B.1.1.7 - UK, B.1.525 - Global",Deletion,21770,G,-
-21801 A-C,D80A,S,B.1.351 - SA,non -Synonymous ,21801,A,C
-21846 C-T,T95I,S,B.1.526 - New york,non -Synonymous ,21846,C,T
-21867 G-T,R102I,S,A.23.1 - Uganda,non -Synonymous ,21867,G,T
-21974 G-T,D138Y,S,P.1 - Manaus,non -Synonymous ,21974,G,T
-21986 G-T,G142V,S,20C/H655Y - Brittany,non -Synonymous ,21986,G,T
+100 C-U,c100t,5' UTR,P.2 - Rio de jeneiro,extragenic,100,C,T
+105 G-T,g105t,5'UTR,B.1.618 - India (West Bengal),extragenic,105,G,T
+174 G-T,g174t,5' UTR,B.1.351 - SA,extragenic,174,G,T
+190 C-T,c190t,5'UTR,A.VOI.2 - Tanzanian suspect,extragenic,190,C,T
+210 G-T,g210t,5' UTR,B.1.617 - India (Maharashtra),extragenic,210,G,T
+361 A-G,G32G,NSP1,A.27 - Mayotte,Synonymous,361,A,G
+569 G-A,E102K,NSP1,A.VOI.2 - Tanzanian suspect,non-Synonymous,569,G,A
+649 T-C,N128N,NSP1,A.VOI.2 - Tanzanian suspect,Synonymous,649,T,C
+733 T-C,D156D,NSP1,P.1 - Manaus,Synonymous,733,T,C
+853 C-T,Y16Y,NSP1,B.1.618 - India (West Bengal),Synonymous,853,C,T
+913 C-T,S36S,NSP2,B.1.1.7 - UK,Synonymous,913,C,T
+1059 C-T,T85I,NSP2,"B.1.427 - California, B.1.429 - California, B.1.351 - SA, B.1.526 - New york, B.1.526.1 - New York, B.1.616 - Brittany",non-Synonymous,1059,C,T
+1473 C-T,T223I,NSP2,B.1.620 - Global,non-Synonymous,1473,C,T
+1498 C-T,F231F,NSP2,B.1.525 - Global,Synonymous,1498,C,T
+1620 A-G,E272G,NSP2,A.VOI.2 - Tanzanian suspect,non-Synonymous,1620,A,G
+1684 C-T,I293I,NSP2,B.1.618 - India (West Bengal),Synonymous,1684,C,T
+1807 A-G,G334G,NSP2,B.1.525 - Global,Synonymous,1807,A,G
+1884 C-T,A360V,NSP2,A.VOI.2 - Tanzanian suspect,non-Synonymous,1884,C,T
+1973 C-T,I389I,NSP2,B.1.616 - Brittany,Synonymous,1973,C,T
+2395 C-T,V530V,NSP2,B.1.429 - California,Synonymous,2395,C,T
+2597 T-C,P597P,NSP2,B.1.429 - California,Synonymous,2597,T,C
+2659 G-A,K618K,NSP2,B.1.525 - Global,Synonymous,2659,G,A
+2692 A-T,T629T,NSP2,B.1.351 - SA,Synonymous,2692,A,T
+2749 C-T,D10D,NSP3,P.1 - Manaus,Synonymous,2749,C,T
+3096 C-T,S126L,NSP3,AP.1 - Wales,non-Synonymous,3096,C,T
+3267 C-T,T183I,NSP3,B.1.1.7 - UK,non-Synonymous,3267,C,T
+3457 C-T,Y246Y,NSP3,B.1.617 - India (Maharashtra),Synonymous,3457,C,T
+3828 C-T,S370L,NSP3,P.1 - Manaus,non-Synonymous,3828,C,T
+3830 A-G,S371G,NSP3,B.1.618 - India (West Bengal),non-Synonymous,3830,A,G
+3903 C-T,P395L,NSP3,A.VOI.2 - Tanzanian suspect,non-Synonymous,3903,C,T
+3961 C-T,I414I,NSP3,B.1.1.318 - Global,Synonymous,3961,C,T
+4236 A-G,N506S,NSP3,B.1.616 - Brittany,non-Synonymous,4236,A,G
+4255 G-A,P512P,NSP3,AP.1 - Wales,Synonymous,4255,G,A
+4573 C-T,N618N,NSP3,A.23.1 - Uganda,Synonymous,4573,C,T
+4809 C-T,S697F,NSP3,B.1.618 - India (West Bengal),non-Synonymous,4809,C,T
+4891 C-T,T724T,NSP3,B.1.214.2 - Belgium,Synonymous,4891,C,T
+4926 A-G,D736G,NSP3,P.3 - Philippines,non-Synonymous,4926,A,G
+4965 C-T,T749I,NSP3,B.1.617 - India (Maharashtra),non-Synonymous,4965,C,T
+5178 C-T,T820I,NSP3,B.1.616 - Brittany,non-Synonymous,5178,C,T
+5182 T-G,D821E,NSP3,A.VOI.2 - Tanzanian suspect,non-Synonymous,5182,T,G
+5230 G-T,K837N,NSP3,B.1.351 - SA,non-Synonymous,5230,G,T
+5263 T-C,S848S,NSP3,B.1.618 - India (West Bengal),Synonymous,5263,T,C
+5388 C-A,A890D,NSP3,B.1.1.7 - UK,non-Synonymous,5388,C,A
+5648 A-C,K977Q,NSP3,P.1 - Manaus,non-Synonymous,5648,A,C
+5884 C-T,Y1055Y,NSP3,B.1.616 - Brittany,Synonymous,5884,C,T
+5986 C-T,F1089F,NSP3,B.1.1.7 - UK,Synonymous,5986,C,T
+6236 G-A,V1173I,NSP3,B.1.620 - Global,non-Synonymous,6236,G,A
+6285 C-T,T1189I,NSP3,B.1.525 - Global,non-Synonymous,6285,C,T
+6319 A-G,P1200P,NSP3,P.1 - Manaus,Synonymous,6319,A,G
+6613 A-G,V1298V,NSP3,P.1 - Manaus,Synonymous,6613,A,G
+6954 T-C,I1412T,NSP3,B.1.1.7 - UK,non-Synonymous,6954,T,C
+7047 C-A,S1443Y,NSP3,B.1.616 - Brittany,non-Synonymous,7047,C,A
+7113 C-T,T1465I,NSP3,A.VOI.2 - Tanzanian suspect,non-Synonymous,7113,C,T
+7334 C-T,H1539Y,NSP3,AP.1 - Wales,non-Synonymous,7334,C,T
+7375 T-G,N1552K,NSP3,A.VOI.2 - Tanzanian suspect,non-Synonymous,7375,T,G
+7564 C-A,S1615S,NSP3,P.3 - Philippines,Synonymous,7564,C,A
+7798 G-T,K1693N,NSP3,B.1.1.318 - Global,non-Synonymous,7798,G,T
+8139 C-T,S1807F,NSP3,P.3 - Philippines,non-Synonymous,8139,C,T
+8593 T-C,V13V,NSP4,B.1.525 - Global,Synonymous,8593,T,C
+8782 C-T,S76S,NSP4,A.23.1 - Uganda,Synonymous,8782,C,T
+8947 C-T,N131N,NSP4,B.1.429 - California,Synonymous,8947,C,T
+8950 C-T,I132I,NSP4,B.1.1.7 - IL signature,Synonymous,8950,C,T
+9072 C-T,T173I,NSP4,B.1.1.318 - Global,non-Synonymous,9072,C,T
+9203 G-A,D217N,NSP4,P.3 - Philippines,non-Synonymous,9203,G,A
+9204 A-G,D217G,NSP4,A.27 - Mayotte,non-Synonymous,9204,A,G
+9565 C-T,F337F,NSP4,B.1.525 - Global,Synonymous,9565,C,T
+9738 G-C,S395T,NSP4,B.1.427 - California,non-Synonymous,9738,G,C
+9743 T-C,Y397H,NSP4,B.1.616 - Brittany,non-Synonymous,9743,T,C
+9749 A-G,K399E,NSP4,B.1.526.1 - New york,non-Synonymous,9749,A,G
+9867 T-C,L438P,NSP4,"B.1.526 - New york, P.3 - Philippines, B.1.526.1 - New york",non-Synonymous,9867,T,C
+9891 C-T,A446V,NSP4,"B.1.1.318 - Global, B.1.526.1 - New york",non-Synonymous,9891,C,T
+10116 C-T,T21I,NSP5,B.1.1.318 - Global,non-Synonymous,10116,C,T
+10252 C-T,F66F,NSP5,B.1.616 - Brittany,Synonymous,10252,C,T
+10323 A-G,K90R,NSP5,B.1.351 - SA,non-Synonymous,10323,A,G
+10449 C-T,P132L,NSP5,AP.1 - Wales,non-Synonymous,10449,C,T
+10667 T-G,L205V,NSP5,P.2 - Rio de jeneiro,non-Synonymous,10667,T,G
+10747 C-T,N231N,NSP5,A.23.1 - Uganda,Synonymous,10747,C,T
+11083 G-T,L37F,NSP5,B.1.616 - Brittany,non-Synonymous,11083,G,T
+11201 A-G,T77A,NSP6,B.1.617 - India (Maharashtra),non-Synonymous,11201,A,G
+11217 A-G,N82S,NSP6,A.27 - Mayotte,non-Synonymous,11217,A,G
+11230 G-T,M86I,NSP6,"A.23.1 - Uganda, A.VOI.2 - Tanzanian suspect",non-Synonymous,11230,G,T
+11266 G-T,L98F,NSP6,A.23.1 - Uganda,non-Synonymous,11266,G,T
+11288-11290,S106del,NSP6,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.1.318 - Global, B.1.526 - New york, B.1.620 - Global",Deletion,11288,T,-
+11288-11290,S106del,NSP6,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.1.318 - Global, B.1.526 - New york, B.1.620 - Global",Deletion,11289,C,-
+11288-11290,S106del,NSP6,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, B.1.1.318 - Global, B.1.526 - New york, B.1.620 - Global",Deletion,11290,T,-
+11289-11297,S106,NSP6,B.1.526.1 - New york,deleteion_stop,11289,C,-
+11289-11297,S106,NSP6,B.1.526.1 - New york,deleteion_stop,11290,T,-
+11289-11297,S106,NSP6,B.1.526.1 - New york,deleteion_stop,11291,G,-
+11289-11297,S106,NSP6,B.1.526.1 - New york,deleteion_stop,11292,G,-
+11289-11297,S106,NSP6,B.1.526.1 - New york,deleteion_stop,11293,T,-
+11289-11297,S106,NSP6,B.1.526.1 - New york,deleteion_stop,11294,T,-
+11289-11297,S106,NSP6,B.1.526.1 - New york,deleteion_stop,11295,T,-
+11289-11297,S106,NSP6,B.1.526.1 - New york,deleteion_stop,11296,T,-
+11289-11297,S106,NSP6,B.1.526.1 - New york,deleteion_stop,11297,A,-
+11291-11293,G107del,NSP6,"P.1 - Manaus, B.1.351 - SA, B.1.1.7 - UK, B.1.526 - New york, B.1.1.318 - Global, B.1.620 - Global",Deletion,11291,G,-
+11291-11293,G107del,NSP6,"P.1 - Manaus, B.1.351 - SA, B.1.1.7 - UK, B.1.526 - New york, B.1.1.318 - Global, B.1.620 - Global",Deletion,11292,G,-
+11291-11293,G107del,NSP6,"P.1 - Manaus, B.1.351 - SA, B.1.1.7 - UK, B.1.526 - New york, B.1.1.318 - Global, B.1.620 - Global",Deletion,11293,T,-
+11294-11296,F108del,NSP6,"P.1 - Manaus, B.1.351 - SA, B.1.1.7 - UK, B.1.526 - New york, B.1.1.318 - Global, B.1.620 - Global",Deletion,11294,T,-
+11294-11296,F108del,NSP6,"P.1 - Manaus, B.1.351 - SA, B.1.1.7 - UK, B.1.526 - New york, B.1.1.318 - Global, B.1.620 - Global",Deletion,11295,T,-
+11294-11296,F108del,NSP6,"P.1 - Manaus, B.1.351 - SA, B.1.1.7 - UK, B.1.526 - New york, B.1.1.318 - Global, B.1.620 - Global",Deletion,11296,T,-
+11308 C-A,D112E,NSP6,P.3 - Philippines,non-Synonymous,11308,C,A
+11521 G-T,M183I,NSP6,A.23.1 - Uganda,non-Synonymous,11521,G,T
+11775 C-T,A268V,NSP6,A.VOI.2 - Tanzanian suspect,non-Synonymous,11775,C,T
+11804 G-A,V278I,NSP6,B.1.526.1 - New york,non-Synonymous,11804,G,A
+11824 C-T,I284I,NSP6,P.2 - Rio de jeneiro,Synonymous,11824,C,T
+12049 C-T,N69N,NSP7,P.3 - Philippines,Synonymous,12049,C,T
+12053 C-T,L71F,NSP7,"P.2 - Rio de jeneiro, P.3 - Philippines",non-Synonymous,12053,C,T
+12100 C-T,A3A,NSP8,B.1.429 - California,Synonymous,12100,C,T
+12103 A-G,S4S,NSP8,AP.1 - Wales,Synonymous,12103,A,G
+12778 C-T,Y31Y,NSP9,P.1 - Manaus,Synonymous,12778,C,T
+12878 A-G,I65V,NSP9,B.1.429 - California,non-Synonymous,12878,A,G
+12964 A-G,G93G,NSP9,P.2 - Rio de jeneiro,Synonymous,12964,A,G
+13713 G-A,K82K,NSP12b,B.1.427 - California,Synonymous,13713,G,A
+13821 C-T,c13821t,ORF1b,VUI_P681H_Israel,Synonymous,13821,C,T
+13860 C-T,D131D,NSP12b,P.1 - Manaus,Synonymous,13860,C,T
+14245 G-A,D260N,NSP12b,B.1.618 - India (West Bengal),non-Synonymous,14245,G,A
+14340 C-T,N291N,NSP12b,R.1 - USA,Synonymous,14340,C,T
+14407 C-T,P314F,NSP12b,B.1.525 - Global,non-Synonymous,14407,C,T
+14676 C-T,P403P,NSP12b,B.1.1.7 - UK,Synonymous,14676,C,T
+15187 A-G,R574G,NSP12b,B.1.214.2 - Belgium,non-Synonymous,15187,A,G
+15279 C-T,H604H,NSP12b,"B.1.1.7 - UK, A.VOI.2 - Tanzanian suspect",Synonymous,15279,C,T
+15324 C-T,N619N,NSP12b,B.1.620 - Global,Synonymous,15324,C,T
+15656 C-T,T730I,NSP12b,A.VOI.2 - Tanzanian suspect,non-Synonymous,15656,C,T
+15905 A-G,Q813R,NSP12b,B.1.616 - Brittany,non-Synonymous,15905,A,G
+16176 T-C,T903T,NSP12b,B.1.1.7 - UK,Synonymous,16176,C,T
+16394 C-T,P53L,NSP13,B.1.427 - California,non-Synonymous,16394,C,T
+16466 C-T,P77L,NSP13,A.27 - Mayotte,non-Synonymous,16466,C,T
+16500 A-C,Q88H,NSP13,B.1.526 - New york,non-Synonymous,16500,A,C
+16575 C-T,D113D,NSP13,A.23.1 - Uganda,Synonymous,16575,C,T
+17014 G-T,D260Y,NSP13,"B.1.429 - California, B.1.427 - California",non-Synonymous,17014,G,T
+17066 A-G,Y277C,NSP13,B.1.618 - India (West Bengal),non-Synonymous,17066,A,G
+17074 C-T,L280F,NSP13,P.3 - Philippines,non-Synonymous,17074,C,T
+17110 G-T,A292S,NSP13,B.1.620 - Global,non-Synonymous,17110,G,T
+17259 G-T,E341D,NSP13,P.1 - Manaus,non-Synonymous,17259,G,T
+17302 G-T,V356F,NSP13,A.VOI.2 - Tanzanian suspect,non-Synonymous,17302,G,T
+17339 C-T,A368V,NSP13,P.3 - Philippines,non-Synonymous,17339,C,T
+17523 G-T,M429I,NSP13,B.1.617 - India (Maharashtra),non-Synonymous,17523,G,T
+17551 G-A,G439R,NSP13,R.1 - USA,non-Synonymous,17551,G,A
+17731 T-C,F499L,NSP13, A.VOI.2 - Tanzanian suspect,non-Synonymous,17731,T,C
+17745 C-T,N503N,NSP13,A.23.1 - Uganda,Synonymous,17745,C,T
+18171 C-T,G44G,NSP14,B.1.525 - Global,Synonymous,18171,C,T
+18508 C-T,L157F,NSP14,B.1.616 - Brittany,non-Synonymous,18508,C,T
+18877 C-T,C279C,NSP14,R.1 - USA,Synonymous,18877,C,T
+18907 G-T,V290F,NSP14,A.VOI.2 - Tanzanian suspect,non-Synonymous,18907,C,T
+19167 A-G,K376K,NSP14,R.1 - USA,Synonymous,19167,A,G
+19274 C-A,P412H,NSP14,R.1 - USA,non-Synonymous,19274,C,A
+19374 C-T,F445F,NSP14,AP.1 - Wales,Synonymous,19374,C,T
+19524 C-T,L495L,NSP14,B.1.1.7 - IL signature,Synonymous,19524,C,T
+19839 T-C,N73N,NSP15,R.1 - USA,Synonymous,19839,T,C
+20049 T-C,I143I,NSP15,B.1.620 - Global,Synonymous,19839,T,C
+20262 A-G,L214L,NSP15,"B.1.526 - New york, A.27 - Mayotte",Synonymous,20262,A,G
+20270 C-T,A217V,NSP15,AP.1 - Wales,Synonymous,20270,C,T
+20322 T-C,H234H,NSP15,A.VOI.2 - Tanzanian suspect,Synonymous,20322,T,C
+20396 A-G,K259R,NSP15,B.1.617 - India (Maharashtra),non-Synonymous,20396,A,G
+20433 G-A,M271I,NSP15,AP.1 - Wales,non-Synonymous,20433,G,A
+20578 G-A,V320M,NSP15,B.1.1.318 - Global,non-Synonymous,20578,G,A
+20724 A-G,L22L,NSP16,B.1.525 - Global,Synonymous,20724,A,G
+21073 G-T,V139F,NSP16,A.VOI.2 - Tanzanian suspect,non-Synonymous,21073,G,T
+21077 C-T,T140I,NSP16,B.1.616 - Brittany,non-Synonymous,21077,C,T
+21234 C-T,A192A,NSP16,B.1.1.7 - IL signature,Synonymous,21234,C,T
+21488 A-G,K277R,NSP16,B.1.616 - Brittany,non-Synonymous,21488,A,G
+21575 C-T,L5F,S,"B.1.526 - New york, B.1.1.7 - IL signature",non-Synonymous,21575,C,T
+21600 G-T,S13I,S,"B.1.429 - California, B.1.427 - California",non-Synonymous,21600,G,T
+21614 C-T,L18F,S,"P.1 - Manaus, A.27 - Mayotte",non-Synonymous,21614,C,T
+21621 C-A,T20N,S,P.1 - Manaus,non-Synonymous,21621,C,A
+21638 C-T,P26S,S,"P.1 - Manaus, B.1.620 - Global",non-Synonymous,21638,C,T
+21691 C-T,F43F,S,B.1.616 - Brittany,non-Synonymous,21691,C,T
+21717 A-G,Q52R,S,B.1.525 - Global,non-Synonymous,21717,A,G
+21758 A-G,H66D,S,B.1.616 - Brittany,non-Synonymous,21758,A,G
+21765-21767,HV69-70del,S,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global",Deletion,21765,T,-
+21765-21767,HV69-70del,S,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global",Deletion,21766,A,-
+21765-21767,HV69-70del,S,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global",Deletion,21767,C,-
+21768-21770,HV69-70del,S,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global",Deletion,21768,A,-
+21768-21770,HV69-70del,S,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global",Deletion,21769,T,-
+21768-21770,HV69-70del,S,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global",Deletion,21770,G,-
+21800 G-T,D80Y,S,A.VOI.2 - Tanzanian suspect,non-Synonymous,21800,G,T
+21801 A-C,D80A,S,B.1.351 - SA,non-Synonymous,21801,A,C
+21801 A-G,D80G,S,B.1.526.1 - New york,non-Synonymous,21801,A,G
+21846 C-T,T95I,S,"B.1.526 - New york, B.1.1.318 - Global",non-Synonymous,21846,C,T
+21895 T-C,D111D,S,B.1.617 - India (Maharashtra),Synonymous,21895,T,C
+21939 T-C,V126A,S,B.1.620 - Global,non-Synonymous,21939,T,C
+21974 G-T,D138Y,S,P.1 - Manaus,non-Synonymous,21974,G,T
+21983-21985,L141del,S,P.3 - Philippines,Deletion,21983,T,-
+21983-21985,L141del,S,P.3 - Philippines,Deletion,21984,T,-
+21983-21985,L141del,S,P.3 - Philippines,Deletion,21985,G,-
+21986 G-T,G142V,S,20C/H655Y - Brittany,non-Synonymous,21986,G,T
+21986-21988,G142del,S,P.3 - Philippines,Deletion,21986,G,-
+21986-21988,G142del,S,P.3 - Philippines,Deletion,21987,G,-
+21986-21988,G142del,S,P.3 - Philippines,Deletion,21988,T,-
+21987 G-T,G142V,S,B.1.616 - Brittany,non-Synonymous,21987,G,T
+21989-21991,V143del,S,P.3 - Philippines,Deletion,21989,G,-
+21989-21991,V143del,S,P.3 - Philippines,Deletion,21990,T,-
+21989-21991,V143del,S,P.3 - Philippines,Deletion,21991,T,-
+21991-21993,Y144Del,S,B.1.616 - Brittany,Deletion,21991,T,-
+21991-21993,Y144Del,S,B.1.616 - Brittany,Deletion,21992,T,-
+21991-21993,Y144Del,S,B.1.616 - Brittany,Deletion,21993,A,-
 21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21992,T,-
 21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21993,A,-
 21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21994,T,-
-22000 C-T,c22000t,S,A.23.1 - Uganda,Synonymous ,22000,C,T
-22018 g-t,W152C,S,B.1.429 - California,non -Synonymous ,22018,G,T
-22033 C-A,F157L,S,A.23.1 - Uganda,non -Synonymous ,22033,C,A
-22132 G-T,R190S,S,P.1 - Manaus,non -Synonymous ,22132,G,T
-22206 A-G,D215G,S,"B.1.351 - SA, 20C/H655Y - Brittany",non -Synonymous ,22206,A,G
-22286-22294,242-244,S,B.1.351 - SA,Deletion,22286,C,-
-22286-22294,242-244,S,B.1.351 - SA,Deletion,22287,T,-
-22286-22294,242-244,S,B.1.351 - SA,Deletion,22288,T,-
-22286-22294,242-244,S,B.1.351 - SA,Deletion,22289,G,-
-22286-22294,242-244,S,B.1.351 - SA,Deletion,22290,C,-
-22286-22294,242-244,S,B.1.351 - SA,Deletion,22291,T,-
-22286-22294,242-244,S,B.1.351 - SA,Deletion,22292,T,-
-22286-22294,242-244,S,B.1.351 - SA,Deletion,22293,T,-
-22286-22294,242-244,S,B.1.351 - SA,Deletion,22294,A,-
-22320 A-G,D253G,S,B.1.526 - New york,non -Synonymous ,22320,A,G
-22468 G-T,g22468t,S,VOI-18.02 - WHO,Synonymous ,22468,G,T
-22661 G-T,V367F,S,A.23.1 - Uganda,non -Synonymous ,22661,G,T
-22812 A-C,K417T,S,P.1 - Manaus,non -Synonymous ,22812,A,C
-22813 G-T,K417N,S,B.1.351 - SA,non -Synonymous ,22813,G,T
-22917 T-G,L452R,S,"B.1.429 - California, VOI-18.02 - WHO, VUI_L452R/L1063F_Israel",non -Synonymous ,22917,T,G
-23005 T-A,N481K,S,VUI_N481K_Israel,non -Synonymous ,23005,T,A
-23010 T-C,V483A,S,20C/H655Y - Brittany,non -Synonymous ,23010,T,C
-23012 G-A,E484K,S,"B.1.351 - SA, P.2 - Rio de jeneiro, P.1 - Manaus, B.1.525 - Global, B.1.526 - New york",non -Synonymous ,23012,G,A
-23063 A-T,N501Y,S,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, VOI-18.02 - WHO",non -Synonymous ,23063,A,T
-23271 C- A,A570D,S,B.1.1.7 - UK,non -Synonymous ,23271,C,A
-23401 G-T,Q613H,S,A.23.1 - Uganda,non -Synonymous ,23401,G,T
-23525 C-T,H655Y,S,"P.1 - Manaus, VOI-18.02 - WHO, 20C/H655Y - Brittany",non -Synonymous ,23525,C,T
-23567 G-A,G669S,S,20C/H655Y - Brittany,non -Synonymous ,23567,G,A
-23593 G-C,Q677H,S,B.1.525 - Global,non -Synonymous ,23593,G,C
-23593 G-T,Q677H,S,VOI-18.02 - WHO,non -Synonymous ,23593,G,T
-23604 C-A,P681H,S,"B.1.1.7 - UK, VUI_P681H_Israel",non -Synonymous ,23604,C,A
-23604 C-G,P681R,S,A.23.1 - Uganda,non -Synonymous ,23604,C,G
-23664 C-T,A701V,S,"B.1.351 - SA, B.1.526 - New york",non -Synonymous ,23664,C,T
-23709 C- T,T716I,S,B.1.1.7 - UK,non -Synonymous ,23709,C,T
-23948 G-T,D796Y,S,VOI-18.02 - WHO,non -Synonymous ,23948,G,T
-24097 T-C,t24097c,S,A.23.1 - Uganda,Synonymous ,24097,T,C
-24224 T-C,F888L,S,B.1.525 - Global,non -Synonymous ,24224,T,C
-24409 A-G,Q949R,S,20C/H655Y - Brittany,non -Synonymous ,24409,A,G
-24506 T-G,S982A,S,B.1.1.7 - UK,non -Synonymous ,24506,T,G
-24642 C-T,T1027I,S,P.1 - Manaus,non -Synonymous ,24642,C,T
-24748 C-T,c24748t,S,B.1.525 - Global,Synonymous ,24748,C,T
-24751 G-T,L1063F,S,VUI_L452R/L1063F_Israel,non -Synonymous ,24751,G,T
-24914 G-C,D1118H,S,B.1.1.7 - UK,non -Synonymous ,24914,G,C
-25121 A-G,N1187D,S,20C/H655Y - Brittany,non -Synonymous ,25121,A,G
-25218 G-T,G1219V,S,VOI-18.02 - WHO,non -Synonymous ,25218,G,T
-25517 C-T,P42L,ORF3a,B.1.526 - New york,non -Synonymous ,25517,C,T
-25541 T-C,V50A,ORF3a,VOI-18.02 - WHO,non -Synonymous ,25541,T,C
-25904 C-T,S171L,ORF3a,B.1.351 - SA,non -Synonymous ,25904,C,T
-26305 C-T,L21F,E,B.1.525 - Global,non -Synonymous ,26305,C,T
-26456 C-T,P71L,E,B.1.351 - SA,non -Synonymous ,26456,C,T
-26767 T-C,I82T,M,B.1.525 - Global,non -Synonymous ,26767,T,C
+21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,A,-,
+21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,T,-,
+21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,T,-,
+22000 C-T,H146H,S,A.23.1 - Uganda,Synonymous,22000,C,T
+22017 G-T,W152L,S,R.1 - USA,non-Synonymous,22017,G,T
+22018 G-T,W152C,S,"B.1.429 - California, B.1.427 - California",non-Synonymous,22018,G,T
+22022 G-A,E154K,S,B.1.617 - India (Maharashtra),non-Synonymous,22022,G,A
+22032 T-C,F157S,S,B.1.526.1 - New york,non-Synonymous,22032,T,C
+22033 C-A,F157L,S,A.23.1 - Uganda,non-Synonymous,22033,C,A
+22132 G-T,R190S,S,P.1 - Manaus,non-Synonymous,22132,G,T
+22190-22192,I210del,S,A.VOI.2 - Tanzanian suspect,Deletion,22190,A,-
+22190-22192,I210del,S,A.VOI.2 - Tanzanian suspect,Deletion,22191,T,-
+22190-22192,I210del,S,A.VOI.2 - Tanzanian suspect,Deletion,22192,T,-
+22204-22212 ACAGATCGA,TDR215,S,B.1.214.2 - Belgium,Insertion,22204,-,A
+22204-22212 ACAGATCGA,TDR215,S,B.1.214.2 - Belgium,Insertion,22205,-,C
+22204-22212 ACAGATCGA,TDR215,S,B.1.214.2 - Belgium,Insertion,22206,-,A
+22204-22212 ACAGATCGA,TDR215,S,B.1.214.2 - Belgium,Insertion,22207,-,G
+22204-22212 ACAGATCGA,TDR215,S,B.1.214.2 - Belgium,Insertion,22208,-,A
+22204-22212 ACAGATCGA,TDR215,S,B.1.214.2 - Belgium,Insertion,22209,-,T
+22204-22212 ACAGATCGA,TDR215,S,B.1.214.2 - Belgium,Insertion,22210,-,C
+22204-22212 ACAGATCGA,TDR215,S,B.1.214.2 - Belgium,Insertion,22211,-,G
+22204-22212 ACAGATCGA,TDR215,S,B.1.214.2 - Belgium,Insertion,22212,-,A
+22206 A-G,D215G,S,"B.1.351 - SA, B.1.616 - Brittany, A.VOI.2 - Tanzanian suspect",non-Synonymous,22206,A,G
+22283-22285,L241del,S,B.1.351 - SA,Deletion,22283,T,-
+22283-22285,L241del,S,B.1.351 - SA,Deletion,22284,T,-
+22283-22285,L241del,S,B.1.351 - SA,Deletion,22285,A,-
+22286-22288,L242del,S,"B.1.351 - SA, B.1.620 - Global",Deletion,22286,C,-
+22286-22288,L242del,S,"B.1.351 - SA, B.1.620 - Global",Deletion,22287,T,-
+22286-22288,L242del,S,"B.1.351 - SA, B.1.620 - Global",Deletion,22288,T,-
+22289-22291,A243del,S,"B.1.351 - SA, B.1.620 - Global",Deletion,22289,G,-
+22289-22291,A243del,S,"B.1.351 - SA, B.1.620 - Global",Deletion,22290,C,-
+22289-22291,A243del,S,"B.1.351 - SA, B.1.620 - Global",Deletion,22291,T,-
+22299-22307,R246del,S,A.VOI.2 - Tanzanian suspect,Deletion,22299,G,-
+22299-22307,R246del,S,A.VOI.2 - Tanzanian suspect,Deletion,22300,A,-
+22299-22307,R246del,S,A.VOI.2 - Tanzanian suspect,Deletion,22301,A,-
+22299-22307,R246del,S,A.VOI.2 - Tanzanian suspect,Deletion,22302,G,-
+22299-22307,R246del,S,A.VOI.2 - Tanzanian suspect,Deletion,22303,T,-
+22299-22307,R246del,S,A.VOI.2 - Tanzanian suspect,Deletion,22304,T,-
+22299-22307,R246del,S,A.VOI.2 - Tanzanian suspect,Deletion,22305,A,-
+22299-22307,R246del,S,A.VOI.2 - Tanzanian suspect,Deletion,22306,T,-
+22299-22307,R246del,S,A.VOI.2 - Tanzanian suspect,Deletion,22307,T,-
+22320 A-G,D253G,S,B.1.526 - New york,non-Synonymous,22320,A,G
+22335 G-T,W258L,S,A.VOI.2 - Tanzanian suspect,non-Synonymous,22335,G,T
+22351 A-G,A263A,S,A.VOI.2 - Tanzanian suspect,Synonymous,22351,A,G
+22468 G-T,T302T,S,A.27 - Mayotte,Synonymous,22468,G,T
+22599 G-A,R346K,S,A.VOI.2 - Tanzanian suspect,non-Synonymous,22599,G,A
+22661 G-T,V367F,S,A.23.1 - Uganda,non-Synonymous,22661,G,T
+22802 C-A,Q414K,S,B.1.214.2 - Belgium,non-Synonymous,22802,C,A
+22812 A-C,K417T,S,P.1 - Manaus,non-Synonymous,22812,A,C
+22813 G-T,K417N,S,B.1.351 - SA,non-Synonymous,22813,G,T
+22912 T-C,N450K,S,B.1.214.2 - Belgium,non-Synonymous,22912,T,C
+22917 T-G,L452R,S,"B.1.429 - California, B.1.427 - California, A.27 - Mayotte, VUI_L452R/L1063F_Israel, B.1.617 - India (Maharashtra), B.1.526.1 - New york",non-Synonymous,22917,T,G
+22992 G-A,S477N,S,B.1.620 - Global,non-Synonymous,22992,G,A
+22995 C-G,T478R,S,A.VOI.2 - Tanzanian suspect,non-Synonymous,22995,C,G
+23005 T-A,N481K,S,VUI_N481K_Israel,non-Synonymous,23005,T,A
+23010 T-C,V483A,S,B.1.616 - Brittany,non-Synonymous,23010,T,C
+23012 G-A,E484K,S,"B.1.351 - SA, P.2 - Rio de jeneiro, P.1 - Manaus, B.1.526 - New york, P.3 - Philippines, A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, R.1 - USA, B.1.618 - India (West Bengal), B.1.620 - Global",non-Synonymous,23012,G,A
+23012 G-C,E484Q,S,B.1.617 - India (Maharashtra),non-Synonymous,23012,G,C
+23063 A-T,N501Y,S,"B.1.1.7 - UK, B.1.351 - SA, P.1 - Manaus, A.27 - Mayotte, P.3 - Philippines, AP.1 - Wales",non-Synonymous,23063,A,T
+23271 C-A,A570D,S,B.1.1.7 - UK,non-Synonymous,23271,C,A
+23287 T-C,A575A,S,B.1.1.318 - Global,Synonymous,23287,T,C
+23317 T-A,L585L,S,A.VOI.2 - Tanzanian suspect,Synonymous,23317,T,A
+23341 T-C,G593G,S,P.3 - Philippines,Synonymous,23341,T,C
+23401 G-T,Q613H,S,A.23.1 - Uganda,non-Synonymous,23401,G,T
+23416 A-T,T618T,S,B.1.620 - Global,Synonymous,23416,A,T
+23520 C-T,A653V,S,A.27 - Mayotte,non-Synonymous,23520,C,T
+23525 C-T,H655Y,S,"P.1 - Manaus, A.27 - Mayotte, B.1.616 - Brittany,A.VOI.2 - Tanzanian suspect ",non-Synonymous,23525,C,T
+23567 G-A,G669S,S,B.1.616 - Brittany,non-Synonymous,23567,G,A
+23593 G-C,Q677H,S,B.1.525 - Global,non-Synonymous,23593,G,C
+23604 C-A,P681H,S,"B.1.1.7 - UK, VUI_P681H_Israel, P.3 - Philippines, A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.620 - Global",non-Synonymous,23604,C,A
+23604 C-G,P681R,S,"A.23.1 - Uganda, B.1.617 - India (Maharashtra)",non-Synonymous,23604,C,G
+23664 C-T,A701V,S,"B.1.351 - SA, B.1.526 - New york",non-Synonymous,23664,C,T
+23683 C-T,Y707Y,S,A.VOI.2 - Tanzanian suspect,Synonymous,23683,C,T
+23709 C-T,T716I,S,"B.1.1.7 - UK, B.1.214.2 - Belgium",non-Synonymous,23709,C,T
+23868 G-T,G769V,S,R.1 - USA,non-Synonymous,23868,G,T
+23948 G-T,D796Y,S,A.27 - Mayotte,non-Synonymous,23948,G,T
+23948 G-C,D796H,S,B.1.1.318 - Global,non-Synonymous,23948,G,C
+24097 T-C,A845A,S,A.23.1 - Uganda,Synonymous,24097,T,C
+24138 C-A,T859N,S,B.1.526.1 - New york,non-Synonymous,24138,C,A
+24187 T-A,S875S,S,P.3 - Philippines,Synonymous,24187,T,A
+24224 T-C,F888L,S,B.1.525 - Global,non-Synonymous,24224,T,C
+24349 T-C,S929S,S,B.1.429 CA,Synonymous,24349,T,C
+24382 C-T,S940S,S,B.1.1.318 - Global,Synonymous,24382,C,T
+24408 A-G,Q949R,S,B.1.616 - Brittany,non-Synonymous,24409,A,G
+24410 G-C,D950H,S,B.1.526.1 - New york,non-Synonymous,24410,G,C
+24433 A-T,Q957H,S,A.VOI.2 - Tanzanian suspect,Synonymous,24433,A,T
+24506 T-G,S982A,S,B.1.1.7 - UK,non-Synonymous,24506,T,G
+24642 C-T,T1027I,S,"P.1 - Manaus, B.1.620 - Global",non-Synonymous,24642,C,T
+24748 C-T,F1062F,S,B.1.525 - Global,Synonymous,24748,C,T
+24751 G-T,L1063F,S,VUI_L452R/L1063F_Israel,non-Synonymous,24751,G,T
+24836 G-A,E1092K,S,P.3 - Philippines,non-Synonymous,24836,G,A
+24863 C-T,H1101Y,S,P.3 - Philippines,non-Synonymous,24863,C,T
+24914 G-C,D1118H,S,"B.1.1.7 - UK, B.1.620 - Global",non-Synonymous,24914,G,C
+25081 T-C,N1173N,S,A.VOI.2 - Tanzanian suspect,Synonymous,25081,T,C
+25084 T-C,A1174A,S,B.1.618 - India (West Bengal),Synonymous,25084,T,C
+25121 A-G,N1187D,S,B.1.616 - Brittany,non-Synonymous,25121,A,G
+25276 C-A,T1238T,S,B.1.1.318 - Global,Synonymous,25276,C,A
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25447,G,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25448,A,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25449,A,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25450,A,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25451,T,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25452,C,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25453,A,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25454,A,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25455,G,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25456,G,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25457,A,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25458,T,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25459,G,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25460,C,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25461,T,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25462,A,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25463,C,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25464,T,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25465,C,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25466,C,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25467,T,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25468,T,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25469,C,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25470,A,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25471,G,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25472,A,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25473,T,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25474,T,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25475,T,-
+25447-25476,E19Del,ORF3a,B.1.214.2 - Belgium,Deletion,25476,T,-
+25469 C-T,S26L,ORF3a,B.1.617 - India (Maharashtra),non-Synonymous,25469,C,T
+25517 C-T,P42L,ORF3a,"B.1.526 - New york, B.1.526.1 - New york",non-Synonymous,25517,C,T
+25561 C-T,Q57*,ORF3a,B.1.526 - New york,Stop codon,25561,C,T
+25563 G-T,Q57H,ORF3a,"B.1.427 - California, B.1.429 - California, B.1.351 - SA, B.1.526 - New york, B.1.526.1 - New york, B.1.616 - Brittany",non-Synonymous,25563,G,T
+25844 C-T,T151I,ORF3a,"B.1.1.7 - IL signature, B.1.618 - India (West Bengal)",non-Synonymous,25844,C,T
+25859 A-G,Y156C,ORF3a,AP.1 - Wales,non-Synonymous,25859,A,G
+25904 C-T,S171L,ORF3a,B.1.351 - SA,non-Synonymous,25904,C,T
+26149 T-C,S253P,ORF3a,P.1 - Manaus,non-Synonymous,26149,T,C
+26304 T-G,F20L,E,B.1.616 - Brittany,non-Synonymous,26304,T,G
+26305 C-T,L21F,E,B.1.525 - Global,non-Synonymous,26305,C,T
+26333 C-T,T30I,E,B.1.616 - Brittany,non-Synonymous,26333,C,T
+26456 C-T,P71L,E,B.1.351 - SA,non-Synonymous,26456,C,T
+26504 T-C,t26504c,3'UTR,AP.1 - Wales,extragenic,26504,T,C
+26604 T-C,F28L,M,R.1 - USA,non-Synonymous,26604,T,C
+26681 C-T,F53F,M,"B.1.427 - California, B.1.429 - California",Synonymous,26681,C,T
+26767 T-C,I82T,M,"B.1.525 - Global, A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global",non-Synonymous,26767,T,C
+26858 C-T,F112F,M,AP.1 - Wales,Synonymous,26858,C,T
+26885 C-T,N121N,M,B.1.618 - India (West Bengal),Synonymous,26885,C,T
+26895 C-T,H125Y,M,B.1.616 - Brittany,non-Synonymous,26895,C,T
+26909 G-T,L129L,M,B.1.618 - India (West Bengal),Synonymous,26909,G,T
+27128 C-T,G202G,M,B.1.616 - Brittany,Synonymous,27128,C,T
+27198 A-G,a27198g,3'UTR,A.VOI.2 - Tanzanian suspect,extragenic,27198,A,G
 27205-27207,F2Del,ORF6,B.1.525 - Global,Deletion,27205,T,-
 27205-27207,F2Del,ORF6,B.1.525 - Global,Deletion,27206,T,-
 27205-27207,F2Del,ORF6,B.1.525 - Global,Deletion,27207,T,-
-27240 G-T,E13D,ORF6,VUI_N481K_Israel,non -Synonymous ,27240,G,T
-27247 C-T,c24247t,'',VOI-18.02 - WHO,Synonymous ,27247,C,T
-27388,27338Del,'',VOI-18.02 - WHO,Deletion,27388,A,-
-27746 G-T,R118I,ORF7a,VUI_N481K_Israel,non -Synonymous ,27746,G,T
-27925 C-T,T11I,ORF8,B.1.526 - New york,non -Synonymous ,27925,C,T
+27213 C-T,L4L,ORF6,R.1 - USA,Synonymous,27213,C,T
+27240 G-T,E13D,ORF6,VUI_N481K_Israel,non-Synonymous,27240,G,T
+27387,a27387del,3'UTR,A.27 - Mayotte,Deletion,27387,A,-
+27390 G-C,g27390c,3'UTR,A.VOI.2 - Tanzanian suspect,extragenic,27390,G,C
+27434 C-T,T14I,ORF7a,AP.1 - Wales,non-Synonymous,27434,C,T
+27493 C-T,P34S,ORF7a,B.1.618 - India (West Bengal),non-Synonymous,27493,C,T
+27576 T-C,T61T,ORF7a,B.1.214.2 - Belgium,Synonymous,27576,T,C
+27577,Q62*,ORF7a,B.1.1.7 - IL signature,Stop codon,27577,C,T
+27638 T-C,V82A,ORF7a,B.1.617 - India (Maharashtra),non-Synonymous,27638,T,C
+27746 G-T,R118I,ORF7a,VUI_N481K_Israel,non-Synonymous,27746,G,T
+27757 T-A,*122R,ORF7a,B.1.616 - Brittany,non-Synonymous,27757,T,A
+27762 G-T,E3*,ORF7b,B.1.618 - India (West Bengal),Stop codon,27762,G,T
+27795-27797,L14del,ORF7b,B.1.620 - Global,Deletion,27795,T,-
+27795-27797,L14del,ORF7b,B.1.620 - Global,Deletion,27796,T,-
+27795-27797,L14del,ORF7b,B.1.620 - Global,Deletion,27797,A,-
+27852 G-T,E33*,ORF7b,B.1.618 - India (West Bengal),Stop codon,27852,G,T
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27887,A,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27888,A,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27889,C,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27890,G,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27891,A,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27892,A,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27893,C,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27894,A,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27895,T,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27896,G,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27897,A,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27898,A,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27899,A,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27900,T,-
+27887-27901,27887- Del,3'UTR,B.1.1.318 - Global,extragenicDeletion,27901,T,-
+27890 G-T,g27890t,3'UTR,B.1.429 - California,extragenic,27890,G,T
+27897 A-C,K2Q,ORF8,P.3 - Philippines,non-Synonymous,27897,A,C
+27925 C-T,T11I,ORF8,"B.1.526 - New york, B.1.526.1 - New york",non-Synonymous,27925,C,T
 27972 C-T,Q27,ORF8,B.1.1.7 - UK,Stop codon,27972,C,T
-28048 G-T,R52I,ORF8,B.1.1.7 - UK,non -Synonymous ,28048,G,T
-28111 A-G,Y73C,ORF8,B.1.1.7 - UK,non -Synonymous ,28111,A,G
-28167 G-A,E92K,ORF8,"P.1 - Manaus, A.23.1 - Uganda",non -Synonymous ,28167,G,A
-28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28248,G,-
-28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28249,A,-
-28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28250,T,-
-28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28251,T,-
-28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28252,T,-
-28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28253,C,-
-28248-28254,28248-28254,ORF8,VOI-18.02 - WHO,Deletion,28254,A,-
-28253 C-U,c28253u ,ORF8,P.2 - Rio de jeneiro,Synonymous ,28253,C,T
-28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28269,-,A
-28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28270,-,A
-28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28271,-,A
-28269-28272 AAAC,,ORF8,P.1 - Manaus,Insertion,28272,-,C
-28280 GAT-CTA,D3L,N,B.1.1.7 - UK,non -Synonymous ,28280,G,C
-28308 C-G,A12G,N,B.1.525 - Global,non -Synonymous ,28308,C,G
-28378 G-C,R32P,N,A.23.1 - Uganda,non -Synonymous ,28378,G,C
-28512 C-G,P80R,N,P.1 - Manaus,non -Synonymous ,28512,C,G
-28628 G- U,A119S,N,P.2 - Rio de jeneiro,non -Synonymous ,28628,G,T
-28699 A-G,a28699g,N,B.1.525 - Global,Synonymous ,28699,A,G
-28869 C-T,P199L,N,B.1.526 - New york,non -Synonymous ,28869,C,T
-28887 C-T,T205I,N,"B.1.351 - SA, B.1.525 - Global",non -Synonymous ,28887,C,T
-28975 G-U,M234I,N,P.2 - Rio de jeneiro,non -Synonymous ,28975,G,T
-28975 G-A,M234I,N,B.1.526 - New york,non -Synonymous ,28975,G,A
-28977 C-T,S235F,N,B.1.1.7 - UK,non -Synonymous ,28977,C,T
-29543 G-T,g29543t,'',B.1.525 - Global,Synonymous ,29543,G,T
-29545 C-A,c29545a,'',VUI_P681H_Israel,Synonymous ,29545,C,A
-29754 C-U,c29754t,3' UTR,P.2 - Rio de jeneiro,Non  ORF sub,29754,C,T
+27979 A-T,Q29L,ORF8,B.1.618 - India (West Bengal),non-Synonymous,27979,A,T
+28044 G-T,A51S,ORF8,B.1.526.1 - New york,non-Synonymous,28044,G,T
+28048 G-T,R52I,ORF8,B.1.1.7 - UK,non-Synonymous,28048,G,T
+28111 A-G,Y73C,ORF8,B.1.1.7 - UK,non-Synonymous,28111,A,G
+28167 G-A,E92K,ORF8,"P.1 - Manaus, A.23.1 - Uganda, A.VOI.2 - Tanzanian suspect",non-Synonymous,28167,G,A
+28209 G-T,E106*,ORF8,B.1.1.318 - Global,Stop codon,28209,G,T
+28248-28253,D199Del,ORF8,A.27 - Mayotte,Deletion,28248,G,-
+28248-28253,D199Del,ORF8,A.27 - Mayotte,Deletion,28249,A,-
+28248-28253,D199Del,ORF8,A.27 - Mayotte,Deletion,28250,T,-
+28248-28253,D199Del,ORF8,A.27 - Mayotte,Deletion,28251,T,-
+28248-28253,D199Del,ORF8,A.27 - Mayotte,Deletion,28252,T,-
+28248-28253,D199Del,ORF8,A.27 - Mayotte,Deletion,28253,C,-
+28253 C-T,F120F,ORF8,"P.2 - Rio de jeneiro, B.1.351 - SA",Synonymous,28253,C,T
+28268-28272 CAAA,'',3'UTR,P.1 - Manaus,Insertion,28269,-,C
+28268-28272 CAAA,'',3'UTR,P.1 - Manaus,Insertion,28270,-,A
+28268-28272 CAAA,'',3'UTR,P.1 - Manaus,Insertion,28271,-,A
+28268-28272 CAAA,'',3'UTR,P.1 - Manaus,Insertion,28272,-,A
+28271 A-G,a28271g,3'UTR,B.1.1.318 - Global,extragenic,28271,A,G
+28271 A-T,a28271g,3'UTR,B.1.620 - Global,extragenic,28271,A,T
+28272 A-T,a28272t,3'UTR,"B.1.427 - California, B.1.429 - California",extragenic,28272,A,T
+28272del,a28272del,3'UTR,B.1.214.2 - Belgium,extragenicDeletion,28272,A,-
+28273del,a28273del,3'UTR,"B.1.1.7 - UK, P.3 - Philippines, B.1.526 - New york, B.1.214.2 - Belgium, B.1.526.1 - New york, R.1 - USA",extragenicDeletion,28273,A,-
+28273 A-T,a28273t,3'UTR,A.27 - Mayotte,extragenic,28273,A,T
+28278-28280,"DS2,3-Y2",N,B.1.525 - Global,Deletion,28278,C,-
+28278-28280,"DS2,3-Y2",N,B.1.525 - Global,Deletion,28279,T,-
+28278-28280,"DS2,3-Y2",N,B.1.525 - Global,Deletion,28280,G,-
+28280 GAT-CTA,D3L,N,"B.1.1.7 - UK, B.1.214.2 - Belgium",non-Synonymous,28280,G,C
+28280 GAT-CTA,D3L,N,"B.1.1.7 - UK, B.1.214.2 - Belgium",non-Synonymous,28281,A,T
+28280 GAT-CTA,D3L,N,"B.1.1.7 - UK, B.1.214.2 - Belgium",non-Synonymous,28282,T,A
+28297 T-C,N8N,N,"B.1.616 - Brittany, B.1.620 - Global",Synonymous,28297,T,C
+28300 G-C,Q9H,N,AP.1 - Wales,non-Synonymous,28300,G,C
+28308 C-G,A12G,N,B.1.525 - Global,non-Synonymous,28308,C,G
+28325 G-A,G18S,N,B.1.618 - India (West Bengal),non-Synonymous,28325,G,A
+28378 G-C,R32P,N,A.23.1 - Uganda,non-Synonymous,28378,G,C
+28512 C-G,P80R,N,P.1 - Manaus,non-Synonymous,28512,C,G
+28628 G- U,A119S,N,"P.2 - Rio de jeneiro, B.1.618 - India (West Bengal)",non-Synonymous,28628,G,T
+28699 A-G,a28699g,N,B.1.525 - Global,Synonymous,28699,A,G
+28833 C-T,S187L,N,R.1 - USA,non-Synonymous,28833,C,T
+28846 C-T,R191R,N,B.1.214.2 - Belgium,Synonymous,28846,C,T
+28869 C-T,P199L,N,B.1.526 - New york,non-Synonymous,28869,C,T
+28877 A-T,S201S,N,P.1 - Manaus,Synonymous,28877,A,T
+28878 G-C,S201S,N,P.1 - Manaus,Synonymous,28887,G,C
+28878 G-A,S202N,N,"A.23.1 - Uganda, A.27 - Mayotte, A.VOI.2 - Tanzanian suspect",non-Synonymous,28878,G,A
+28881 G-T,R203M,N,B.1.617 - India (Maharashtra),non-Synonymous,28881,G,T
+28882 G-A,R203R,N,A.VOI.2 - Tanzanian suspect,Synonymous,28882,G,A
+28887 C-T,T205I,N,"B.1.351 - SA, B.1.427 - California, B.1.429 - California, B.1.214.2 - Belgium, B.1.526.1 - New york",non-Synonymous,28887,C,T
+28896-28898,A208Del,N,B.1.1.318 - Global,Deletion,28896,C,-
+28896-28898,A208Del,N,B.1.1.318 - Global,Deletion,28897,T,-
+28896-28898,A208Del,N,B.1.1.318 - Global,Deletion,28898,A,-
+28922 G-T,A217S,N,B.1.618 - India (West Bengal),non-Synonymous,28922,G,T
+28932 C-T,A220V,N,B.1.620 - Global,non-Synonymous,28932,C,T
+28975 G-T,M234I,N,"P.2 - Rio de jeneiro, ,A.VOI.2 - Tanzanian suspect, B.1.618 - India (West Bengal)",non-Synonymous,28975,G,T
+28975 G-A,M234I,N,"B.1.526 - New york, B.1.526.1 - New york",non-Synonymous,28975,G,A
+28977 C-T,S235F,N,B.1.1.7 - UK,non-Synonymous,28977,C,T
+29095 C-T,F274F,N,B.1.616 - Brittany,Synonymous,29095,C,T
+29247 C-T,T325I,N,B.1.616 - Brittany,non-Synonymous,29247,C,T
+29362 C-T,F363F,N,"B.1.427 - California, B.1.429 - California",Synonymous,29362,C,T
+29372 G-C,E367Q,N,B.1.618 - India (West Bengal),non-Synonymous,29372,G,C
+29402 G-T,D377Y,N,B.1.617 - India (Maharashtra),non-Synonymous,29402,G,T
+29524 T-C,T417T,N,B.1.1.7 IL signature,Synonymous,29524,T,C
+29525 C-T,Q418*,N,R.1 - USA,Stop codon,29525,C,T
+29527 G-T,Q418H,N,R.1 - USA,non-Synonymous,29527,G,T
+29543 G-T,g29543t,3'UTR,B.1.525 - Global,Synonymous,29543,G,T
+29545 C-A,c29545a,'',VUI_P681H_Israel,Synonymous,29545,C,A
+29580 C-T,A8V,ORF10,B.1.616 - Brittany,non-Synonymous,29580,C,T
+29724 C-T,c29724t,3'UTR,P.3 - Philippines,extragenic,29724,C,T
+29742 G-A,g29742a,3'UTR,"A.23.1 - Uganda, A.VOI.2 - Tanzanian suspect",extragenic,29742,G,A
+29742 G-T,g29742a,3'UTR,"B.1.617 - India (Maharashtra), A.27 - Mayotte",extragenic,29742,G,T
+29754 C-U,c29754t,3'UTR,P.2 - Rio de jeneiro,extragenic,29754,C,T
+29769 C-T,c29769t,3-UTR,B.1.1.318 - Global,extragenic,29769,C,T
