@@ -198,9 +198,9 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21992,T,-
 21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21993,A,-
 21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21994,T,-
-21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,A,-,
-21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,T,-,
-21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,T,-,
+21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,21993,A,-,
+21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,21994,T,-,
+21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,21995,T,-,
 22000 C-T,H146H,S,A.23.1 - Uganda,Synonymous,22000,C,T
 22017 G-T,W152L,S,R.1 - USA,non-Synonymous,22017,G,T
 22018 G-T,W152C,S,"B.1.429 - California, B.1.427 - California",non-Synonymous,22018,G,T
