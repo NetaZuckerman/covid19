@@ -10,7 +10,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 733 T-C,D156D,NSP1,P.1 - Manaus,Synonymous,733,T,C
 853 C-T,Y16Y,NSP1,B.1.618 - India (West Bengal),Synonymous,853,C,T
 913 C-T,S36S,NSP2,B.1.1.7 - UK,Synonymous,913,C,T
-1059 C-T,T85I,NSP2,"B.1.427 - California, B.1.429 - California, B.1.351 - SA, B.1.526 - New york, B.1.526.1 - New York, B.1.616 - Brittany",non-Synonymous,1059,C,T
+1059 C-T,T85I,NSP2,"B.1.427 - California, B.1.429 - California, B.1.351 - SA, B.1.526 - New york, B.1.526.1 - New york, B.1.616 - Brittany",non-Synonymous,1059,C,T
 1473 C-T,T223I,NSP2,B.1.620 - Global,non-Synonymous,1473,C,T
 1498 C-T,F231F,NSP2,B.1.525 - Global,Synonymous,1498,C,T
 1620 A-G,E272G,NSP2,A.VOI.2 - Tanzanian suspect,non-Synonymous,1620,A,G
@@ -184,7 +184,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 21983-21985,L141del,S,P.3 - Philippines,Deletion,21983,T,-
 21983-21985,L141del,S,P.3 - Philippines,Deletion,21984,T,-
 21983-21985,L141del,S,P.3 - Philippines,Deletion,21985,G,-
-21986 G-T,G142V,S,20C/H655Y - Brittany,non-Synonymous,21986,G,T
+21986 G-T,G142V,S,B.1.616 - Brittany,non-Synonymous,21986,G,T
 21986-21988,G142del,S,P.3 - Philippines,Deletion,21986,G,-
 21986-21988,G142del,S,P.3 - Philippines,Deletion,21987,G,-
 21986-21988,G142del,S,P.3 - Philippines,Deletion,21988,T,-
@@ -195,9 +195,9 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 21991-21993,Y144Del,S,B.1.616 - Brittany,Deletion,21991,T,-
 21991-21993,Y144Del,S,B.1.616 - Brittany,Deletion,21992,T,-
 21991-21993,Y144Del,S,B.1.616 - Brittany,Deletion,21993,A,-
-21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21992,T,-
-21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21993,A,-
-21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, 20C/H655Y - Brittany",Deletion,21994,T,-
+21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, B.1.616 - Brittany",Deletion,21992,T,-
+21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, B.1.616 - Brittany",Deletion,21993,A,-
+21992-21994,Y144Del,S,"B.1.1.7 - UK, B.1.525 - Global, B.1.616 - Brittany",Deletion,21994,T,-
 21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,21993,A,-
 21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,21994,T,-
 21993-21995,Y145Del,S,"A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.526.1 - New york, B.1.618 - India (West Bengal), B.1.620 - Global",Deletion,21995,T,-
@@ -264,7 +264,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 23401 G-T,Q613H,S,A.23.1 - Uganda,non-Synonymous,23401,G,T
 23416 A-T,T618T,S,B.1.620 - Global,Synonymous,23416,A,T
 23520 C-T,A653V,S,A.27 - Mayotte,non-Synonymous,23520,C,T
-23525 C-T,H655Y,S,"P.1 - Manaus, A.27 - Mayotte, B.1.616 - Brittany,A.VOI.2 - Tanzanian suspect ",non-Synonymous,23525,C,T
+23525 C-T,H655Y,S,"P.1 - Manaus, A.27 - Mayotte, B.1.616 - Brittany,A.VOI.2 - Tanzanian suspect",non-Synonymous,23525,C,T
 23567 G-A,G669S,S,B.1.616 - Brittany,non-Synonymous,23567,G,A
 23593 G-C,Q677H,S,B.1.525 - Global,non-Synonymous,23593,G,C
 23604 C-A,P681H,S,"B.1.1.7 - UK, VUI_P681H_Israel, P.3 - Philippines, A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.620 - Global",non-Synonymous,23604,C,A
@@ -279,7 +279,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 24138 C-A,T859N,S,B.1.526.1 - New york,non-Synonymous,24138,C,A
 24187 T-A,S875S,S,P.3 - Philippines,Synonymous,24187,T,A
 24224 T-C,F888L,S,B.1.525 - Global,non-Synonymous,24224,T,C
-24349 T-C,S929S,S,B.1.429 CA,Synonymous,24349,T,C
+24349 T-C,S929S,S,B.1.429 - California,Synonymous,24349,T,C
 24382 C-T,S940S,S,B.1.1.318 - Global,Synonymous,24382,C,T
 24408 A-G,Q949R,S,B.1.616 - Brittany,non-Synonymous,24409,A,G
 24410 G-C,D950H,S,B.1.526.1 - New york,non-Synonymous,24410,G,C
@@ -444,7 +444,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 29362 C-T,F363F,N,"B.1.427 - California, B.1.429 - California",Synonymous,29362,C,T
 29372 G-C,E367Q,N,B.1.618 - India (West Bengal),non-Synonymous,29372,G,C
 29402 G-T,D377Y,N,B.1.617 - India (Maharashtra),non-Synonymous,29402,G,T
-29524 T-C,T417T,N,B.1.1.7 IL signature,Synonymous,29524,T,C
+29524 T-C,T417T,N,B.1.1.7 - IL signature,Synonymous,29524,T,C
 29525 C-T,Q418*,N,R.1 - USA,Stop codon,29525,C,T
 29527 G-T,Q418H,N,R.1 - USA,non-Synonymous,29527,G,T
 29543 G-T,g29543t,3'UTR,B.1.525 - Global,Synonymous,29543,G,T

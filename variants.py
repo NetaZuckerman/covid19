@@ -84,7 +84,8 @@ for sample, record in alignment.items():
 
 unique_lineages = set(lineages_list)
 
-mutations_by_lineage = {x: mutTable[mutTable.lineage.str.contains(x)].AA.tolist() for x in unique_lineages}
+mutations_by_lineage = {x: mutTable[mutTable.lineage.str.contains(x, regex=False)].AA.tolist() for x in unique_lineages}
+
 
 final_table = []
 
