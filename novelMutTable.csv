@@ -76,7 +76,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 9778 C-T,S408S,NSP4,AT.1 - St Petersburg,Synonymous,9778,C,T
 9867 T-C,L438P,NSP4,"B.1.526 - New york, P.3 - Philippines, B.1.526.1 - New york",non-Synonymous,9867,T,C
 9891 C-T,A446V,NSP4,"B.1.1.318 - Global, B.1.526.1 - New york",non-Synonymous,9891,C,T
-10029 C-T,T492I,NSP4,AT.1 - St Petersburg,10029,C,T
+10029 C-T,T492I,NSP4,AT.1 - St Petersburg,non-Synonymous,10029,C,T
 10116 C-T,T21I,NSP5,B.1.1.318 - Global,non-Synonymous,10116,C,T
 10252 C-T,F66F,NSP5,B.1.616 - Brittany,Synonymous,10252,C,T
 10323 A-G,K90R,NSP5,B.1.351 - SA,non-Synonymous,10323,A,G
