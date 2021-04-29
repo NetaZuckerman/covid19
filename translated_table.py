@@ -122,7 +122,7 @@ for sample, record in multifasta.items():
 
 varcol = finalTable.apply(lambda row: row[8:].unique(), axis=1)
 finalTable.insert(6, 'var', varcol)
-finalTable = finalTable.sort_values(by=["gene", "lineage"], ascending=[False, True])
+finalTable = finalTable.sort_values(by=["lineage", "gene"], ascending=[True, False])
 finalTable = finalTable.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'})
 
 sorted_cols = ['nuc pos', 'nuc name', 'type', 'gene', 'var', 'name', 'lineage', 'REF', 'mut']
