@@ -148,7 +148,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 17523 G-T,M429I,NSP13,B.1.617 - India (Maharashtra),non-Synonymous,17523,G,T
 17551 G-A,G439R,NSP13,R.1 - USA,non-Synonymous,17551,G,A
 17562 G-T,R442R,NSP13,AT.1 - St Petersburg,Synonymous,17562,G,T
-17731 T-C,F499L,NSP13, A.VOI.2 - Tanzanian suspect,non-Synonymous,17731,T,C
+17731 T-C,F499L,NSP13,A.VOI.2 - Tanzanian suspect,non-Synonymous,17731,T,C
 17745 C-T,N503N,NSP13,A.23.1 - Uganda,Synonymous,17745,C,T
 18171 C-T,G44G,NSP14,B.1.525 - Global,Synonymous,18171,C,T
 18508 C-T,L157F,NSP14,B.1.616 - Brittany,non-Synonymous,18508,C,T
