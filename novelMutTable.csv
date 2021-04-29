@@ -384,7 +384,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 26333 C-T,T30I,E,B.1.616 - Brittany,non-Synonymous,26333,C,T
 26456 C-T,P71L,E,B.1.351 - SA,non-Synonymous,26456,C,T
 26504 T-C,t26504c,3'UTR,AP.1 - Wales,extragenic,26504,T,C
-26568 C-A,L16I,M,AT.1 - St Petersburg,26568,C,A
+26568 C-A,L16I,M,AT.1 - St Petersburg,non-Synonymous,26568,C,A
 26604 T-C,F28L,M,R.1 - USA,non-Synonymous,26604,T,C
 26681 C-T,F53F,M,"B.1.427 - California, B.1.429 - California",Synonymous,26681,C,T
 26767 T-C,I82T,M,"B.1.525 - Global, A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global",non-Synonymous,26767,T,C
