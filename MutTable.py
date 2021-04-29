@@ -45,7 +45,7 @@ df["REF"] = df["REF"].str.upper()  # make sure all reference nucleotides from ta
 df = df[df.type != 'Insertion']
 varcol = df.apply(lambda row: row[8:].unique(), axis=1)
 df.insert(6, "var", varcol)
-df = df.sort_values(by=["gene", "lineage"], ascending=[False, True]) # check!
+df = df.sort_values(by=["lineage", "gene"], ascending=[True, False]) # check!
 
 df = df.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'})
 
