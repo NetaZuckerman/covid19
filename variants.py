@@ -205,7 +205,7 @@ for sample, sample_mutlist in samples_mutations.items():
 
         # "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
         "all mutations": ';'.join(aa_substitution_list.values[0]) if not aa_substitution_list.empty else '',  # TODO: check
-        "nextclade": nextclade[0] if not nextclade.empty else '',
+        "nextclade": nextclade.values[0] if not nextclade.empty else '',
         "pangolin_clade": pangolin_clade,
         "status": pangolin_status,
         "pangolin-note": pangolin_note
