@@ -17,14 +17,16 @@ def getAASubs(substitutions_list):
     :return: list of amino acid substitutions of the row.
     """
     row_list = []
-    for dic in substitutions_list:
-        if dic['aaSubstitutions']:
-            codon = dic['aaSubstitutions'][0]['codon']
-            gene = dic['aaSubstitutions'][0]['gene']
-            refAA = dic['aaSubstitutions'][0]['refAA']
-            queryAA = dic['aaSubstitutions'][0]['queryAA']
-            sub = f"{refAA}{codon}{queryAA}({gene})"
-            row_list.append(sub)
+
+    if substitutions_list and substitutions_list == substitutions_list:  # check substitution list is not 'nan'!
+        for dic in substitutions_list:
+            if dic['aaSubstitutions']:
+                codon = dic['aaSubstitutions'][0]['codon']
+                gene = dic['aaSubstitutions'][0]['gene']
+                refAA = dic['aaSubstitutions'][0]['refAA']
+                queryAA = dic['aaSubstitutions'][0]['queryAA']
+                sub = f"{refAA}{codon}{queryAA}({gene})"
+                row_list.append(sub)
     return row_list
 
 
@@ -40,11 +42,6 @@ mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
 mutTable["mut"] = mutTable["mut"].apply(lambda x: x.upper())
 mutTable = mutTable[mutTable.type != 'Insertion']  # Ignore insertions for now
 
-# extract output from nextclade json file
-clades_df = pd.read_json(clades_json)
-clades_df['aaSubstitutions'] = clades_df.apply(lambda row: getAASubs(row.substitutions), axis=1)
-clades_df = clades_df[['seqName', 'aaSubstitutions', 'clade']]
-clades_df = clades_df.rename(columns={'seqName': 'sample'})
 
 alignment = SeqIO.to_dict(SeqIO.parse(alignment_file, 'fasta'))  # fasta-dict -> {id: seq object}
 alignment.pop('NC_045512.2', None)
@@ -87,6 +84,15 @@ samples_mutations = {id: [] for id in alignment}
 samples_not_covered = {id: [] for id in alignment}
 unexpected_mutations = {id: [] for id in alignment}
 lineages_list = []
+
+
+# extract output from nextclade json file
+clades_df = pd.read_json(clades_json)
+clades_df['aaSubstitutions'] = clades_df.apply(lambda row: getAASubs(row.substitutions), axis=1)
+clades_df = clades_df[['seqName', 'aaSubstitutions', 'clade']]
+clades_df = clades_df.rename(columns={'seqName': 'sample'})
+
+
 for sample, record in alignment.items():
     for row in mutTable.iterrows():
         pos = int(row[1][5])-1
