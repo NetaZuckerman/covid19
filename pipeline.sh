@@ -216,7 +216,7 @@ function muttable() {
     conda activate CoronaPipeline
     python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
     python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv
-    python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
+    python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.json
 }
 
 function quazitable() {

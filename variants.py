@@ -194,6 +194,7 @@ for sample, sample_mutlist in samples_mutations.items():
                 unexpected_mutations[sample].remove(x)
 
     aa_substitution_list = clades_df[clades_df['sample'] == sample].aaSubstitutions
+    nextclade = clades_df[clades_df['sample'] == sample].clade
     line = {
         "Sample": sample,
         "Known Variant": known_variant if known_variant and not QCfail else 'no variant',
@@ -204,7 +205,7 @@ for sample, sample_mutlist in samples_mutations.items():
 
         # "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
         "all mutations": ';'.join(aa_substitution_list[0]) if aa_substitution_list else '',  # TODO: check
-        "nextclade": clades_df[clades_df['sample'] == sample].clade[0],
+        "nextclade": nextclade[0] if nextclade else '',
         "pangolin_clade": pangolin_clade,
         "status": pangolin_status,
         "pangolin-note": pangolin_note
