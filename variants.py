@@ -204,8 +204,8 @@ for sample, sample_mutlist in samples_mutations.items():
         "Not Covered": ';'.join(set(samples_not_covered[sample])) if not QCfail else '',
 
         # "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
-        "all mutations": ';'.join(aa_substitution_list[0]) if aa_substitution_list else '',  # TODO: check
-        "nextclade": nextclade[0] if nextclade else '',
+        "all mutations": ';'.join(aa_substitution_list[0]) if not aa_substitution_list.empty else '',  # TODO: check
+        "nextclade": nextclade[0] if  not nextclade.empty else '',
         "pangolin_clade": pangolin_clade,
         "status": pangolin_status,
         "pangolin-note": pangolin_note
