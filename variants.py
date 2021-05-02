@@ -7,6 +7,26 @@ from sys import argv
 alignment_file = argv[1]
 output_file = argv[2]
 pangolin_file = argv[3]
+clades_json = argv[4]
+
+
+def getAASubs(substitutions_list):
+    """
+    extract amino acid substitutions from 'substitutions' column.
+    :param substitutions_list: list of substitutions (as dictionaries)
+    :return: list of amino acid substitutions of the row.
+    """
+    row_list = []
+    for dic in substitutions_list:
+        if dic['aaSubstitutions']:
+            codon = dic['aaSubstitutions'][0]['codon']
+            gene = dic['aaSubstitutions'][0]['gene']
+            refAA = dic['aaSubstitutions'][0]['refAA']
+            queryAA = dic['aaSubstitutions'][0]['queryAA']
+            sub = f"{refAA}{codon}{queryAA}({gene})"
+            row_list.append(sub)
+    return row_list
+
 
 pangolinTable = pd.read_csv(pangolin_file)
 # mutTable = pd.read_csv("novelMutTable.csv")
@@ -20,6 +40,11 @@ mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
 mutTable["mut"] = mutTable["mut"].apply(lambda x: x.upper())
 mutTable = mutTable[mutTable.type != 'Insertion']  # Ignore insertions for now
 
+# extract output from nextclade json file
+clades_df = pd.read_json(clades_json)
+clades_df['aaSubstitutions'] = clades_df.apply(lambda row: getAASubs(row.substitutions), axis=1)
+clades_df = clades_df[['seqName', 'aaSubstitutions', 'clade']]
+clades_df = clades_df.rename(columns={'seqName': 'sample'})
 
 alignment = SeqIO.to_dict(SeqIO.parse(alignment_file, 'fasta'))  # fasta-dict -> {id: seq object}
 alignment.pop('NC_045512.2', None)
@@ -168,7 +193,7 @@ for sample, sample_mutlist in samples_mutations.items():
             if 'Q677H' in more_muts:
                 unexpected_mutations[sample].remove(x)
 
-
+    aa_substitution_list = clades_df[clades_df['sample'] == sample].aaSubstitutions
     line = {
         "Sample": sample,
         "Known Variant": known_variant if known_variant and not QCfail else 'no variant',
@@ -176,7 +201,10 @@ for sample, sample_mutlist in samples_mutations.items():
         "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] + ")" for x in more_muts])),
         # "S Not Covered": ';'.join(samples_s_not_covered[sample]),
         "Not Covered": ';'.join(set(samples_not_covered[sample])) if not QCfail else '',
-        "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
+
+        # "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
+        "all mutations": ';'.join(aa_substitution_list[0]) if aa_substitution_list else '',  # TODO: check
+        "nextclade": clades_df[clades_df['sample'] == sample].clade[0],
         "pangolin_clade": pangolin_clade,
         "status": pangolin_status,
         "pangolin-note": pangolin_note
@@ -185,7 +213,7 @@ for sample, sample_mutlist in samples_mutations.items():
 
 with open(output_file, 'w') as outfile:
     filednames = ["Sample", "Known Variant", "Suspect", "More Mutations", "Not Covered",  # 'S Not Covered'
-                  "non-Table Mutations", "pangolin_clade", "status", "pangolin-note"]
+                  "all mutations", "nextclade", "pangolin_clade", "status", "pangolin-note"]
     writer = csv.DictWriter(outfile, filednames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:

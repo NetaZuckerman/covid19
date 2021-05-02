@@ -209,16 +209,14 @@ function muttable() {
     pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv
     conda deactivate
 
+    conda activate nextstrain
+    nextclade -i alignment/all_aligned.fasta --output-json results/nextclade.json
+    conda deactivate
+
     conda activate CoronaPipeline
     python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
     python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv
     python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv
-
-#    mkdir -p BAM/readcounts
-#    for file in BAM/*.mapped.sorted.bam; do
-#      bam-readcount -f "$refseq" "$file" -w 1 > BAM/readcounts/`basename "$file" .mapped.sorted.bam`.txt
-#    done
-    # add python script here to parse whole BAM/readcounts directory
 }
 
 function quazitable() {

@@ -1,25 +1,39 @@
+import pandas as pd
 from sys import argv
-from Bio import SeqIO
-import json
-# argv[1]: aligned fasta
+"""
+create csv file from json nextclade output file.
+filter only wanted information: clade, aa-substitutions
+"""
+
+def getAASubs(substitutions_list):
+    """
+    extract amino acid substitutions from 'substitutions' column.
+    :param substitutions_list: list of substitutions (as dictionaries)
+    :return: list of amino acid substitutions of the row.
+    """
+    row_list = []
+    for dic in substitutions_list:
+        if dic['aaSubstitutions']:
+            codon = dic['aaSubstitutions'][0]['codon']
+            gene = dic['aaSubstitutions'][0]['gene']
+            refAA = dic['aaSubstitutions'][0]['refAA']
+            queryAA = dic['aaSubstitutions'][0]['queryAA']
+            sub = f"{refAA}{codon}{queryAA}({gene})"
+            row_list.append(sub)
+    return row_list
 
 
-json_path = "/data/projects/Michal/nCoV2019/data/nextstrain_Israel/results/clades.json"  # change later for pipeline
-with open(json_path) as f:
-    data = json.load(f)
+if __name__ == '__main__':
+    # user input:
+    clades_json_path = argv[1]
+    output_path = argv[2]
 
-fastadict = SeqIO.to_dict(SeqIO.parse(argv[1], 'fasta'))
-fastadict.pop('NC_045512.2', None)  # lose ref-seq. If not there will do nothing
-fastadict.pop('REF_NC_045512.2', None)
+    # open json file:
+    clades_df = pd.read_json(clades_json_path)
 
-samples_dict = {}
-for id, seqrecord in fastadict.items():
-    if id in data['nodes']:
-        samples_dict[id] = data['nodes'][id]['clade_membership']
+    # get amino acid substitutions
+    clades_df['aaSubstitutions'] = clades_df.apply(lambda row: getAASubs(row.substitutions), axis=1)
 
-with open('results/clades.csv', 'w') as file:
-    file.write('id,clade\n')
-    for key, val in samples_dict.items():
-        file.write(f'{key},{val}\n')
-
-
+    # prepare output file
+    output_df = clades_df[['seqName', 'aaSubstitutions', 'clade']]
+    output_df.to_csv(output_path)
