@@ -30,8 +30,8 @@ def getAASubs(substitutions_list):
 
 pangolinTable = pd.read_csv(pangolin_file)
 # mutTable = pd.read_csv("novelMutTable.csv")
-if len(argv) > 4:
-    muttable_path = argv[4]
+if len(argv) > 5:
+    muttable_path = argv[5]
 else:
     muttable_path = "/data/projects/Dana/scripts/covid19/novelMutTable.csv"
 mutTable = pd.read_csv(muttable_path)
