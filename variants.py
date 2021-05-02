@@ -193,7 +193,7 @@ for sample, sample_mutlist in samples_mutations.items():
             if 'Q677H' in more_muts:
                 unexpected_mutations[sample].remove(x)
 
-    aa_substitution_list = clades_df[clades_df['sample'] == sample].aaSubstitutions.values[0]
+    aa_substitution_list = clades_df[clades_df['sample'] == sample].aaSubstitutions
     nextclade = clades_df[clades_df['sample'] == sample].clade
     line = {
         "Sample": sample,
@@ -204,7 +204,7 @@ for sample, sample_mutlist in samples_mutations.items():
         "Not Covered": ';'.join(set(samples_not_covered[sample])) if not QCfail else '',
 
         # "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
-        "all mutations": ';'.join(aa_substitution_list) if not aa_substitution_list.empty else '',  # TODO: check
+        "all mutations": ';'.join(aa_substitution_list.values[0]) if not aa_substitution_list.empty else '',  # TODO: check
         "nextclade": nextclade[0] if not nextclade.empty else '',
         "pangolin_clade": pangolin_clade,
         "status": pangolin_status,
