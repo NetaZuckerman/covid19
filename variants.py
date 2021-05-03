@@ -2,8 +2,12 @@ from Bio import SeqIO
 import csv
 import pandas as pd
 from sys import argv
+"""
+create variants table - for each sample in fasta multiple alignment file a covid variant is decided if found.
+including pangolin and nextclades variants as well. 
+"""
 
-# TODO: create more functions based code, with main
+# get user input
 alignment_file = argv[1]
 output_file = argv[2]
 pangolin_file = argv[3]
@@ -28,24 +32,6 @@ def getAASubs(substitutions_list):
                 sub = f"{refAA}{codon}{queryAA}({gene})"
                 row_list.append(sub)
     return row_list
-
-
-pangolinTable = pd.read_csv(pangolin_file)
-# mutTable = pd.read_csv("novelMutTable.csv")
-if len(argv) > 5:
-    muttable_path = argv[5]
-else:
-    muttable_path = "/data/projects/Dana/scripts/covid19/novelMutTable.csv"
-mutTable = pd.read_csv(muttable_path)
-
-mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
-mutTable["mut"] = mutTable["mut"].apply(lambda x: x.upper())
-mutTable = mutTable[mutTable.type != 'Insertion']  # Ignore insertions for now
-
-
-alignment = SeqIO.to_dict(SeqIO.parse(alignment_file, 'fasta'))  # fasta-dict -> {id: seq object}
-alignment.pop('NC_045512.2', None)
-alignment.pop('REF_NC_045512.2', None)
 
 
 def specific_cases(unexpected_muts_dict, sample, variant):
@@ -79,29 +65,47 @@ def specific_cases(unexpected_muts_dict, sample, variant):
     return new_unexpected
 
 
+# load pangolin + nextclade outputs, mutations table.
+pangolinTable = pd.read_csv(pangolin_file)
+clades_df = pd.read_json(clades_json)
+if len(argv) > 5:
+    muttable_path = argv[5]
+else:
+    muttable_path = "/data/projects/Dana/scripts/covid19/novelMutTable.csv"
+mutTable = pd.read_csv(muttable_path)
+
+# prepare mutations table dataframe
+mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
+mutTable["mut"] = mutTable["mut"].apply(lambda x: x.upper())
+mutTable = mutTable[mutTable.type != 'Insertion']  # Ignore insertions for now
+
+# prepare multiple alignment dictionary (key: sample name, val: SeqIO record)
+alignment = SeqIO.to_dict(SeqIO.parse(alignment_file, 'fasta'))
+alignment.pop('NC_045512.2', None)
+alignment.pop('REF_NC_045512.2', None)
+
+# prepare nextclade dataframe
+clades_df['aaSubstitutions'] = clades_df.apply(lambda row: getAASubs(row.substitutions), axis=1)
+clades_df = clades_df[['seqName', 'aaSubstitutions', 'clade']]
+clades_df = clades_df.rename(columns={'seqName': 'sample'})
+
+# some variables:
 samples_mutations = {id: [] for id in alignment}
 # samples_s_not_covered = {id: [] for id in alignment}
 samples_not_covered = {id: [] for id in alignment}
 unexpected_mutations = {id: [] for id in alignment}
 lineages_list = []
 
-
-# extract output from nextclade json file
-clades_df = pd.read_json(clades_json)
-clades_df['aaSubstitutions'] = clades_df.apply(lambda row: getAASubs(row.substitutions), axis=1)
-clades_df = clades_df[['seqName', 'aaSubstitutions', 'clade']]
-clades_df = clades_df.rename(columns={'seqName': 'sample'})
-
-
+# iterate over all samples in multifasta and over all mutations in table, and check value of each mutation
 for sample, record in alignment.items():
     for row in mutTable.iterrows():
-        pos = int(row[1][5])-1
-        alt = record.seq[pos]
-        ref = row[1][6]
-        table_mut = row[1][7]
+        pos = int(row[1][5])-1  # mutation position
+        alt = record.seq[pos]  # fasta value in position
+        ref = row[1][6]  # reference in position
+        table_mut = row[1][7]  # mutation  according to table
         gene = row[1][2] if row[1][2] else ''
         lineage = row[1][3]
-        lineages_list += [x.strip() for x in lineage.split(',')]
+        lineages_list += [x.strip() for x in lineage.split(',')]  # accumulate all lineages to list - for later
         mutation_name = row[1][1] if row[1][1] else row[1][0]  # if no AA name take nucleotide name
         if alt != table_mut or alt == 'N':
             if alt == 'N':  # and gene == 'S':
@@ -110,16 +114,14 @@ for sample, record in alignment.items():
             elif alt != ref and alt != 'N':  # alt is not the expected mut. and is covered in sequencing
                 unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
         else:  # some variant mutation
-            samples_mutations[sample].append(mutation_name)
-
+            samples_mutations[sample].append(mutation_name)  # accumulate all samples+mutations in dict: {sampleName: mutationName}
 
 unique_lineages = set(lineages_list)
-
+# create a dictionary of mutations by lineage -> {key=lineage: val=dataframe with all of lineage's mutations}
 mutations_by_lineage = {x: mutTable[mutTable.lineage.str.contains(x, regex=False)].AA.tolist() for x in unique_lineages}
 
-
 final_table = []
-
+# iterate over all samples mutations and determine variants
 for sample, sample_mutlist in samples_mutations.items():
     known_variant = ""
     more_muts = []
@@ -127,6 +129,7 @@ for sample, sample_mutlist in samples_mutations.items():
     suspect = ''
     lin_percentages = {}
     lin_number = {}
+    # iterate over mutations of each lineage
     for lin, linmuts in mutations_by_lineage.items():
         temp = [x for x in linmuts]
         temp_mutes = []
@@ -140,40 +143,45 @@ for sample, sample_mutlist in samples_mutations.items():
         elif len(linmuts) != len(temp):  # some mutations do exist
             more_muts += temp_mutes
             lin_percentages[lin] = round(len(temp_mutes) / len(linmuts) * 100, 2)
-            lin_number[lin] = (len(temp_mutes), len(linmuts))  # tuple: (#mutation_sample, #tot_lin_mutations)
+            lin_number[lin] = (len(temp_mutes), len(linmuts))  # tuple: (#lin_mutation_sample, #tot_lin_mutations)
 
     if known_variant:
         more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
-    else:
+    else:  # did not find variant that has all mutations in sample
         max=0
         var = ''
         flag = False
         val = 0
+        fraction = 0
         british_over_50 = False
         for key, tup in lin_number.items():
             val = round((tup[0] / tup[1])*100, 2)
+            frac = f'({int(tup[0])}/{int(tup[1])})'
             if val >= 60:  # 60%
                 flag = True
             if val > max:
                 max = val
                 var = key
+                fraction = frac
         if flag:
             known_variant = var
             more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
-        elif val >= 50 and var:  # and < 70
+        elif val >= 50 and var:  # and < 60% because no known variant
             more_muts = [x for x in more_muts if x not in mutations_by_lineage[var]]
             if var == "B.1.1.7 - UK":
-                known_variant = var  # for british variant only: over 50% is enough to determine variant
+                known_variant = var  # for british variant only: over 50% is enough to determine variant (not possible at the moment)
 
-        if var and lin_number[var][0] >= 2:
-            suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
+        if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage
+            # suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
+            suspect = f'suspect_{var}: {str(lin_percentages[var])}{fraction}'  # suspect_<lineagename>): (%)(x/y)
     unexpected_mutations = specific_cases(unexpected_mutations, sample, known_variant)
 
-    more_muts = set(more_muts)
+    more_muts = set(more_muts)  # lose redundancies
 
-    # if not suspect and (more_muts or samples_s_not_covered[sample] or unexpected_mutations[sample]):
     if not suspect and (more_muts or samples_not_covered[sample] or unexpected_mutations[sample]):
         suspect = 'suspect'
+
+    # get pangolin info
     try:
         pangolin_clade = pangolinTable[pangolinTable.taxon == sample].lineage.values[0]
         pangolin_status = pangolinTable[pangolinTable.taxon == sample].status.values[0]
@@ -207,10 +215,10 @@ for sample, sample_mutlist in samples_mutations.items():
         "Suspect": suspect,
         "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] + ")" for x in more_muts])),
         # "S Not Covered": ';'.join(samples_s_not_covered[sample]),
-        "Not Covered": ';'.join(set(samples_not_covered[sample])) if not QCfail else '',
-
+        "Not Covered": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] +
+                                     ")" for x in samples_not_covered[sample]])) if not QCfail else '',
         # "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
-        "all mutations": ';'.join(aa_substitution_list.values[0]) if not aa_substitution_list.empty else '',  # TODO: check
+        "all mutations": ';'.join(aa_substitution_list.values[0]) if not aa_substitution_list.empty else '',
         "nextclade": nextclade.values[0] if not nextclade.empty else '',
         "pangolin_clade": pangolin_clade,
         "status": pangolin_status,
