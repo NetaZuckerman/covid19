@@ -47,7 +47,7 @@ def specific_cases(unexpected_muts_dict, sample, variant):
 
 # load pangolin + nextclade outputs, mutations table.
 pangolinTable = pd.read_csv(pangolin_file)
-clades_df = pd.read_csv(clades_path, sep='\t') #########################!
+clades_df = pd.read_csv(clades_path, sep='\t')
 if len(argv) > 5:
     muttable_path = argv[5]
 else:
@@ -67,6 +67,8 @@ alignment.pop('REF_NC_045512.2', None)
 # prepare nextclade dataframe
 clades_df = clades_df[['seqName', 'aaSubstitutions', 'clade']]
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
+clades_df['sample'] = clades_df['sample'].apply(str)
+aa_substitution_dict = {sample: [f"{x.split(':')[1]}({x.split(':')[0]})" for x in clades_df[clades_df['sample']==sample].aaSubstitutions.values.tolist()[0].split(',')] for sample in clades_df['sample']}
 
 # some variables:
 samples_mutations = {id: [] for id in alignment}
@@ -122,8 +124,8 @@ for sample, sample_mutlist in samples_mutations.items():
             known_variant = lin
         elif len(linmuts) != len(temp):  # some mutations do exist
             more_muts += temp_mutes
-            lin_percentages[lin] = round(len(set(temp_mutes)) / len(set(linmuts['AA'])) * 100, 2)
-            lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts['AA'])))  # tuple: (#lin_mutation_sample, #tot_lin_mutations)
+            lin_percentages[lin] = round(len(set(temp_mutes)) / len(set(linmuts)) * 100, 2)
+            lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts)))  # tuple: (#lin_mutation_sample, #tot_lin_mutations)
 
     if known_variant:
         more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
@@ -188,10 +190,8 @@ for sample, sample_mutlist in samples_mutations.items():
             if 'Q677H' in more_muts:
                 unexpected_mutations[sample].remove(x)
 
-    aa_substitution_list = clades_df[clades_df['sample'] == sample].aaSubstitutions
-    aa_substitution_dict = {sample: [f"{x.split(':')[1]}({x.split(':')[0]})" for x in clades_df[clades_df['sample']==sample].aaSubstitutions.values.tolist()[0].split(',')] for sample in clades_df['sample']}
+    # aa_substitution_list = clades_df[clades_df['sample'] == sample].aaSubstitutions
 
-    ######################################################################### HERE ##################################################################
     nextclade = clades_df[clades_df['sample'] == sample].clade
     line = {
         "Sample": sample,
@@ -202,7 +202,7 @@ for sample, sample_mutlist in samples_mutations.items():
         "Not Covered": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] +
                                      ")" for x in samples_not_covered[sample]])) if not QCfail else '',
         # "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
-        "all mutations": ';'.join(aa_substitution_list.values[0]) if not aa_substitution_list.empty else '',
+        "all mutations": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict else '',
         "nextclade": nextclade.values[0] if not nextclade.empty else '',
         "pangolin_clade": pangolin_clade,
         "status": pangolin_status,
