@@ -210,13 +210,13 @@ function muttable() {
     conda deactivate
 
     conda activate nextstrain
-    nextclade -i alignment/all_not_aligned.fasta --output-json results/nextclade.json
+    nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
     conda deactivate
 
     conda activate CoronaPipeline
     python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
     python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv
-    python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.json
+    python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv
 }
 
 function quazitable() {

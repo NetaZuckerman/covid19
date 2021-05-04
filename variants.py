@@ -11,27 +11,7 @@ including pangolin and nextclades variants as well.
 alignment_file = argv[1]
 output_file = argv[2]
 pangolin_file = argv[3]
-clades_json = argv[4]
-
-
-def getAASubs(substitutions_list):
-    """
-    extract amino acid substitutions from 'substitutions' column.
-    :param substitutions_list: list of substitutions (as dictionaries)
-    :return: list of amino acid substitutions of the row.
-    """
-    row_list = []
-
-    if substitutions_list and substitutions_list == substitutions_list:  # check substitution list is not 'nan'!
-        for dic in substitutions_list:
-            if dic['aaSubstitutions']:
-                codon = dic['aaSubstitutions'][0]['codon']
-                gene = dic['aaSubstitutions'][0]['gene']
-                refAA = dic['aaSubstitutions'][0]['refAA']
-                queryAA = dic['aaSubstitutions'][0]['queryAA']
-                sub = f"{refAA}{codon}{queryAA}({gene})"
-                row_list.append(sub)
-    return row_list
+clades_path = argv[4]
 
 
 def specific_cases(unexpected_muts_dict, sample, variant):
@@ -67,7 +47,7 @@ def specific_cases(unexpected_muts_dict, sample, variant):
 
 # load pangolin + nextclade outputs, mutations table.
 pangolinTable = pd.read_csv(pangolin_file)
-clades_df = pd.read_json(clades_json)
+clades_df = pd.read_csv(clades_path, sep='\t') #########################!
 if len(argv) > 5:
     muttable_path = argv[5]
 else:
@@ -85,7 +65,6 @@ alignment.pop('NC_045512.2', None)
 alignment.pop('REF_NC_045512.2', None)
 
 # prepare nextclade dataframe
-clades_df['aaSubstitutions'] = clades_df.apply(lambda row: getAASubs(row.substitutions), axis=1)
 clades_df = clades_df[['seqName', 'aaSubstitutions', 'clade']]
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
 
@@ -114,7 +93,8 @@ for sample, record in alignment.items():
             elif alt != ref and alt != 'N':  # alt is not the expected mut. and is covered in sequencing
                 unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
         else:  # some variant mutation
-            samples_mutations[sample].append(mutation_name)  # accumulate all samples+mutations in dict: {sampleName: mutationName}
+            samples_mutations[sample].append(mutation_name)  # accumulate all samples+mutations in dict:
+            # {sampleName: mutationName}
 
 unique_lineages = set(lineages_list)
 # create a dictionary of mutations by lineage -> {key=lineage: val=dataframe with all of lineage's mutations}
@@ -142,8 +122,8 @@ for sample, sample_mutlist in samples_mutations.items():
             known_variant = lin
         elif len(linmuts) != len(temp):  # some mutations do exist
             more_muts += temp_mutes
-            lin_percentages[lin] = round(len(temp_mutes) / len(linmuts) * 100, 2)
-            lin_number[lin] = (len(temp_mutes), len(linmuts))  # tuple: (#lin_mutation_sample, #tot_lin_mutations)
+            lin_percentages[lin] = round(len(set(temp_mutes)) / len(set(linmuts['AA'])) * 100, 2)
+            lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts['AA'])))  # tuple: (#lin_mutation_sample, #tot_lin_mutations)
 
     if known_variant:
         more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
@@ -169,7 +149,8 @@ for sample, sample_mutlist in samples_mutations.items():
         elif val >= 50 and var:  # and < 60% because no known variant
             more_muts = [x for x in more_muts if x not in mutations_by_lineage[var]]
             if var == "B.1.1.7 - UK":
-                known_variant = var  # for british variant only: over 50% is enough to determine variant (not possible at the moment)
+                known_variant = var  # for british variant only: over 50% is enough to determine variant
+                # (not possible at the moment)
 
         if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage
             # suspect = 'suspect_' + var + ": " + str(lin_percentages[var]) + "%"
@@ -208,6 +189,9 @@ for sample, sample_mutlist in samples_mutations.items():
                 unexpected_mutations[sample].remove(x)
 
     aa_substitution_list = clades_df[clades_df['sample'] == sample].aaSubstitutions
+    aa_substitution_dict = {sample: [f"{x.split(':')[1]}({x.split(':')[0]})" for x in clades_df[clades_df['sample']==sample].aaSubstitutions.values.tolist()[0].split(',')] for sample in clades_df['sample']}
+
+    ######################################################################### HERE ##################################################################
     nextclade = clades_df[clades_df['sample'] == sample].clade
     line = {
         "Sample": sample,
