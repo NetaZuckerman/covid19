@@ -68,7 +68,17 @@ alignment.pop('REF_NC_045512.2', None)
 clades_df = clades_df[['seqName', 'aaSubstitutions', 'clade']]
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
 clades_df['sample'] = clades_df['sample'].apply(str)
-aa_substitution_dict = {sample: [f"{x.split(':')[1]}({x.split(':')[0]})" for x in clades_df[clades_df['sample']==sample].aaSubstitutions.values.tolist()[0].split(',')] for sample in clades_df['sample']}
+clades_df = clades_df.fillna('')
+aa_substitution_dict = {}
+for sample in clades_df['sample']:
+    aasubs = clades_df[clades_df['sample']==sample].aaSubstitutions.values.tolist()
+    if aasubs and aasubs != ['']:
+        print(sample)
+        aa_substitution_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aasubs[0].split(',')]
+    else:
+        aa_substitution_dict[sample] = ''
+
+
 
 # some variables:
 samples_mutations = {id: [] for id in alignment}
