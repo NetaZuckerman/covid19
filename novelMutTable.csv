@@ -500,4 +500,4 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut
 29742 G-A,g29742a,3'UTR,"A.23.1 - Uganda, A.VOI.2 - Tanzanian suspect",extragenic,29742,G,A
 29742 G-T,g29742a,3'UTR,"B.1.617 - India (Maharashtra), A.27 - Mayotte",extragenic,29742,G,T
 29754 C-U,c29754t,3'UTR,P.2 - Rio de jeneiro,extragenic,29754,C,T
-29769 C-T,c29769t,3-UTR,B.1.1.318 - Global,extragenic,29769,C,T
+29769 C-T,c29769t,3'UTR,B.1.1.318 - Global,extragenic,29769,C,T

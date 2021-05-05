@@ -72,13 +72,7 @@ clades_df = clades_df.fillna('')
 aa_substitution_dict = {}
 for sample in clades_df['sample']:
     aasubs = clades_df[clades_df['sample']==sample].aaSubstitutions.values.tolist()
-    if aasubs and aasubs != ['']:
-        print(sample)
-        aa_substitution_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aasubs[0].split(',')]
-    else:
-        aa_substitution_dict[sample] = ''
-
-
+    aa_substitution_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aasubs[0].split(',')] if (aasubs and aasubs != ['']) else ''
 
 # some variables:
 samples_mutations = {id: [] for id in alignment}
