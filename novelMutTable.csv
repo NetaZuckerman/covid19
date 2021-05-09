@@ -4,7 +4,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 174 G-T,g174t,5' UTR,B.1.351,extragenic,174,G,T,B.1.351 - SA
 190 C-T,c190t,5'UTR,A.VOI.2,extragenic,190,C,T,A.VOI.2 - Tanzanian suspect
 203 C-T,c203t,5'UTR,B.1.1.519,extragenic,203,C,T,B.1.1.519
-210 G-T,g210t,5' UTR,"B.1.617, B.1.617.2, B.1.617.3",extragenic,210,G,T,"B.1.617, B.1.617.2, B.1.617.3"
+210 G-T,g210t,5' UTR,"B.1.617.2, B.1.617.3",extragenic,210,G,T,"B.1.617.2, B.1.617.3"
 222 C-T,c222t,5' UTR,B.1.1.519,extragenic,222,C,T,B.1.1.519
 361 A-G,G32G,NSP1,A.27,Synonymous,361,A,G,A.27 - Mayotte
 569 G-A,E102K,NSP1,A.VOI.2,non-Synonymous,569,G,A,A.VOI.2 - Tanzanian suspect
@@ -189,7 +189,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 21588 C-T,P9L,S,AT.1,non-Synonymous,21588,C,T,AT.1 - St Petersburg
 21600 G-T,S13I,S,"B.1.429, B.1.427",non-Synonymous,21600,G,T,"B.1.429 - California, B.1.427 - California"
 21614 C-T,L18F,S,"P.1, A.23.1, A.VOI.2",non-Synonymous,21614,C,T,"P.1 - Manaus, A.27 - Mayotte"
-21618 C-G,T19R,S,"B.1.617, B.1.617.2, B.1.617.3",non-Synonymous,21618,C,G,"B.1.617, B.1.617.2, B.1.617.3"
+21618 C-G,T19R,S,"B.1.617.2, B.1.617.3",non-Synonymous,21618,C,G,"B.1.617.2, B.1.617.3"
 21621 C-A,T20N,S,P.1,non-Synonymous,21621,C,A,P.1 - Manaus
 21638 C-T,P26S,S,"P.1, B.1.620",non-Synonymous,21638,C,T,"P.1 - Manaus, B.1.620 - Global"
 21691 C-T,F43F,S,B.1.616,non-Synonymous,21691,C,T,B.1.616 - Brittany
@@ -248,12 +248,12 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 22017 G-T,W152L,S,R.1,non-Synonymous,22017,G,T,R.1 - USA
 22018 G-T,W152C,S,"B.1.429, B.1.427",non-Synonymous,22018,G,T,"B.1.429 - California, B.1.427 - California"
 22022 G-A,E154K,S,B.1.617.1,non-Synonymous,22022,G,A,B.1.617.1
-22029-22034,EFR156G,S,"B.1.617, B.1.617.2",Deletion,22029,A,-,"B.1.617, B.1.617.2"
-22029-22034,EFR156G,S,"B.1.617, B.1.617.2",Deletion,22030,G,-,"B.1.617, B.1.617.2"
-22029-22034,EFR156G,S,"B.1.617, B.1.617.2",Deletion,22031,T,-,"B.1.617, B.1.617.2"
-22029-22034,EFR156G,S,"B.1.617, B.1.617.2",Deletion,22032,T,-,"B.1.617, B.1.617.2"
-22029-22034,EFR156G,S,"B.1.617, B.1.617.2",Deletion,22033,C,-,"B.1.617, B.1.617.2"
-22029-22034,EFR156G,S,"B.1.617, B.1.617.2",Deletion,22034,A,-,"B.1.617, B.1.617.2"
+22029-22034,EFR156G,S,"B.1.617.2",Deletion,22029,A,-,"B.1.617.2"
+22029-22034,EFR156G,S,"B.1.617.2",Deletion,22030,G,-,"B.1.617.2"
+22029-22034,EFR156G,S,"B.1.617.2",Deletion,22031,T,-,"B.1.617.2"
+22029-22034,EFR156G,S,"B.1.617.2",Deletion,22032,T,-,"B.1.617.2"
+22029-22034,EFR156G,S,"B.1.617.2",Deletion,22033,C,-,"B.1.617.2"
+22029-22034,EFR156G,S,"B.1.617.2",Deletion,22034,A,-,"B.1.617.2"
 22032 T-C,F157S,S,B.1.526.1,non-Synonymous,22032,T,C,B.1.526.1 - New york
 22033 C-A,F157L,S,A.23.1,non-Synonymous,22033,C,A,A.23.1 - Uganda
 22132 G-T,R190S,S,P.1,non-Synonymous,22132,G,T,P.1 - Manaus
@@ -299,10 +299,10 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 22812 A-C,K417T,S,P.1,non-Synonymous,22812,A,C,P.1 - Manaus
 22813 G-T,K417N,S,B.1.351,non-Synonymous,22813,G,T,B.1.351 - SA
 22912 T-C,N450K,S,B.1.214.2,non-Synonymous,22912,T,C,B.1.214.2 - Belgium
-22917 T-G,L452R,S,"B.1.429, B.1.427, A.27, VUI_L452R/L1063F_Israel, B.1.617, B.1.526.1, B.1.617.1, B.1.617.2, B.1.617.3",non-Synonymous,22917,T,G,"B.1.429 - California, B.1.427 - California, A.27 - Mayotte, VUI_L452R/L1063F_Israel, B.1.617, B.1.526.1 - New york, B.1.617.1, B.1.617.2, B.1.617.3"
+22917 T-G,L452R,S,"B.1.429, B.1.427, A.27, VUI_L452R/L1063F_Israel, B.1.526.1, B.1.617.1, B.1.617.2, B.1.617.3",non-Synonymous,22917,T,G,"B.1.429 - California, B.1.427 - California, A.27 - Mayotte, VUI_L452R/L1063F_Israel, B.1.526.1 - New york, B.1.617.1, B.1.617.2, B.1.617.3"
 22992 G-A,S477N,S,B.1.620,non-Synonymous,22992,G,A,B.1.620 - Global
 22995 C-G,T478R,S,A.VOI.2,non-Synonymous,22995,C,G,A.VOI.2 - Tanzanian suspect
-22995 C-A,T478K,S,"B.1.617, B.1.617.2, B.1.1.519",non-Synonymous,22995,C,A,"B.1.617, B.1.617.2, B.1.1.519"
+22995 C-A,T478K,S,"B.1.617.2, B.1.1.519",non-Synonymous,22995,C,A,"B.1.617.2, B.1.1.519"
 23005 T-A,N481K,S,VUI_N481K_Israel,non-Synonymous,23005,T,A,VUI_N481K_Israel
 23010 T-C,V483A,S,B.1.616,non-Synonymous,23010,T,C,B.1.616 - Brittany
 23012 G-A,E484K,S,"B.1.351, P.2, P.1, B.1.526, P.3, A.VOI.2, B.1.1.318, R.1, B.1.618, B.1.620, AT.1",non-Synonymous,23012,G,A,"B.1.351 - SA, P.2 - Rio de jeneiro, P.1 - Manaus, B.1.526 - New york, P.3 - Philippines, A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, R.1 - USA, B.1.618 - India (West Bengal), B.1.620 - Global, AT.1 - St Petersburg"
@@ -331,7 +331,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 23598-23609,KGIA679,S,AT.1,Insertion,23608,-,C,AT.1 - St Petersburg
 23598-23609,KGIA679,S,AT.1,Insertion,23609,-,T,AT.1 - St Petersburg
 23604 C-A,P681H,S,"B.1.1.7, VUI_P681H_Israel, P.3, A.VOI.2, B.1.1.318, B.1.620, B.1.1.519",non-Synonymous,23604,C,A,"B.1.1.7 - UK, VUI_P681H_Israel, P.3 - Philippines, A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.620 - Global, B.1.1.519"
-23604 C-G,P681R,S,"A.23.1, B.1.617, B.1.617.1, B.1.617.2, B.1.617.3",non-Synonymous,23604,C,G,"A.23.1 - Uganda, B.1.617, B.1.617.1, B.1.617.2, B.1.617.3"
+23604 C-G,P681R,S,"A.23.1, B.1.617.1, B.1.617.2, B.1.617.3",non-Synonymous,23604,C,G,"A.23.1 - Uganda, B.1.617.1, B.1.617.2, B.1.617.3"
 23664 C-T,A701V,S,"B.1.351, B.1.526",non-Synonymous,23664,C,T,"B.1.351 - SA, B.1.526 - New york"
 23683 C-T,Y707Y,S,A.VOI.2,Synonymous,23683,C,T,A.VOI.2 - Tanzanian suspect
 23709 C-T,T716I,S,"B.1.1.7, B.1.214.2",non-Synonymous,23709,C,T,"B.1.1.7 - UK, B.1.214.2 - Belgium"
@@ -349,7 +349,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 24382 C-T,S940S,S,B.1.1.318,Synonymous,24382,C,T,B.1.1.318 - Global
 24408 A-G,Q949R,S,B.1.616,non-Synonymous,24409,A,G,B.1.616 - Brittany
 24410 G-C,D950H,S,B.1.526.1,non-Synonymous,24410,G,C,B.1.526.1 - New york
-24410 G-A,D950N,S,"B.1.617, B.1.617.2",non-Synonymous,24410,G,A,"B.1.617, B.1.617.2"
+24410 G-A,D950N,S,"B.1.617.2",non-Synonymous,24410,G,A,"B.1.617.2"
 24433 A-T,Q957H,S,A.VOI.2,Synonymous,24433,A,T,A.VOI.2 - Tanzanian suspect
 24506 T-G,S982A,S,B.1.1.7,non-Synonymous,24506,T,G,B.1.1.7 - UK
 24642 C-T,T1027I,S,"P.1, B.1.620",non-Synonymous,24642,C,T,"P.1 - Manaus, B.1.620 - Global"
@@ -413,7 +413,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 26568 C-A,L16I,M,AT.1,non-Synonymous,26568,C,A,AT.1 - St Petersburg
 26604 T-C,F28L,M,R.1,non-Synonymous,26604,T,C,R.1 - USA
 26681 C-T,F53F,M,"B.1.427, B.1.429",Synonymous,26681,C,T,"B.1.427 - California, B.1.429 - California"
-26767 T-C,I82T,M,"B.1.525, A.VOI.2, B.1.1.318, B.1.617, B.1.617.2",non-Synonymous,26767,T,C,"B.1.525 - Global, A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.617, B.1.617.2"
+26767 T-C,I82T,M,"B.1.525, A.VOI.2, B.1.1.318, B.1.617.2",non-Synonymous,26767,T,C,"B.1.525 - Global, A.VOI.2 - Tanzanian suspect, B.1.1.318 - Global, B.1.617.2"
 26858 C-T,F112F,M,AP.1,Synonymous,26858,C,T,AP.1 - Wales
 26885 C-T,N121N,M,B.1.618,Synonymous,26885,C,T,B.1.618 - India (West Bengal)
 26895 C-T,H125Y,M,B.1.616,non-Synonymous,26895,C,T,B.1.616 - Brittany
@@ -431,9 +431,9 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 27434 C-T,T14I,ORF7a,AP.1,non-Synonymous,27434,C,T,AP.1 - Wales
 27493 C-T,P34S,ORF7a,B.1.618,non-Synonymous,27493,C,T,B.1.618 - India (West Bengal)
 27576 T-C,T61T,ORF7a,B.1.214.2,Synonymous,27576,T,C,B.1.214.2 - Belgium
-27638 T-C,V82A,ORF7a,"B.1.617, B.1.617.2, B.1.617.3",non-Synonymous,27638,T,C,"B.1.617, B.1.617.2, B.1.617.3"
+27638 T-C,V82A,ORF7a,"B.1.617.2, B.1.617.3",non-Synonymous,27638,T,C,"B.1.617.2, B.1.617.3"
 27746 G-T,R118I,ORF7a,VUI_N481K_Israel,non-Synonymous,27746,G,T,VUI_N481K_Israel
-27752 C-T,T120I,ORF7a,"B.1.617, B.1.617.2",non-Synonymous,27752,C,T,"B.1.617, B.1.617.2"
+27752 C-T,T120I,ORF7a,"B.1.617.2",non-Synonymous,27752,C,T,"B.1.617, B.1.617.2"
 27757 T-A,*122R,ORF7a,B.1.616,non-Synonymous,27757,T,A,B.1.616 - Brittany
 27762 G-T,E3*,ORF7b,B.1.618,Stop codon,27762,G,T,B.1.618 - India (West Bengal)
 27795-27797,L14del,ORF7b,B.1.620,Deletion,27795,T,-,B.1.620 - Global
@@ -482,7 +482,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 28271 A-T,a28271g,3'UTR,B.1.620,extragenic,28271,A,T,B.1.620 - Global
 28272 A-T,a28272t,3'UTR,"B.1.427, B.1.429",extragenic,28272,A,T,"B.1.427 - California, B.1.429 - California"
 28272del,a28272del,3'UTR,B.1.214.2,extragenicDeletion,28272,A,-,B.1.214.2 - Belgium
-28273del,a28273del,3'UTR,"B.1.1.7, P.3, B.1.526, B.1.214.2, B.1.526.1, R.1, B.1.617, B.1.617.1, B.1.617.2",extragenicDeletion,28273,A,-,"B.1.1.7 - UK, P.3 - Philippines, B.1.526 - New york, B.1.214.2 - Belgium, B.1.526.1 - New york, R.1 - USA, B.1.617, B.1.617.1, B.1.617.2"
+28273del,a28273del,3'UTR,"B.1.1.7, P.3, B.1.526, B.1.214.2, B.1.526.1, R.1, B.1.617.1, B.1.617.2",extragenicDeletion,28273,A,-,"B.1.1.7 - UK, P.3 - Philippines, B.1.526 - New york, B.1.214.2 - Belgium, B.1.526.1 - New york, R.1 - USA, B.1.617.1, B.1.617.2"
 28273 A-T,a28273t,3'UTR,A.27,extragenic,28273,A,T,A.27 - Mayotte
 28278-28280,DS2;3-Y2,N,B.1.525,Deletion,28278,C,-,B.1.525 - Global
 28278-28280,DS2;3-Y2,N,B.1.525,Deletion,28279,T,-,B.1.525 - Global
@@ -495,7 +495,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 28308 C-G,A12G,N,B.1.525,non-Synonymous,28308,C,G,B.1.525 - Global
 28325 G-A,G18S,N,B.1.618,non-Synonymous,28325,G,A,B.1.618 - India (West Bengal)
 28378 G-C,R32P,N,A.23.1,non-Synonymous,28378,G,C,A.23.1 - Uganda
-28461 A-G,D63G,N,"B.1.617, B.1.617.2",non-Synonymous,28461,A,G,"B.1.617, B.1.617.2"
+28461 A-G,D63G,N,"B.1.617.2",non-Synonymous,28461,A,G,"B.1.617.2"
 28472 C-T,P67S,N,B.1.617.3,non-Synonymous,28472,C,T,B.1.617.3
 28512 C-G,P80R,N,P.1,non-Synonymous,28512,C,G,P.1 - Manaus
 28628 G- U,A119S,N,"P.2, B.1.618",non-Synonymous,28628,G,T,"P.2 - Rio de jeneiro, B.1.618 - India (West Bengal)"
@@ -506,7 +506,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 28877 A-T,S201S,N,P.1,Synonymous,28877,A,T,P.1 - Manaus
 28878 G-C,S201S,N,P.1,Synonymous,28887,G,C,P.1 - Manaus
 28878 G-A,S202N,N,"A.23.1, A.27, A.VOI.2",non-Synonymous,28878,G,A,"A.23.1 - Uganda, A.27 - Mayotte, A.VOI.2 - Tanzanian suspect"
-28881 G-T,R203M,N,"B.1.617, B.1.617.2, B.1.617.3",non-Synonymous,28881,G,T,"B.1.617, B.1.617.2, B.1.617.3"
+28881 G-T,R203M,N,"B.1.617.2, B.1.617.3",non-Synonymous,28881,G,T,"B.1.617.2, B.1.617.3"
 28882 G-A,R203R,N,A.VOI.2,Synonymous,28882,G,A,A.VOI.2 - Tanzanian suspect
 28887 C-T,T205I,N,"B.1.351, B.1.427, B.1.429, B.1.214.2, B.1.526.1",non-Synonymous,28887,C,T,"B.1.351 - SA, B.1.427 - California, B.1.429 - California, B.1.214.2 - Belgium, B.1.526.1 - New york"
 28896-28898,A208Del,N,B.1.1.318,Deletion,28896,C,-,B.1.1.318 - Global
@@ -530,6 +530,6 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 29580 C-T,A8V,ORF10,B.1.616,non-Synonymous,29580,C,T,B.1.616 - Brittany
 29724 C-T,c29724t,3'UTR,P.3,extragenic,29724,C,T,P.3 - Philippines
 29742 G-A,g29742a,3'UTR,"A.23.1, A.VOI.2",extragenic,29742,G,A,"A.23.1 - Uganda, A.VOI.2 - Tanzanian suspect"
-29742 G-T,g29742a,3'UTR,"B.1.617, A.27, B.1.617, B.1.617.1, B.1.617.2",extragenic,29742,G,T,"B.1.617, A.27 - Mayotte, B.1.617, B.1.617.1, B.1.617.2"
+29742 G-T,g29742a,3'UTR,"A.27B.1.617.1, B.1.617.2",extragenic,29742,G,T,"A.27 - Mayotte, B.1.617.1, B.1.617.2"
 29754 C-U,c29754t,3'UTR,P.2,extragenic,29754,C,T,P.2 - Rio de jeneiro
 29769 C-T,c29769t,3'UTR,B.1.1.318,extragenic,29769,C,T,B.1.1.318 - Global
