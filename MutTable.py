@@ -44,7 +44,8 @@ for file, seqrecord in fastadict.items():
 
 df["REF"] = df["REF"].str.upper()  # make sure all reference nucleotides from table are upper case.
 df = df[df.type != 'Insertion']  # ignore insertions
-varcol = df.apply(lambda row: row[8:].unique(), axis=1)  # add var columns- show which values in row (from col8 forward)
+varcol = df.apply(lambda row: row[9:].unique(), axis=1)  # add var columns- show which values in row (from col9 forward
+# because 9 first columns are the muations table)
 df.insert(6, "var", varcol)
 df = df.sort_values(by=["lineage", "gene"], ascending=[True, False])
 df = df.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'})
