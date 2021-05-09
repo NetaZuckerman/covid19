@@ -2,6 +2,7 @@ from Bio import SeqIO
 import csv
 import pandas as pd
 from sys import argv
+import os
 """
 create variants table - for each sample in fasta multiple alignment file a covid variant is decided if found.
 including pangolin and nextclades variants as well. 
@@ -52,10 +53,12 @@ except FileNotFoundError:
     pangolinTable = pd.DataFrame()
 
 clades_df = pd.read_csv(clades_path, sep='\t')
-if len(argv) > 5:
-    muttable_path = argv[5]
-else:
-    muttable_path = "/data/projects/Dana/scripts/covid19/novelMutTable.csv"
+# if len(argv) > 5:
+#     muttable_path = argv[5]
+# else:
+#     muttable_path = "/data/projects/Dana/scripts/covid19/novelMutTable.csv"
+
+muttable_path = os.path.dirname(os.path.abspath(__file__)) + '/novelMutTable.csv'
 mutTable = pd.read_csv(muttable_path)
 
 # prepare mutations table dataframe
