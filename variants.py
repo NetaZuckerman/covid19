@@ -212,7 +212,10 @@ for sample, sample_mutlist in samples_mutations.items():
         "Not Covered": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] +
                                      ")" for x in samples_not_covered[sample]])) if not QCfail else '',
         # "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
-        "all mutations": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict else '',
+        "all mutations": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and sample in
+                                                                   aa_substitution_dict else 'NA',
+        "aaDeletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
+                                                             in aa_deletions_dict else 'NA'),
         "nextclade": nextclade.values[0] if not nextclade.empty else '',
         "pangolin_clade": pangolin_clade,
         "status": pangolin_status,
@@ -222,7 +225,7 @@ for sample, sample_mutlist in samples_mutations.items():
 
 with open(output_file, 'w') as outfile:
     filednames = ["Sample", "Known Variant", "Suspect", "More Mutations", "Not Covered",  # 'S Not Covered'
-                  "all mutations", "nextclade", "pangolin_clade", "status", "pangolin-note"]
+                  "all mutations", "aaDeletions","nextclade", "pangolin_clade", "status", "pangolin-note"]
     writer = csv.DictWriter(outfile, filednames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:
