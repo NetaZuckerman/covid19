@@ -32,21 +32,21 @@ fastadict.pop('NC_045512.2', None)  # remove refseq from dictionary (if does not
 fastadict.pop('REF_NC_045512.2', None)
 
 samples = []
+# iterate over fasta records of aligned fasta file and get values in mutations positions
 for file, seqrecord in fastadict.items():
     seq = seqrecord.seq
-    samples.append(file)
+    samples.append(file) # keep sample names in list
     mutpositions = []
-    for pos in df["pos"]:
+    for pos in df["pos"]:  # for each mutations position get the value from fasta record (-1 bcs index starts from 0)
         x = seq[int(pos)-1]
         mutpositions.append(x)
-    df[file] = mutpositions
+    df[file] = mutpositions  # add sample as column
 
 df["REF"] = df["REF"].str.upper()  # make sure all reference nucleotides from table are upper case.
-df = df[df.type != 'Insertion']
-varcol = df.apply(lambda row: row[8:].unique(), axis=1)
+df = df[df.type != 'Insertion']  # ignore insertions
+varcol = df.apply(lambda row: row[8:].unique(), axis=1)  # add var columns- show which values in row (from col8 forward)
 df.insert(6, "var", varcol)
-df = df.sort_values(by=["lineage", "gene"], ascending=[True, False]) # check!
-
+df = df.sort_values(by=["lineage", "gene"], ascending=[True, False])
 df = df.rename(columns={'pos': 'nuc pos', 'nucleotide': 'nuc name', 'AA': 'name'})
 
 # change order of columns
