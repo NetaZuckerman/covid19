@@ -212,11 +212,21 @@ for sample, sample_mutlist in samples_mutations.items():
     # get nextclade info from table
     nextclade = clades_df[clades_df['sample'] == sample].clade
     # create final table's line (sample line)
+
+    more_muts_final = []
+    for mut in more_muts:  # moremuts: keep only mutations in S and add (S) to mut. name
+        if mutTable[mutTable.AA == mut].gene.values[0] == 'S':
+            m_name = mut + "(S)"
+            if m_name not in more_muts_final: # make sure no duplicates
+                more_muts_final.append(m_name)
+        # else do not keep in list
+
     line = {
         "Sample": sample,
         "Known Variant": known_variant if known_variant and not QCfail else 'no monitored variant',
         "Suspect": suspect,
-        "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] + ")" for x in more_muts])),
+        # "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0]+")" for x in more_muts])),
+        "More Mutations": ';'.join(more_muts_final),
         # "S Not Covered": ';'.join(samples_s_not_covered[sample]),
         "Not Covered": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] +
                                      ")" for x in samples_not_covered[sample]])) if not QCfail else '',
@@ -234,7 +244,7 @@ for sample, sample_mutlist in samples_mutations.items():
 
 with open(output_file, 'w') as outfile:
     filednames = ["Sample", "Known Variant", "Suspect", "More Mutations", "Not Covered",  # 'S Not Covered'
-                  "all mutations", "aaDeletions","nextclade", "pangolin_clade", "status", "pangolin-note"]
+                  "all mutations", "aaDeletions", "nextclade", "pangolin_clade", "status", "pangolin-note"]
     writer = csv.DictWriter(outfile, filednames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:
