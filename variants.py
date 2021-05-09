@@ -49,7 +49,7 @@ try:
     pangolinTable = pd.read_csv(pangolin_file)
 except FileNotFoundError:
     print("Pangolin File Not Found")
-    pangolinTable = False
+    pangolinTable = pd.DataFrame()
 
 clades_df = pd.read_csv(clades_path, sep='\t')
 if len(argv) > 5:
@@ -179,20 +179,17 @@ for sample, sample_mutlist in samples_mutations.items():
         suspect = 'suspect'
 
     # get pangolin info from table
-    if pangolinTable:
-        try:
-            pangolin_clade = pangolinTable[pangolinTable.taxon == sample].lineage.values[0]
-            pangolin_status = pangolinTable[pangolinTable.taxon == sample].status.values[0]
-            pangolin_note = pangolinTable[pangolinTable.taxon == sample].note.values[0]
-        except:
-            pangolin_clade = '-'
-            pangolin_status = ''
-            pangolin_note = ''
-        QCfail = True if pangolin_status == 'fail' else False
-    else:
-        pangolin_clade = 'Pangolin Error'
-        pangolin_status = 'Pangolin Error'
-        pangolin_note = 'Pangolin Error'
+
+    try:
+        pangolin_clade = pangolinTable[pangolinTable.taxon == sample].lineage.values[0]
+        pangolin_status = pangolinTable[pangolinTable.taxon == sample].status.values[0]
+        pangolin_note = pangolinTable[pangolinTable.taxon == sample].note.values[0]
+    except:
+        pangolin_clade = '-'
+        pangolin_status = ''
+        pangolin_note = ''
+    QCfail = True if pangolin_status == 'fail' else False
+
     # specific cases of mutations in the same location:
     temp = unexpected_mutations[sample].copy()
     for x in temp:
