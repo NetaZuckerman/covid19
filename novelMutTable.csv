@@ -530,6 +530,6 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 29580 C-T,A8V,ORF10,B.1.616,non-Synonymous,29580,C,T,B.1.616 - Brittany
 29724 C-T,c29724t,3'UTR,P.3,extragenic,29724,C,T,P.3 - Philippines
 29742 G-A,g29742a,3'UTR,"A.23.1, A.VOI.2",extragenic,29742,G,A,"A.23.1 - Uganda, A.VOI.2 - Tanzanian suspect"
-29742 G-T,g29742a,3'UTR,"A.27B.1.617.1, B.1.617.2",extragenic,29742,G,T,"A.27 - Mayotte, B.1.617.1, B.1.617.2"
+29742 G-T,g29742a,3'UTR,"A.27, B.1.617.1, B.1.617.2",extragenic,29742,G,T,"A.27 - Mayotte, B.1.617.1, B.1.617.2"
 29754 C-U,c29754t,3'UTR,P.2,extragenic,29754,C,T,P.2 - Rio de jeneiro
 29769 C-T,c29769t,3'UTR,B.1.1.318,extragenic,29769,C,T,B.1.1.318 - Global
