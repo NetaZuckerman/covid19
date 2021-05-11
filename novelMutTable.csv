@@ -195,12 +195,12 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 21691 C-T,F43F,S,B.1.616,non-Synonymous,21691,C,T,B.1.616 - Brittany
 21717 A-G,Q52R,S,B.1.525,non-Synonymous,21717,A,G,B.1.525 - Global
 21758 A-G,H66D,S,B.1.616,non-Synonymous,21758,A,G,B.1.616 - Brittany
-21765-21767,HV69-70del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21765,T,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
-21765-21767,HV69-70del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21766,A,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
-21765-21767,HV69-70del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21767,C,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
-21768-21770,HV69-70del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21768,A,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
-21768-21770,HV69-70del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21769,T,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
-21768-21770,HV69-70del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21770,G,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
+21765-21767,H69del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21765,T,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
+21765-21767,H69del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21766,A,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
+21765-21767,H69del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21767,C,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
+21768-21770,V70del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21768,A,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
+21768-21770,V70del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21769,T,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
+21768-21770,V70del,S,"B.1.525, B.1.1.7, B.1.620",Deletion,21770,G,-,"B.1.525 - Global, B.1.1.7 - UK, B.1.620 - Global"
 21800 G-T,D80Y,S,A.VOI.2,non-Synonymous,21800,G,T,A.VOI.2 - Tanzanian suspect
 21801 A-C,D80A,S,B.1.351,non-Synonymous,21801,A,C,B.1.351 - SA
 21801 A-G,D80G,S,B.1.526.1,non-Synonymous,21801,A,G,B.1.526.1 - New york
