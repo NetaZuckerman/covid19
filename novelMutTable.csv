@@ -518,7 +518,7 @@ nucleotide,AA,gene,lineage,type,pos,REF,mut,lineage original
 28975 G-A,M234I,N,"B.1.526, B.1.526.1",non-Synonymous,28975,G,A,"B.1.526 - New york, B.1.526.1 - New york"
 28977 C-T,S235F,N,B.1.1.7,non-Synonymous,28977,C,T,B.1.1.7 - UK
 29095 C-T,F274F,N,B.1.616,Synonymous,29095,C,T,B.1.616 - Brittany
-29197 C-T,A308A,N,B.1.1.519,non-Synonymous,29197,C,T,B.1.1.519
+29197 C-T,A308A,N,B.1.1.519,Synonymous,29197,C,T,B.1.1.519
 29247 C-T,T325I,N,B.1.616,non-Synonymous,29247,C,T,B.1.616 - Brittany
 29362 C-T,F363F,N,"B.1.427, B.1.429",Synonymous,29362,C,T,"B.1.427 - California, B.1.429 - California"
 29372 G-C,E367Q,N,B.1.618,non-Synonymous,29372,G,C,B.1.618 - India (West Bengal)
