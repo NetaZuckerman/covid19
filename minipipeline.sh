@@ -1,0 +1,76 @@
+#!/bin/bash
+# 18.05.2021 Dana Bar Ilan
+
+# respond do ctrl+c to abort run:
+trap "kill 0" EXIT
+# allow conda activation from scrit
+eval "$(conda shell.bash hook)"
+
+# help function: (usage)
+function usage() {
+    cat <<EOF
+  usage: $0 [-h] [-i | --suquences] [-r | --reference-sequence]
+
+  -i | --sequences            [unaligned MULTI FASTA]
+  -r | --reference-sequence   [FASTA]
+EOF
+exit 0
+}
+
+function get_user_input() {
+  while (( "$#" )); do
+    case "$1" in
+      -i|--sequences)
+        shift
+        unaligned="$1"
+        shift
+        ;;
+      -r|--reference-sequence)
+        shift
+        refseq="$1"
+        shift
+        ;;
+      -h|--help)
+        usage
+        shift
+        ;;
+      -*|--*)  # decline any other flag
+        echo "Error: Unsupported flag $1" >&2
+        exit 1
+        ;;
+    esac
+  done
+}
+
+### MAIN ###
+path=$(dirname "${0}")
+get_user_input "$@"
+# check input:
+echo "checking input.."
+[[ -z "$unaligned" ]] && echo "Please provide multi-fasta sequence (-i|--sequences)" && exit 0
+[[ -z "$refseq" ]] && echo "Please provide reference sequence (-r|--reference-sequence)" && exit 0
+echo "all input provided. continuing."
+mkdir -p {alignment,results} # -p: create only if doesnt already exist
+
+conda activate nextstain
+# nextclade (-t: tsv output)
+nextclade -i "$unaligned" -t results/nextclade.tsv
+# align multifasta to reference sequence using augur align:
+augur align \
+--sequences "$unaligned" \
+--reference-sequence "$refseq" \
+--output alignment/all_aligned.fasta
+
+conda deactivate nextstain
+
+
+conda activate pangolin
+pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv
+conda deactivate
+
+conda activate CoronaPipeline
+python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
+python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv
+python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv
+
+echo "finished minipipeline (:"
