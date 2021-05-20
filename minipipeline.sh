@@ -52,7 +52,7 @@ echo "checking input.."
 echo "all input provided. continuing."
 mkdir -p {alignment,results} # -p: create only if doesnt already exist
 
-conda activate nextstain
+conda activate nextstrain
 # nextclade (-t: tsv output)
 nextclade -i "$unaligned" -t results/nextclade.tsv
 # align multifasta to reference sequence using augur align:
@@ -61,8 +61,7 @@ augur align \
 --reference-sequence "$refseq" \
 --output alignment/all_aligned.fasta
 
-conda deactivate nextstrain
-
+conda deactivate
 
 conda activate pangolin
 pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv
