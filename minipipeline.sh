@@ -61,7 +61,7 @@ augur align \
 --reference-sequence "$refseq" \
 --output alignment/all_aligned.fasta
 
-conda deactivate nextstain
+conda deactivate nextstrain
 
 
 conda activate pangolin
