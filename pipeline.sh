@@ -300,7 +300,7 @@ initialize_globals
 get_user_input "$@"
 check_flags
 
-if [ "$single_end" = true ]; then
+if [ "$single_end" == true ]; then
   single_end_mapping
 else
   # start workflow:
@@ -310,7 +310,10 @@ keep_mapped_reads
 sort_index_bam
 depth
 consensus
-change_fasta_header
+if [ "$single_end" == false ]; then
+  change_fasta_header
+fi
+
 mafft_alignment
 muttable
 over_50
