@@ -7,7 +7,7 @@ outfile = argv[2]
 
 # check user input, if missing print message and exit.
 if len(argv) < 3:
-    print(f"missing input.\nusage: {argv[0]} <input fasta> <output fasta> <optional: n% threshold>")
+    print(f"missing input.\nusage: {argv[0]} <input fasta> <output fasta> <optional: N% threshold (int)>")
     exit(1)
 
 threshold = 50  # threshold default, if not given by user.
@@ -23,7 +23,7 @@ with open(outfile, 'w') as out:
         sequence = record.seq
         nCount = sequence.upper().count('N')
         length = len(sequence)
-        if (nCount/length)*100 >= threshold:  # if N percentage is higher/equals threshold, add to output file.
+        if (nCount/length)*100 >= int(threshold):  # if N percentage is higher/equals threshold, add to output file.
             SeqIO.write(record, out, 'fasta')
 
 fasta.close()
