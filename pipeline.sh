@@ -275,7 +275,10 @@ function results_report() {
     if [[ $sample_name == Sh_* ]]; then
       sample_name=${sample_name/Sh_/}
     fi
-    sample_name=$( echo "$sample_name" | cut -d'_' -f 1 ) # SHORT NAME
+
+    if [ "$single_end" == false ]; then
+      sample_name=$( echo "$sample_name" | cut -d'_' -f 1 ) # SHORT NAME
+    fi
 
     original_bam=${file/.mapped.sorted.bam/.bam} # {var/find/replace}
     tot_reads=$(samtools view -c "$original_bam") # do not use -@n when capturing output in variable
