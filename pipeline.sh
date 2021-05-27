@@ -202,14 +202,21 @@ function consensus() {
   mkdir -p CNS CNS_5
   for file in BAM/*.mapped.sorted.bam; do
     # ivar instead of bcftools:
-    # CNS1
-    file_name=`basename "$file" .mapped.sorted.bam`
 
-    samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name"
-    # CNS5
-    samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
-    # remove qual files:
+    file_name=`basename "$file" .mapped.sorted.bam`
+    if [ "$single_end" == FALSE ]; then  # if paired end leave quality threshold 20
+      # CNS1
+      samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name"
+      # CNS5
+      samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
+    else  # of single end allow low quality bases (MinIon)
+      # CNS1
+      samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name" -q 0
+      # CNS5
+      samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name" -q 0
+    fi
   done
+  # remove qual files:
   rm CNS/*.qual.txt CNS_5/*.qual.txt
 }
 
