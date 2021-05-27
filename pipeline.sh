@@ -120,12 +120,17 @@ function single_end_mapping() {
     if [[ $file == *Undetermined*.fastq* || $file == *unpaired*.fastq*  || $file == *singletons* ]]; then # ignore undetermined and singletons
         continue
     fi
-    output=`basename ${output/.gz/}`
+
+    if [[ $file == *.gz ]]; then
+      output=`basename ${file/.gz/}`
+    else
+      output=`basename "$file"`
+    fi
     # replace to short name:
     if [[ $output == Sh_* ]]; then
       output=${output/Sh_/}
     fi
-    output=$( echo "$output" | cut -d'_' -f 1 )  # SHORT NAME
+
     output=BAM/$output.bam
 
     bwa mem -v1 -t"$threads" "$refseq" "$file" | samtools view -@ "$threads" -b - > $output
@@ -155,7 +160,11 @@ function map_to_ref() {
     r2=${r1/R1/R2}
     output=${r1/_R1/}
     output=${output/_paired/}
-    output=`basename ${output/.gz/}`
+    if [[ $file == *.gz ]]; then
+      output=`basename ${output/.gz/}`
+    else
+      output=`basename "$output"`
+    fi
     # replace to short name:
     if [[ $output == Sh_* ]]; then
       output=${output/Sh_/}
