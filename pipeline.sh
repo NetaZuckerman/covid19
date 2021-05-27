@@ -211,9 +211,9 @@ function consensus() {
       samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
     else  # of single end allow low quality bases (MinIon)
       # CNS1
-      samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name" -q 10
+      samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name" -q 15
       # CNS5
-      samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name" -q 10
+      samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name" -q 15
     fi
   done
   # remove qual files:
