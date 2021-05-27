@@ -22,7 +22,7 @@ function initialize_globals() {
   dirs_flag=false
   threads=32
   input_path=""
-  sewer_flag=false
+  single_end=false
 }
 
 # parse input with flags
@@ -32,13 +32,13 @@ Usage: $0 [options]
 
 required: [-h | -d | -i AND -r]
 -h| --help                      print this usage message and exit. Ignore the rest
--d|--create_dirs                create all project's directories in current working directory.
--i              [fastq.gz/path] input path to fastq.gz files location.
--r|--refseq     [refseq/path/]  user defined reference. required: refseq/path/ - path to reference fasta file.
+-d|--create_dirs                create all project's directories in current working directory
+-i              [fastq.gz/path] input path to fastq.gz files location
+-r|--refseq     [refseq/path/]  user defined reference. required: refseq/path/ - path to reference fasta file
 
 optional:
 --threads       [int]           number of threads. default: 32
---sewer                         add sewer output table.
+-s|--single-end                 single end sequencing
 
 EOF
 exit 0
@@ -70,8 +70,8 @@ function get_user_input() {
         usage
         shift
         ;;
-      --sewer)
-        sewer_flag=true
+      -s|--single-end)
+        single_end=true
         shift
         ;;
       -*|--*=)
@@ -100,6 +100,36 @@ function check_flags() {
     echo please provide reference sequence --refseq! >&2
     exit 1
   fi
+}
+
+
+function single_end_mapping() {
+  bwa index "$refseq"
+  if [ -d BAM/ ]; then # not first run, rm BAM files to avoid mixups
+    rm BAM/* 2> /dev/null # if file not found it's ok. no need to see on screen
+  fi
+  if [ -d CNS/ ]; then
+    rm CNS/* 2> /dev/null
+  fi
+  if [ -d CNS_5/ ]; then
+    rm CNS_5/* 2> /dev/null
+  fi
+  mkdir -p BAM CNS alignment results
+
+  for file in "$input_path"*.fastq*; do
+    if [[ $file == *Undetermined*.fastq* || $file == *unpaired*.fastq*  || $file == *singletons* ]]; then # ignore undetermined and singletons
+        continue
+    fi
+    output=`basename ${output/.gz/}`
+    # replace to short name:
+    if [[ $output == Sh_* ]]; then
+      output=${output/Sh_/}
+    fi
+    output=$( echo "$output" | cut -d'_' -f 1 )  # SHORT NAME
+    output=BAM/$output.bam
+
+    bwa mem -v1 -t"$threads" "$refseq" "$file" | samtools view -@ "$threads" -b - > $output
+  done
 }
 
 # map reads to reference. straight to bam format! assuming PE for now # TODO
@@ -201,6 +231,7 @@ function mafft_alignment() {
   --output alignment/all_aligned.fasta
 }
 
+
 function muttable() {
     # run pangolin
     conda deactivate
@@ -219,13 +250,10 @@ function muttable() {
     python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv
 }
 
-function quazitable() {
-  mkdir -p BAM/readcounts
-  for file in BAM/*.mapped.sorted.bam; do
-    file_name=$( echo "$file" | cut -d'_' -f1 )
-    bam-readcount -f "$refseq" "$file" -w1 > BAM/readcounts`basename "$file_name"`.txt
-  done
-  # now call python script to analyse files and produce table
+function over_50() {
+  # create another multifasta with only sequences of <50% N's.
+  python "$path"/filterNPercent.py alignment/all_not_aligned.fasta alignment/all_not_aligned_over50.fasta
+  python "$path"/filterNPercent.py alignment/all_aligned.fasta alignment/all_aligned_over50.fasta
 }
 
 function results_report() {
@@ -262,8 +290,13 @@ function sewer() {
 initialize_globals
 get_user_input "$@"
 check_flags
-# start workflow:
-map_to_ref
+
+if [ "$single_end" = true ]; then
+  single_end_mapping
+else
+  # start workflow:
+  map_to_ref
+fi
 keep_mapped_reads
 sort_index_bam
 depth
@@ -271,11 +304,10 @@ consensus
 change_fasta_header
 mafft_alignment
 muttable
+over_50
 results_report
 wait
-if [ "$sewer_flag" = true ]; then
-  sewer
-fi
+
 conda deactivate
 echo "pipeline finished! (:"
 
