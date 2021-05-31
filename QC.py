@@ -173,7 +173,7 @@ def fastqc_reports(out_dir, in_dir):
     if not os.path.exists(out_dest):
         os.mkdir(out_dest)
     for fqfile in os.listdir(in_dir):
-        if not fqfile.endswith(".fastq.gz") or "singletons" in fqfile:
+        if (not fqfile.endswith(".fastq.gz") and not fqfile.endswith(".fastq")) or "singletons" in fqfile:
             continue  # step over files that are not fastq.gz format, or singletons
         print(in_dir + fqfile)
         # -q: quite mode
