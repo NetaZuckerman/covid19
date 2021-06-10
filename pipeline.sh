@@ -258,12 +258,12 @@ function muttable() {
 
     conda activate nextstrain
     nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
-    conda deactivate
+    conda deactivatenano
 
     conda activate CoronaPipeline
-    python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
-    python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv
-    python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv
+    python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx  "$path"/mutationsTable.xlsx
+    python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
+    python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx
 }
 
 function over_50() {

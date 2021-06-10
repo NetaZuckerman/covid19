@@ -3,6 +3,7 @@ import csv
 import pandas as pd
 from sys import argv
 import os
+
 """
 create variants table - for each sample in fasta multiple alignment file a covid variant is decided if found.
 including pangolin and nextclades variants as well. 
@@ -13,37 +14,7 @@ alignment_file = argv[1]
 output_file = argv[2]
 pangolin_file = argv[3]
 clades_path = argv[4]
-
-
-def specific_cases(unexpected_muts_dict, sample, variant):
-    """
-    remove double mutations from unexpected mutations dictionary.
-    double mutations:
-        1. P681H(UK) P981R(Uganda) pos 23604
-        2. M234I G-T(Rio), G-A(NY) pos 28975
-
-    :param more_muts_list: extra mutations, more than variant
-    :param unexpected_muts_list: mutations that are different from ref but also from mutations table
-    :param variant: which variant already chosen
-    :return: more_muts_list and unexpected_muts_list updated.
-    """
-    if variant not in ["B.1.1.7", "A.23.1", "P.2", "B.1.526"]:
-        return unexpected_muts_dict
-
-    new_unexpected = unexpected_muts_dict.copy()  # create shallow copy to avoid changing the original
-
-    for x in unexpected_muts_dict[sample]:
-        if "P681R" in x and variant == "B.1.1.7":
-            new_unexpected[sample].remove(x)
-        elif "P681H" in x and variant == "A.23.1":
-            new_unexpected[sample].remove(x)
-        elif "M234I" in x and variant in ["B.1.526 ", "P.2"]:
-            new_unexpected[sample].remove(x)
-        elif "Q677H" in x and variant == "B.1.1.7":
-            new_unexpected[sample].remove(x)
-
-    return new_unexpected
-
+excel_path = argv[5]  # mutations table path
 
 # load pangolin + nextclade outputs, mutations table.
 try:
@@ -53,18 +24,20 @@ except FileNotFoundError:
     pangolinTable = pd.DataFrame()
 
 clades_df = pd.read_csv(clades_path, sep='\t')
-# if len(argv) > 5:
-#     muttable_path = argv[5]
-# else:
-#     muttable_path = "/data/projects/Dana/scripts/covid19/novelMutTable.csv"
 
-muttable_path = os.path.dirname(os.path.abspath(__file__)) + '/novelMutTable.csv'
-mutTable = pd.read_csv(muttable_path)
+# excel muttable:
+excel_mutTable = pd.read_excel(excel_path, sheet_name=None, engine='openpyxl')
+mutTable_copy = excel_mutTable.copy()
+for name, frame in mutTable_copy.items():
+    frame['Mutation type'] = frame['Mutation type'].str.lower()  # make sure lower case to prevent mistakes
+    excel_mutTable[name] = frame[frame['Mutation type'] != 'insertion']  # ignore insertions for now
+    excel_mutTable[name]['lineage'] = name  # add a lineage column to all variant's tables
+
+mutTable = pd.concat(excel_mutTable.values(), ignore_index=True)
 
 # prepare mutations table dataframe
-mutTable["REF"] = mutTable["REF"].apply(lambda x: x.upper())
-mutTable["mut"] = mutTable["mut"].apply(lambda x: x.upper())
-mutTable = mutTable[mutTable.type != 'Insertion']  # Ignore insertions for now
+mutTable["Reference"] = mutTable["Reference"].str.upper()  # make sure all upper case for safe comparisons
+mutTable["Mutation"] = mutTable["Mutation"].str.upper()
 
 # prepare multiple alignment dictionary (key: sample name, val: SeqIO record)
 alignment = SeqIO.to_dict(SeqIO.parse(alignment_file, 'fasta'))
@@ -72,14 +45,14 @@ alignment.pop('NC_045512.2', None)
 alignment.pop('REF_NC_045512.2', None)
 
 # prepare nextclade dataframe
-clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade']]  # or aaDeletions instead?? # TODO
+clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade']]
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
 clades_df['sample'] = clades_df['sample'].apply(str)
 clades_df = clades_df.fillna('')
-# create dict of aasubstitutions and aadeletions. key=sample id, value=list of substitutions..
+# create dict of aasubstitutions and aadeletions. key=sample id, value=list of substitutions. to keep for final table.
 aa_substitution_dict = {}
 aa_deletions_dict = {}
-for sample in clades_df['sample']: # for each sample aggregate
+for sample in clades_df['sample']:  # change appearance from nextclade format to: Mutation(Gene)
     aasubs = clades_df[clades_df['sample'] == sample].aaSubstitutions.values.tolist()
     aadels = clades_df[clades_df['sample'] == sample].aaDeletions.values.tolist()
     aa_substitution_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aasubs[0].split(',')] \
@@ -87,37 +60,34 @@ for sample in clades_df['sample']: # for each sample aggregate
     aa_deletions_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aadels[0].split(',')] \
         if (aadels and aadels != ['']) else ''
 
-# some variables:
 samples_mutations = {id: [] for id in alignment}
 # samples_s_not_covered = {id: [] for id in alignment}
 samples_not_covered = {id: [] for id in alignment}
 unexpected_mutations = {id: [] for id in alignment}
 lineages_list = []
 
-# iterate over all samples in multifasta and over all mutations in table, and check value of each mutation
+# iterate over all samples in multi-fasta and over all mutations in table, and check value of each mutation
+mutTable = mutTable.dropna(thresh=10)  # lose empty rows that might get there by mistake in concat
 for sample, record in alignment.items():
     for row in mutTable.iterrows():
-        pos = int(row[1][5])-1  # mutation position
+        pos = int(row[1][0]) - 1  # mutation position
         alt = record.seq[pos]  # fasta value in position
-        ref = row[1][6]  # reference in position
-        table_mut = row[1][7]  # mutation  according to table
-        gene = row[1][2] if row[1][2] else ''
-        lineage = row[1][3]
-        lineages_list += [x.strip() for x in lineage.split(',')]  # accumulate all lineages to list - for later
-        mutation_name = row[1][1] if row[1][1] else row[1][0]  # if no AA name take nucleotide name
-        if alt != table_mut or alt == 'N':
-            if alt == 'N':  # and gene == 'S':
-                # samples_s_not_covered[sample].append(mutation_name)
+        ref = row[1][1]  # reference in position
+        table_mut = row[1][2]  # mutation  according to table
+        gene = row[1][3] if row[1][3] else ''
+        mutation_name = str(row[1][4])
+        if alt != table_mut or alt == 'N':  # if position not covered in sequence OR the mutation is not the predictable
+            if alt == 'N':  # mutation not covered in sequence - add to not covered dict under sample key
                 samples_not_covered[sample].append(mutation_name)
-            elif alt != ref and alt != 'N':  # alt is not the expected mut. and is covered in sequencing
-                unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
-        else:  # some variant mutation
+            elif alt != ref and alt != 'N':  # alt is not the expected mut. and is covered in sequencing (not N)
+                unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")  # add to unexpected mutations
+        else:  # mutation exists in sequence
             samples_mutations[sample].append(mutation_name)  # accumulate all samples+mutations in dict:
             # {sampleName: mutationName}
 
-unique_lineages = set(lineages_list)
-# create a dictionary of mutations by lineage -> {key=lineage: val=dataframe with all of lineage's mutations}
-mutations_by_lineage = {x: mutTable[mutTable.lineage.str.contains(x, regex=False)].AA.tolist() for x in unique_lineages}
+unique_lineages = set(excel_mutTable.keys())  # get list of all unique lineages (= names of sheets of excel table)
+mutations_by_lineage = {key: excel_mutTable[key].variant.tolist() for key in
+                        excel_mutTable}  # mutations table with only lineage: mutation name
 
 final_table = []
 # iterate over all samples mutations and determine variants
@@ -131,10 +101,12 @@ for sample, sample_mutlist in samples_mutations.items():
     # iterate over mutations of each lineage, check how much of the lineage's mutations are covered by sample -
     # to decide on variant
     for lin, linmuts in mutations_by_lineage.items():
-        temp = [x for x in linmuts]
+        temp = [m for m in linmuts]  # copy of mutations names into temp to use for calculations,
+        # without harming original list
         temp_mutes = []
         for mut in sample_mutlist:  # iterate over  table mutations of sample
-            if mut in temp:  # remove mutations of sample from temp list and keep in temp_mutes list
+            if mut in temp:  # remove mutations of sample from temp list and keep in temp_mutes list.
+                # eventually will check if all mutations are covered (if temp is empty)
                 temp.remove(mut)
                 temp_mutes.append(mut)
         if not temp:  # all mutations of that lineage exists in sample -> known variant=lineage name
@@ -158,7 +130,7 @@ for sample, sample_mutlist in samples_mutations.items():
             # val = round((tup[0] / tup[1])*100, 2)
             val = lin_percentages[key]
             frac = f'({int(tup[0])}/{int(tup[1])})'  # keep as fraction to print to table
-            if val >= 60:  # 60% -> knwon variant
+            if val >= 60:  # 60% -> known variant
                 flag = True
             if val > max:  # make sure to choose best match and not the first over 60%
                 max = val
@@ -172,8 +144,7 @@ for sample, sample_mutlist in samples_mutations.items():
             more_muts = [x for x in more_muts if x not in mutations_by_lineage[var]]
 
         if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage --> suspect variant
-            suspect = f'suspect_{var}: {str(lin_percentages[var])}{fraction}'  # suspect_<lineagename>): (%)(x/y)
-    unexpected_mutations = specific_cases(unexpected_mutations, sample, known_variant)
+            suspect = f'suspect {var}: {str(lin_percentages[var])}% {fraction}'  # suspect_<lineage-name>): (%)(x/y)
 
     more_muts = set(more_muts)  # lose redundancies of mutations
 
@@ -215,22 +186,37 @@ for sample, sample_mutlist in samples_mutations.items():
 
     more_muts_final = []
     for mut in more_muts:  # moremuts: keep only mutations in S and add (S) to mut. name
-        if mutTable[mutTable.AA == mut].gene.values[0] == 'S':
+        if mutTable[mutTable.variant == mut].protein.values[0] == 'S':
             m_name = mut + "(S)"
-            if m_name not in more_muts_final: # make sure no duplicates
+            if m_name not in more_muts_final:  # make sure no duplicates
                 more_muts_final.append(m_name)
         # else do not keep in list
 
+    # if found known variant, write it down only if sample passed QC.
+    if known_variant:
+        known_variant = known_variant if not QCfail else "QC Fail"
+    else:
+        known_variant = "no monitored variant"
+
+
+    not_covered_list = []
+    for mut in samples_not_covered[sample]:
+        protein_values = mutTable[mutTable.variant == mut].protein.values.tolist()
+        if QCfail:
+            break
+        if protein_values:
+            not_covered_list.append(mut + "(" + protein_values[0] + ")")
+        else:
+            not_covered_list.append(mut + "()")
+
+    not_covered_list = ";".join(set(not_covered_list)) if not_covered_list else ''
+
     line = {
         "Sample": sample,
-        "Known Variant": known_variant if known_variant and not QCfail else 'no monitored variant',
+        "Known Variant": known_variant,
         "Suspect": suspect,
-        # "More Mutations": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0]+")" for x in more_muts])),
         "More Mutations": ';'.join(more_muts_final),
-        # "S Not Covered": ';'.join(samples_s_not_covered[sample]),
-        "Not Covered": ';'.join(set([x + "(" + mutTable[mutTable.AA == x].gene.values[0] +
-                                     ")" for x in samples_not_covered[sample]])) if not QCfail else '',
-        # "non-Table Mutations": ';'.join(unexpected_mutations[sample]),
+        "Not Covered": not_covered_list,
         "all mutations": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and sample in
                                                                    aa_substitution_dict else 'NA',
         "aaDeletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
@@ -249,4 +235,3 @@ with open(output_file, 'w') as outfile:
     writer.writeheader()
     for line in final_table:
         writer.writerow(line)
-
