@@ -24,7 +24,7 @@ def highlight_row(row):
     return color_list
 
 
-excel_table = pd.read_excel(argv[3], sheet_name=None)  # load excel mutations table
+excel_table = pd.read_excel(argv[3], sheet_name=None, engine='openpyxl')  # load excel mutations table
 for name in excel_table:
     excel_table[name]['lineage'] = name  # add lineage column to all tables before joining them
 

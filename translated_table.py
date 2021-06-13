@@ -99,7 +99,7 @@ multifasta = SeqIO.to_dict(SeqIO.parse(aligned_fasta_path, 'fasta'))
 multifasta.pop('NC_045512.2', None)  # remove refseq sequence from alignment file if exists.
 multifasta.pop('REF_NC_045512.2', None)
 
-mutTable_excel = pd.read_excel(excel_mutations_table_path, sheet_name=None)
+mutTable_excel = pd.read_excel(excel_mutations_table_path, sheet_name=None, engine='openpyxl')
 
 for name in mutTable_excel:
     mutTable_excel[name]['lineage'] = name  # add a lineage column to all variant's tables
