@@ -137,13 +137,13 @@ function single_end_mapping() {
   done
 }
 
-# map reads to reference. straight to bam format! assuming PE for now # TODO
+# paired end mapping: map reads to reference. straight to bam format.
 function map_to_ref() {
   # index reference
   bwa index "$refseq"
 
-  if [ -d BAM/ ]; then # not first run, rm BAM files to avoid mixups
-    rm BAM/* 2> /dev/null # if file not found it's ok. no need to see on screen
+  if [ -d BAM/ ]; then # not first run, rm existing files to avoid mix ups
+    rm BAM/* 2> /dev/null #  if file not found it's ok. no need to print error to screen.
   fi
   if [ -d CNS/ ]; then
     rm CNS/* 2> /dev/null
@@ -151,7 +151,7 @@ function map_to_ref() {
   if [ -d CNS_5/ ]; then
     rm CNS_5/* 2> /dev/null
   fi
-  mkdir -p BAM CNS alignment results
+  mkdir -p BAM CNS alignment results  # -p: only if directory does not exist. else continue without errors.
 
   for r1 in "$input_path"*R1*.fastq*; do
     if [[ $r1 == *Undetermined*.fastq* || $r1 == *unpaired*.fastq*  || $r1 == *singletons* ]]; then # ignore undetermined and singletons
@@ -161,9 +161,9 @@ function map_to_ref() {
     output=${r1/_R1/}
     output=${output/_paired/}
     if [[ $file == *.gz ]]; then
-      output=`basename ${output/.gz/}`
+      output=`basename ${output/.fastq.gz/}`
     else
-      output=`basename "$output"`
+      output=`basename "$output" .fastq`
     fi
     # replace to short name:
     if [[ $output == Sh_* ]]; then
