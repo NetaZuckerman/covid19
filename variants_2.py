@@ -204,7 +204,7 @@ for sample, sample_mutlist in samples_mutations.items():
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
-    fieldnames = ["Sample", "Variant", "suspect", "variant > 60", "Suspected variant", "AA substitutions",
+    fieldnames = ["Sample", "Variant", "suspect", "variant > 60", "suspected variant", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "% coverage", "pangolin clade",
                   "pangolin scorpio", "nextstrain clade"]
     writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
