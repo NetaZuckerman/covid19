@@ -146,9 +146,9 @@ for sample, sample_mutlist in samples_mutations.items():
             known_variant = var
 
         if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage --> suspect variant
-            # TODO add len(N mutations)/len(all)
-            lin_n = [x for x in mutations_by_lineage[var] if x in samples_not_covered[sample]]  # list of not covered mutations
-            n_numer = len(set(lin_n))
+            # list of not covered lineage mutations in sample:
+            lin_n = [x for x in mutations_by_lineage[var] if x in samples_not_covered[sample]]
+            n_numer = len(set(lin_n))  # get number of not covered mutation
             suspect_info = f'suspect {var}: {str(lin_percentages[var])}% {fraction}; N({n_numer}/{int(lin_number[var][1])})'  # suspect <lineage>: (%)(x/y)
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
