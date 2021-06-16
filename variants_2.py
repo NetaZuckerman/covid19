@@ -197,7 +197,7 @@ for sample, sample_mutlist in samples_mutations.items():
         "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
         "mutations not covered": not_covered_list,
         "% coverage": coverage,
-        "pangolin_clade": pangolin_clade,
+        "pangolin clade": pangolin_clade,
         "pangolin scorpio": pangolin_scorpio,
         "nextstrain clade": nextclade.values[0] if not nextclade.empty else ''
     }
