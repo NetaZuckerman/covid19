@@ -105,6 +105,7 @@ for sample, sample_mutlist in samples_mutations.items():
     suspect_info = ''
     lin_percentages = {}
     lin_number = {}
+    lin_not_covered = {}
     # iterate over mutations of each lineage, check how much of the lineage's mutations are covered by sample -
     # to decide on variant
     for lin, linmuts in mutations_by_lineage.items():
@@ -145,8 +146,10 @@ for sample, sample_mutlist in samples_mutations.items():
             known_variant = var
 
         if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage --> suspect variant
-            # suspect_info = f'suspect {var}: {str(lin_percentages[var])}% {fraction}'  # suspect <lineage>: (%)(x/y)
-            suspect_info = f'{str(lin_percentages[var])}% {fraction}'  # (%)(x/y) # lineage written in 'variant >60' col
+            # TODO add len(N mutations)/len(all)
+            lin_n = [x for x in mutations_by_lineage[var] if x in samples_not_covered[sample]]  # list of not covered mutations
+            n_numer = len(lin_n)
+            suspect_info = f'suspect {var}: {str(lin_percentages[var])}% {fraction}; N({n_numer}/{int(lin_number[var][1])})'  # suspect <lineage>: (%)(x/y)
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
