@@ -9,7 +9,7 @@ does not include insertions (for now).
 # input:
 # argv[1] : input multi-fasta file (aligned by augur!)
 # argv[2] : output xlsx table of mutations in samples. must end with xlsx.
-# argv[3] : mutations table path  # TODO: add argument to pipeline
+# argv[3] : mutations table path
 
 
 def highlight_row(row):

@@ -16,7 +16,7 @@ conda activate CoronaPipeline
 path=`dirname "${0}"`
 
 # TODO: keep errors in log file to review later
-# TODO: add sewer flag + code
+# TODO: add more documentations
 
 function initialize_globals() {
   dirs_flag=false
