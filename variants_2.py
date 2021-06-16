@@ -152,9 +152,9 @@ for sample, sample_mutlist in samples_mutations.items():
     coverage = qc[qc['sample'].astype('string') == sample]['coverageCNS_5%'].values[0].round(2)   # get coverage of sample from qc report.txt
     # get pangolin info from table
     try:
-        pangolin_clade = pangolinTable[pangolinTable.taxon == sample].lineage.values[0]
-        pangolin_status = pangolinTable[pangolinTable.taxon == sample].status.values[0]
-        pangolin_scorpio = pangolinTable[pangolinTable.taxon == sample].scorpio_call.values[0]
+        pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
+        pangolin_status = pangolinTable[pangolinTable['taxon'] == sample].status.values[0]
+        pangolin_scorpio = pangolinTable[pangolinTable['taxon'] == sample].scorpio_call.values[0]
     except:
         pangolin_clade = '-'
         pangolin_status = ''
