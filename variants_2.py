@@ -17,7 +17,7 @@ clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
 qc_report_path = argv[6]   # TODO add to pipeline and mini-pipeline a 6th parameter
 
-qc = pd.read_csv(qc_report_path, delimiter='\t')
+qc = pd.read_csv(qc_report_path, sep='\t')
 # load pangolin + nextclade outputs, mutations table.
 try:
     pangolinTable = pd.read_csv(pangolin_file)
@@ -47,7 +47,7 @@ alignment.pop('NC_045512.2', None)
 alignment.pop('REF_NC_045512.2', None)
 
 # prepare nextclade dataframe
-clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade']]
+clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'insertions']]
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
 clades_df['sample'] = clades_df['sample'].apply(str)
 clades_df = clades_df.fillna('')
