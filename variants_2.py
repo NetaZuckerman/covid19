@@ -149,7 +149,7 @@ for sample, sample_mutlist in samples_mutations.items():
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
         suspect_info = 'suspect'
 
-    coverage = qc[qc.sample == sample]['coverageCNS_5%'].values[0]   # get coverage of sample from qc report.txt
+    coverage = qc[qc['sample'].astype('string') == sample]['coverageCNS_5%'].values[0].round(2)   # get coverage of sample from qc report.txt
     # get pangolin info from table
     try:
         pangolin_clade = pangolinTable[pangolinTable.taxon == sample].lineage.values[0]
