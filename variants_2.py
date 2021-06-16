@@ -18,9 +18,11 @@ excel_path = argv[5]  # mutations table path
 qc_report_path = argv[6]   # TODO add to pipeline and mini-pipeline a 6th parameter
 
 qc = pd.read_csv(qc_report_path, sep='\t')
+qc['sample'] = qc['sample'].apply(str)
 # load pangolin + nextclade outputs, mutations table.
 try:
     pangolinTable = pd.read_csv(pangolin_file)
+    pangolinTable['taxon'] = pangolinTable['taxon'].apply(str)
 except FileNotFoundError:
     print("Pangolin File Not Found")
     pangolinTable = pd.DataFrame()
@@ -143,18 +145,20 @@ for sample, sample_mutlist in samples_mutations.items():
             known_variant = var
 
         if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage --> suspect variant
-            suspect_info = f'suspect {var}: {str(lin_percentages[var])}% {fraction}'  # suspect <lineage>): (%)(x/y)
+            # suspect_info = f'suspect {var}: {str(lin_percentages[var])}% {fraction}'  # suspect <lineage>: (%)(x/y)
+            suspect_info = f'{str(lin_percentages[var])}% {fraction}'  # (%)(x/y) # lineage written in 'variant >60' col
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
         suspect_info = 'suspect'
 
-    coverage = qc[qc['sample'].astype('string') == sample]['coverageCNS_5%'].values[0].round(2)   # get coverage of sample from qc report.txt
+    # get coverage of sample from qc report.txt
+    coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
     # get pangolin info from table
     try:
-        pangolin_clade = pangolinTable[pangolinTable['taxon'].astype('string') == sample].lineage.values[0]
-        pangolin_status = pangolinTable[pangolinTable['taxon'].astype('string') == sample].status.values[0]
-        pangolin_scorpio = pangolinTable[pangolinTable['taxon'].astype('string') == sample].scorpio_call.values[0]
+        pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
+        pangolin_status = pangolinTable[pangolinTable['taxon'] == sample].status.values[0]
+        pangolin_scorpio = pangolinTable[pangolinTable['taxon'] == sample].scorpio_call.values[0]
     except:
         pangolin_clade = '-'
         pangolin_status = ''
