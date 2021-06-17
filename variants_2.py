@@ -157,8 +157,8 @@ for sample, sample_mutlist in samples_mutations.items():
 
             # suspect <lineage>: (%)(x/y); noN(x/#covered_mutations); SNP(#); SNP_silent(#) :
             suspect_info = \
-                f'suspect {var}:{str(lin_percentages[var])}% {fraction};' \
-                f'noN:{covered_percentage}% {mutations_found_number}/{no_n_number}'  # TODO check accuracy
+                f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
+                f'noN: {covered_percentage}% {mutations_found_number}/{no_n_number}'  # TODO check accuracy
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
