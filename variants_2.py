@@ -180,12 +180,6 @@ for sample, sample_mutlist in samples_mutations.items():
     # get nextclade info from table
     nextclade = clades_df[clades_df['sample'] == sample].clade
 
-    # create final table's line (sample line) #
-    # if found known variant, write it down only if sample passed QC.
-    if known_variant:
-        known_variant = known_variant if not QCfail else "QC Fail"
-    else:
-        known_variant = "no monitored variant >60%"
 
     not_covered_list = []
     for mut in samples_not_covered[sample]:
@@ -202,7 +196,7 @@ for sample, sample_mutlist in samples_mutations.items():
 
     line = {
         "Sample": sample,
-        "Variant": pangolin_clade,
+        "Variant": pangolin_clade if not QCfail else "QC Fail",
         "suspect": None,
         "suspected variant": suspect_info,  # TODO add more info
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
