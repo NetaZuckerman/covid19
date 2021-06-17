@@ -146,10 +146,19 @@ for sample, sample_mutlist in samples_mutations.items():
             known_variant = var
 
         if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage --> suspect variant
-            # list of not covered lineage mutations in sample:
-            lin_n = [x for x in mutations_by_lineage[var] if x in samples_not_covered[sample]]
-            n_numer = len(set(lin_n))  # get number of not covered mutation
-            suspect_info = f'suspect {var}: {str(lin_percentages[var])}% {fraction}; N({n_numer}/{int(lin_number[var][1])})'  # suspect <lineage>: (%)(x/y)
+            # list of covered lineage mutations in sample:
+            lin_no_n = [x for x in mutations_by_lineage[var] if x not in samples_not_covered[sample]]
+            no_n_number = len(set(lin_no_n))  # get number of covered mutation
+            mutations_found = set([x for x in mutations_by_lineage[var] if x in sample_mutlist])
+            mutations_found_number = len(mutations_found)
+            covered_percentage = round(float(no_n_number) / mutations_found, 2)
+            # get number of SNPs and SNP_silent
+            # for mutation in sample_mutlist:
+
+            # suspect <lineage>: (%)(x/y); noN(x/#covered_mutations); SNP(#); SNP_silent(#) :
+            suspect_info = \
+                f'suspect {var}:{str(lin_percentages[var])}% {fraction};' \
+                f'noN:{covered_percentage}% {mutations_found}/{no_n_number}'  # TODO check accuracy
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
