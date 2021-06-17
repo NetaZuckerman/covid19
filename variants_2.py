@@ -204,7 +204,6 @@ for sample, sample_mutlist in samples_mutations.items():
         "Sample": sample,
         "Variant": pangolin_clade,
         "suspect": None,
-        "variant > 60": known_variant,
         "suspected variant": suspect_info,  # TODO add more info
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
                                                                       sample in aa_substitution_dict else 'NA',
@@ -220,7 +219,7 @@ for sample, sample_mutlist in samples_mutations.items():
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
-    fieldnames = ["Sample", "Variant", "suspect", "variant > 60", "suspected variant", "AA substitutions",
+    fieldnames = ["Sample", "Variant", "suspect", "suspected variant", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "% coverage", "pangolin clade",
                   "pangolin scorpio", "nextstrain clade"]
     writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
