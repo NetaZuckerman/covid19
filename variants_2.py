@@ -151,7 +151,7 @@ for sample, sample_mutlist in samples_mutations.items():
             no_n_number = len(set(lin_no_n))  # get number of covered mutation
             mutations_found = set([x for x in mutations_by_lineage[var] if x in sample_mutlist])
             mutations_found_number = len(mutations_found)
-            covered_percentage = round(float(no_n_number) / mutations_found, 2)
+            covered_percentage = round(float(no_n_number) / mutations_found_number, 2)
             # get number of SNPs and SNP_silent
             # for mutation in sample_mutlist:
 
