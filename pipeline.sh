@@ -300,9 +300,6 @@ function results_report() {
   done
 }
 
-function sewer() {
-  echo "sewer"
-}
 ########################### MAIN ###############################
 # call all functions
 # user input:
