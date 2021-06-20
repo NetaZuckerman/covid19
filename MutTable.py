@@ -12,6 +12,7 @@ does not include insertions (for now).
 # argv[3] : mutations table path
 
 
+
 def highlight_row(row):
     """
     highlight mutations in yellow and refseq in silver.
@@ -68,4 +69,9 @@ df = df[sorted_cols + [col for col in df.columns if col not in sorted_cols]]  # 
 
 # write to file
 # add highlights with designated function in the top of the page
-df.style.apply(highlight_row, axis=1).to_excel(argv[2], index=False)
+try:
+    df.style.apply(highlight_row, axis=1).to_excel(argv[2], index=False)
+except ValueError:
+    df.style.apply(highlight_row, axis=1).to_excel('MutTable.xlsx', index=False)
+    print("output file is not valid - must end with .xlsx")
+    print("output was written to MutTable.xlsx instead of %s" % (argv[2]))
