@@ -258,7 +258,7 @@ function muttable() {
 
     conda activate nextstrain
     nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
-    conda deactivatenano
+    conda deactivate
 
     conda activate CoronaPipeline
     python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx  "$path"/mutationsTable.xlsx
