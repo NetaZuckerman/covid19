@@ -13,12 +13,16 @@ including pangolin and nextclades variants as well.
 alignment_file = argv[1]
 output_file = argv[2]
 pangolin_file = argv[3]
-clades_path = argv[4]
+clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
+qc_report_path = argv[6]   # TODO add to pipeline and mini-pipeline a 6th parameter
 
+qc = pd.read_csv(qc_report_path, sep='\t')
+qc['sample'] = qc['sample'].apply(str)
 # load pangolin + nextclade outputs, mutations table.
 try:
     pangolinTable = pd.read_csv(pangolin_file)
+    pangolinTable['taxon'] = pangolinTable['taxon'].apply(str)
 except FileNotFoundError:
     print("Pangolin File Not Found")
     pangolinTable = pd.DataFrame()
@@ -45,20 +49,23 @@ alignment.pop('NC_045512.2', None)
 alignment.pop('REF_NC_045512.2', None)
 
 # prepare nextclade dataframe
-clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade']]
+clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'insertions']]
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
 clades_df['sample'] = clades_df['sample'].apply(str)
 clades_df = clades_df.fillna('')
 # create dict of aasubstitutions and aadeletions. key=sample id, value=list of substitutions. to keep for final table.
 aa_substitution_dict = {}
 aa_deletions_dict = {}
+insertions_dict = {}
 for sample in clades_df['sample']:  # change appearance from nextclade format to: Mutation(Gene)
     aasubs = clades_df[clades_df['sample'] == sample].aaSubstitutions.values.tolist()
     aadels = clades_df[clades_df['sample'] == sample].aaDeletions.values.tolist()
+    insertions = clades_df[clades_df['sample'] == sample].insertions.values.tolist()
     aa_substitution_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aasubs[0].split(',')] \
         if (aasubs and aasubs != ['']) else ''
     aa_deletions_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aadels[0].split(',')] \
         if (aadels and aadels != ['']) else ''
+    insertions_dict[sample] = insertions[0].split(',')
 
 samples_mutations = {id: [] for id in alignment}
 # samples_s_not_covered = {id: [] for id in alignment}
@@ -93,11 +100,12 @@ final_table = []
 # iterate over all samples mutations and determine variants
 for sample, sample_mutlist in samples_mutations.items():
     known_variant = ""
-    more_muts = []
+
     notes = ''
-    suspect = ''
+    suspect_info = ''
     lin_percentages = {}
     lin_number = {}
+    lin_not_covered = {}
     # iterate over mutations of each lineage, check how much of the lineage's mutations are covered by sample -
     # to decide on variant
     for lin, linmuts in mutations_by_lineage.items():
@@ -112,18 +120,16 @@ for sample, sample_mutlist in samples_mutations.items():
         if not temp:  # all mutations of that lineage exists in sample -> known variant=lineage name
             known_variant = lin
         elif len(linmuts) != len(temp):  # some of lineage's mutations exist but not all
-            more_muts += temp_mutes  # keep found mutation in more_mutes
             # calculate percentage of lineage mutations found:
             lin_percentages[lin] = round(len(set(temp_mutes)) / len(set(linmuts)) * 100, 2)
+            # also keep as fraction x/y
             lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts)))  # tuple:
             # (#lin_mutation_sample, #tot_lin_mutations)
 
-    if known_variant:  # remove from more_mutes the mutations of the known variant to show only additional mutations
-        more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
-    else:  # did not find variant that has 100% mutations in sample
-        max = 0
+    if not known_variant:  # did not find variant that has 100% mutations in sample
+        max_percentage = 0
         var = ''
-        flag = False  # True means known variant (at least 60% mutations)
+        over_60 = False
         val = 0
         fraction = 0
         for key, tup in lin_number.items():  # pick variant that has highest muations % but at least 60 %
@@ -131,78 +137,55 @@ for sample, sample_mutlist in samples_mutations.items():
             val = lin_percentages[key]
             frac = f'({int(tup[0])}/{int(tup[1])})'  # keep as fraction to print to table
             if val >= 60:  # 60% -> known variant
-                flag = True
-            if val > max:  # make sure to choose best match and not the first over 60%
-                max = val
+                over_60 = True
+            if val > max_percentage:  # make sure to choose best match and not the first over 60%
+                max_percentage = val
                 var = key
                 fraction = frac
-        if flag:  # found >60%
+        if over_60:  # found >60% mutations of lineage
             known_variant = var
-            # keep only additional mutations and not lineage mutations of known var.
-            more_muts = [x for x in more_muts if x not in mutations_by_lineage[known_variant]]
-        elif val >= 50 and var:  # > 50% mutations and < 60% because no known variant
-            more_muts = [x for x in more_muts if x not in mutations_by_lineage[var]]
 
         if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage --> suspect variant
-            suspect = f'suspect {var}: {str(lin_percentages[var])}% {fraction}'  # suspect_<lineage-name>): (%)(x/y)
+            # list of covered lineage mutations in sample:
+            lin_no_n = [x for x in mutations_by_lineage[var] if x not in samples_not_covered[sample]]
+            no_n_number = len(set(lin_no_n))  # get number of covered mutation
+            mutations_found = set([x for x in mutations_by_lineage[var] if x in sample_mutlist])
+            mutations_found_number = len(mutations_found)
+            covered_percentage = round(float((mutations_found_number) / no_n_number)*100, 2)
+            # get number of SNPs and SNP_silent
+            # for mutation in sample_mutlist:
 
-    more_muts = set(more_muts)  # lose redundancies of mutations
+            # suspect <lineage>: (%)(x/y); noN(x/#covered_mutations); SNP(#); SNP_silent(#) :
+            suspect_info = \
+                f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
+                f'noN: {covered_percentage}% {mutations_found_number}/{no_n_number}'  # TODO check accuracy
 
-    if not suspect and (more_muts or samples_not_covered[sample] or unexpected_mutations[sample]):
+    if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
-        suspect = 'suspect'
+        suspect_info = 'suspect'
 
+    # get coverage of sample from qc report.txt
+    coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
     # get pangolin info from table
-
     try:
-        pangolin_clade = pangolinTable[pangolinTable.taxon == sample].lineage.values[0]
-        pangolin_status = pangolinTable[pangolinTable.taxon == sample].status.values[0]
-        pangolin_note = pangolinTable[pangolinTable.taxon == sample].note.values[0]
+        pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
+        pangolin_status = pangolinTable[pangolinTable['taxon'] == sample].status.values[0]
+        pangolin_scorpio = pangolinTable[pangolinTable['taxon'] == sample].scorpio_call.values[0]
     except:
         pangolin_clade = '-'
         pangolin_status = ''
-        pangolin_note = ''
+        pangolin_scorpio = ''
     QCfail = True if pangolin_status == 'fail' else False
-
-    # specific cases of mutations in the same location:
-    temp = unexpected_mutations[sample].copy()
-    for x in temp:
-        short_name = x.split('(')[0]
-        if 'P681' in short_name:
-            if short_name == 'P681R' and 'P681H' in more_muts:
-                unexpected_mutations[sample].remove(x)
-            elif short_name == 'P681H' and 'P681R' in more_muts:
-                unexpected_mutations[sample].remove(x)
-        elif short_name == 'M234I':
-            if 'M234I' in more_muts:
-                unexpected_mutations[sample].remove(x)
-        elif short_name == 'Q677H':
-            if 'Q677H' in more_muts:
-                unexpected_mutations[sample].remove(x)
 
     # get nextclade info from table
     nextclade = clades_df[clades_df['sample'] == sample].clade
-    # create final table's line (sample line)
-
-    more_muts_final = []
-    for mut in more_muts:  # moremuts: keep only mutations in S and add (S) to mut. name
-        if mutTable[mutTable.variant == mut].protein.values[0] == 'S':
-            m_name = mut + "(S)"
-            if m_name not in more_muts_final:  # make sure no duplicates
-                more_muts_final.append(m_name)
-        # else do not keep in list
-
-    # if found known variant, write it down only if sample passed QC.
-    if known_variant:
-        known_variant = known_variant if not QCfail else "QC Fail"
-    else:
-        known_variant = "no monitored variant"
 
 
     not_covered_list = []
     for mut in samples_not_covered[sample]:
         protein_values = mutTable[mutTable.variant == mut].protein.values.tolist()
-        if QCfail:
+        if QCfail:  # do not output list of uncovered mutations in case of QCFail. just write QCFail.
+            # probably most of the mutations will be N's in that case.
             break
         if protein_values:
             not_covered_list.append(mut + "(" + protein_values[0] + ")")
@@ -213,25 +196,27 @@ for sample, sample_mutlist in samples_mutations.items():
 
     line = {
         "Sample": sample,
-        "Known Variant": known_variant,
-        "Suspect": suspect,
-        "More Mutations": ';'.join(more_muts_final),
-        "Not Covered": not_covered_list,
-        "all mutations": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and sample in
-                                                                   aa_substitution_dict else 'NA',
-        "aaDeletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
+        "Variant": pangolin_clade if not QCfail else "QC Fail",
+        "suspect": None,
+        "suspected variant": suspect_info,  # TODO add more info
+        "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
+                                                                      sample in aa_substitution_dict else 'NA',
+        "AA deletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
                                                              in aa_deletions_dict else 'NA'),
-        "nextclade": nextclade.values[0] if not nextclade.empty else '',
-        "pangolin_clade": pangolin_clade,
-        "status": pangolin_status,
-        "pangolin-note": pangolin_note
+        "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
+        "mutations not covered": not_covered_list,
+        "% coverage": coverage,
+        "pangolin clade": pangolin_clade,
+        "pangolin scorpio": pangolin_scorpio,
+        "nextstrain clade": nextclade.values[0] if not nextclade.empty else ''
     }
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
-    filednames = ["Sample", "Known Variant", "Suspect", "More Mutations", "Not Covered",  # 'S Not Covered'
-                  "all mutations", "aaDeletions", "nextclade", "pangolin_clade", "status", "pangolin-note"]
-    writer = csv.DictWriter(outfile, filednames, lineterminator='\n')
+    fieldnames = ["Sample", "Variant", "suspect", "suspected variant", "AA substitutions",
+                  "AA deletions", "Insertions", "mutations not covered", "% coverage", "pangolin clade",
+                  "pangolin scorpio", "nextstrain clade"]
+    writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:
         writer.writerow(line)
