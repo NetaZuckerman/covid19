@@ -43,12 +43,12 @@ fastadict.pop('REF_NC_045512.2', None)
 
 samples = []  # list to aggregate a samples column to.
 # iterate over fasta records of aligned fasta file and get values in mutations positions
+df = df.dropna(how='all')
 for file, seqrecord in fastadict.items():
     seq = seqrecord.seq
     samples.append(file)  # keep sample names in list
     mutpositions = []
     for pos in df["Position"]:  # for each mutations position get the value from fasta record (-1 bcs index starts from 0)
-        print(pos)
         x = seq[int(pos)-1]
         mutpositions.append(x)
     df[file] = mutpositions  # add sample as column
