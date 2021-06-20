@@ -322,9 +322,10 @@ if [ "$single_end" == false ]; then
 fi
 
 mafft_alignment
-muttable
+
 over_50
 results_report
+muttable
 wait
 
 conda deactivate
