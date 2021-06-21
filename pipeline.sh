@@ -253,7 +253,7 @@ function muttable() {
     conda deactivate
 
     conda activate pangolin
-    pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv
+    pangolin alignment/all_not_aligned.fasta --outfile results/pangolinClades.csv
     conda deactivate
 
     conda activate nextstrain
