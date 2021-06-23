@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 # 18.05.2021 Dana Bar Ilan
 
 # respond do ctrl+c to abort run:
