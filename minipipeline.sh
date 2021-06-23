@@ -64,12 +64,12 @@ augur align \
 conda deactivate
 
 conda activate pangolin
-pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv
+pangolin "$unaligned" --outfile results/pangolinClades.csv
 conda deactivate
 
 conda activate CoronaPipeline
 python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx
 python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv
-python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv
+python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv QC/report.txt
 
 echo "finished minipipeline (:"
