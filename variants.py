@@ -22,7 +22,7 @@ try:
     qc['sample'] = qc['sample'].apply(str)
 except FileNotFoundError:
     print("QC File does not exist")
-    qc = ''
+    qc = pd.DataFrame()
 # load pangolin + nextclade outputs, mutations table.
 try:
     pangolinTable = pd.read_csv(pangolin_file)
@@ -169,7 +169,10 @@ for sample, sample_mutlist in samples_mutations.items():
         suspect_info = 'suspect'
 
     # get coverage of sample from qc report.txt
-    coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2) if qc else ''
+    try:
+        coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
+    except:
+        coverage = ''
     # get pangolin info from table
     try:
         pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
