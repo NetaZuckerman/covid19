@@ -44,7 +44,7 @@ mutTable = mutTable[mutTable['Mutation type'] != 'insertion']
 # prepare mutations table dataframe
 mutTable["Reference"] = mutTable["Reference"].str.upper()  # make sure all upper case for safe comparisons
 mutTable["Mutation"] = mutTable["Mutation"].str.upper()
-
+mutTable.to_csv('concat_table.csv')
 # prepare multiple alignment dictionary (key: sample name, val: SeqIO record)
 alignment = SeqIO.to_dict(SeqIO.parse(alignment_file, 'fasta'))
 alignment.pop('NC_045512.2', None)
