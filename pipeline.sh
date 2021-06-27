@@ -206,14 +206,14 @@ function consensus() {
     file_name=`basename "$file" .mapped.sorted.bam`
     if [ "$single_end" == FALSE ]; then  # if paired end leave quality threshold 20
       # CNS1
-      samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name"
+      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 1 -p CNS/"$file_name"
       # CNS5
-      samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name"
+      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 5 -p CNS_5/"$file_name"
     else  # of single end allow low quality bases (MinIon)
       # CNS1
-      samtools mpileup -A "$file" | ivar consensus -m 1 -p CNS/"$file_name" -q 10
+      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 1 -p CNS/"$file_name" -q 10
       # CNS5
-      samtools mpileup -A "$file" | ivar consensus -m 5 -p CNS_5/"$file_name" -q 10
+      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 5 -p CNS_5/"$file_name" -q 10
     fi
   done
   # remove qual files:
