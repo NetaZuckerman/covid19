@@ -35,14 +35,12 @@ clades_df = pd.read_csv(clades_path, sep='\t')
 
 # excel muttable:
 excel_mutTable = pd.read_excel(excel_path, sheet_name=None, engine='openpyxl')
-mutTable_copy = excel_mutTable.copy()
-for name, frame in mutTable_copy.items():
-    frame['Mutation type'] = frame['Mutation type'].str.lower()  # make sure lower case to prevent mistakes
-    excel_mutTable[name] = frame[frame['Mutation type'] != 'insertion']  # ignore insertions for now
+for name in excel_mutTable:
     excel_mutTable[name]['lineage'] = name  # add a lineage column to all variant's tables
 
 mutTable = pd.concat(excel_mutTable.values(), ignore_index=True)
-
+mutTable['Mutation type'] = mutTable['Mutation type'].str.lower()
+mutTable = mutTable[mutTable['Mutation type'] != 'insertion']
 # prepare mutations table dataframe
 mutTable["Reference"] = mutTable["Reference"].str.upper()  # make sure all upper case for safe comparisons
 mutTable["Mutation"] = mutTable["Mutation"].str.upper()
@@ -78,25 +76,25 @@ unexpected_mutations = {id: [] for id in alignment}
 lineages_list = []
 
 # iterate over all samples in multi-fasta and over all mutations in table, and check value of each mutation
-mutTable = mutTable.dropna(thresh=10)  # lose empty rows that might get there by mistake in concat
+  # lose empty rows that might get there by mistake in concat
+# thresh = 2 means 2 or more valid data is required to keep the row
 for sample, record in alignment.items():
-    for row in mutTable.iterrows():
-        pos = int(row[1][0]) - 1  # mutation position
+    for (idx, row) in mutTable.iterrows():
+        pos = int(row.loc['Position']) - 1  # mutation position
         alt = record.seq[pos]  # fasta value in position
-        ref = row[1][1]  # reference in position
-        table_mut = row[1][2]  # mutation  according to table
-        gene = row[1][3] if row[1][3] else ''
-        mutation_name = str(row[1][4])
-        if alt != table_mut or alt == 'N':  # if position not covered in sequence OR the mutation is not the predictable
-            if alt == 'N':  # mutation not covered in sequence - add to not covered dict under sample key
-                samples_not_covered[sample].append(mutation_name)
-            elif alt != ref and alt != 'N':  # alt is not the expected mut. and is covered in sequencing (not N)
-                unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")  # add to unexpected mutations
-        else:  # mutation exists in sequence
-            samples_mutations[sample].append(mutation_name)  # accumulate all samples+mutations in dict:
-            # {sampleName: mutationName}
+        ref = row.loc['Reference']  # reference in position
+        table_mut = row.loc['Mutation']  # mutation  according to table
+        gene = row.loc['protein']
+        mutation_name = str(row.loc['variant'])
+        if alt == table_mut:  # mutation exists in sequence
+            samples_mutations[sample].append(mutation_name)
+        elif alt == 'N':  # if position not covered in sequence
+            samples_not_covered[sample].append(mutation_name)
+        elif alt != ref:  # alt is not the expected mut. and is covered in sequencing (not N)
+            unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
 
-unique_lineages = set(excel_mutTable.keys())  # get list of all unique lineages (= names of sheets of excel table)
+
+unique_lineages = excel_mutTable.keys()  # get list of all unique lineages (= names of sheets of excel table)
 mutations_by_lineage = {key: excel_mutTable[key].variant.tolist() for key in
                         excel_mutTable}  # mutations table with only lineage: mutation name
 
@@ -104,7 +102,6 @@ final_table = []
 # iterate over all samples mutations and determine variants
 for sample, sample_mutlist in samples_mutations.items():
     known_variant = ""
-
     notes = ''
     suspect_info = ''
     lin_percentages = {}
@@ -162,7 +159,7 @@ for sample, sample_mutlist in samples_mutations.items():
             # suspect <lineage>: (%)(x/y); noN(x/#covered_mutations); SNP(#); SNP_silent(#) :
             suspect_info = \
                 f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
-                f'noN: {covered_percentage}% {mutations_found_number}/{no_n_number}'  # TODO check accuracy
+                f'noN: {covered_percentage}% ({mutations_found_number}/{no_n_number})'  # TODO check accuracy
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
