@@ -37,6 +37,8 @@ clades_df = pd.read_csv(clades_path, sep='\t')
 excel_mutTable = pd.read_excel(excel_path, sheet_name=None, engine='openpyxl')
 for name in excel_mutTable:
     excel_mutTable[name]['lineage'] = name  # add a lineage column to all variant's tables
+    excel_mutTable[name]['variant'] = excel_mutTable[name]['variant'].astype(str)
+
 
 mutTable = pd.concat(excel_mutTable.values(), ignore_index=True)
 mutTable['Mutation type'] = mutTable['Mutation type'].str.lower()
@@ -87,6 +89,7 @@ for sample, record in alignment.items():
         table_mut = row.loc['Mutation']  # mutation  according to table
         gene = row.loc['protein']
         mutation_name = str(row.loc['variant'])
+        z=3
         if alt == table_mut:  # mutation exists in sequence
             samples_mutations[sample].append(mutation_name)
         elif alt == 'N':  # if position not covered in sequence
