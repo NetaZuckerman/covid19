@@ -15,7 +15,7 @@ output_file = argv[2]
 pangolin_file = argv[3]
 clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
-qc_report_path = argv[6]   # TODO add to pipeline and mini-pipeline a 6th parameter
+qc_report_path = argv[6]
 
 try:
     qc = pd.read_csv(qc_report_path, sep='\t')
