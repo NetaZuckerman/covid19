@@ -85,6 +85,7 @@ for sample, record in alignment.items():
     for (idx, row) in mutTable.iterrows():
         if pd.isna(row.loc['Position']):
             print(f"NaN: {row}")
+            continue
         pos = int(row.loc['Position']) - 1  # mutation position
         alt = record.seq[pos]  # fasta value in position
         ref = row.loc['Reference']  # reference in position
