@@ -83,6 +83,8 @@ lineages_list = []
 # thresh = 2 means 2 or more valid data is required to keep the row
 for sample, record in alignment.items():
     for (idx, row) in mutTable.iterrows():
+        if pd.isna(row.loc['Position']):
+            print(f"NaN: {row}")
         pos = int(row.loc['Position']) - 1  # mutation position
         alt = record.seq[pos]  # fasta value in position
         ref = row.loc['Reference']  # reference in position
