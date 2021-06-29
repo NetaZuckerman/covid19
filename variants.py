@@ -79,26 +79,25 @@ unexpected_mutations = {id: [] for id in alignment}
 lineages_list = []
 
 # iterate over all samples in multi-fasta and over all mutations in table, and check value of each mutation
-  # lose empty rows that might get there by mistake in concat
-# thresh = 2 means 2 or more valid data is required to keep the row
-for sample, record in alignment.items():
-    for (idx, row) in mutTable.iterrows():
-        if pd.isna(row.loc['Position']):
-            print(f"NaN: {row}")
-            continue
-        pos = int(row.loc['Position']) - 1  # mutation position
-        alt = record.seq[pos]  # fasta value in position
-        ref = row.loc['Reference']  # reference in position
-        table_mut = row.loc['Mutation']  # mutation  according to table
-        gene = row.loc['protein']
-        mutation_name = str(row.loc['variant'])
-        z=3
-        if alt == table_mut:  # mutation exists in sequence
-            samples_mutations[sample].append(mutation_name)
-        elif alt == 'N':  # if position not covered in sequence
-            samples_not_covered[sample].append(mutation_name)
-        elif alt != ref:  # alt is not the expected mut. and is covered in sequencing (not N)
-            unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
+with open("mutations.log", 'w') as log:
+    for sample, record in alignment.items():
+        for (idx, row) in mutTable.iterrows():
+            if pd.isna(row.loc['Position']):
+                log.write(f"NaN: {row}")
+                continue
+            pos = int(row.loc['Position']) - 1  # mutation position
+            alt = record.seq[pos]  # fasta value in position
+            ref = row.loc['Reference']  # reference in position
+            table_mut = row.loc['Mutation']  # mutation  according to table
+            gene = row.loc['protein']
+            mutation_name = str(row.loc['variant'])
+            z=3
+            if alt == table_mut:  # mutation exists in sequence
+                samples_mutations[sample].append(mutation_name)
+            elif alt == 'N':  # if position not covered in sequence
+                samples_not_covered[sample].append(mutation_name)
+            elif alt != ref:  # alt is not the expected mut. and is covered in sequencing (not N)
+                unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
 
 
 unique_lineages = excel_mutTable.keys()  # get list of all unique lineages (= names of sheets of excel table)
