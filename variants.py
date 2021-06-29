@@ -204,7 +204,7 @@ for sample, sample_mutlist in samples_mutations.items():
 
     line = {
         "Sample": sample,
-        "Variant": pangolin_clade if not QCfail else "QC Fail",
+        "Variant": pangolin_clade if not QCfail else "QC fail",
         "suspect": None,
         "suspected variant": suspect_info,  # TODO add more info
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
