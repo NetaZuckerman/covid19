@@ -50,6 +50,8 @@ for file, seqrecord in fastadict.items():
     samples.append(file)  # keep sample names in list
     mutpositions = []
     for pos in df["Position"]:  # for each mutations position get the value from fasta record (-1 bcs index starts from 0)
+        if pd.isna(pos):
+            continue
         x = seq[int(pos)-1]
         mutpositions.append(x)
     df[file] = mutpositions  # add sample as column
