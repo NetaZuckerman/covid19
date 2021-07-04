@@ -4,8 +4,8 @@
 # respond do ctrl+c to abort run:
 trap "kill 0" EXIT
 # allow conda activation from scrpit
-#eval "$(conda shell.bash hook)"
-source ~/miniconda3/etc/profile.d/conda.sh
+eval "$(conda shell.bash hook)"
+#source ~/miniconda3/etc/profile.d/conda.sh
 
 # help function: (usage)
 function usage() {
