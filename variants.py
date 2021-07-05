@@ -154,7 +154,8 @@ for sample, sample_mutlist in samples_mutations.items():
 
         if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage --> suspect variant
             # list of covered lineage mutations in sample:
-            lin_no_n = [x for x in mutations_by_lineage[var] if x not in samples_not_covered[sample]]
+            ns_list = [x for x in samples_not_covered[sample] if x not in sample_mutlist]  # partially covered = covered
+            lin_no_n = [x for x in mutations_by_lineage[var] if x not in ns_list]
             no_n_number = len(set(lin_no_n))  # get number of covered mutation
             mutations_found = set([x for x in mutations_by_lineage[var] if x in sample_mutlist])
             mutations_found_number = len(mutations_found)
