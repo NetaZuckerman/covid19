@@ -55,7 +55,7 @@ mkdir -p {alignment,results} # -p: create only if doesnt already exist
 
 conda activate nextstrain
 # nextclade (-t: tsv output)
-nextclade -i "$unaligned" -t results/nextclade.tsv
+nextclade -i "$unaligned" -t results/nextclade.tsv > /dev/null 2>&1
 # align multifasta to reference sequence using augur align:
 augur align \
 --sequences "$unaligned" \
