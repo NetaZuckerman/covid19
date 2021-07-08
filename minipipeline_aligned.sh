@@ -53,21 +53,21 @@ path=$(dirname "${0}")
 get_user_input "$@"
 # check input:
 
-mkdir -p results_04072021 # -p: create only if doesnt already exist
+mkdir -p results_new # -p: create only if doesnt already exist
 
 conda activate nextstrain
 # nextclade (-t: tsv output)
-nextclade -i "$unaligned" -t results_04072021/nextclade.tsv
+nextclade -i "$unaligned" -t results_new/nextclade.tsv
 
 conda deactivate
 
 conda activate pangolin
-pangolin "$unaligned" --outfile results_04072021/pangolinClades.csv
+pangolin "$unaligned" --outfile results_new/pangolinClades.csv
 conda deactivate
 
 conda activate CoronaPipeline
-python "$path"/MutTable.py "$aligned" results_04072021/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
-python "$path"/translated_table.py "$aligned" results_04072021/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-python "$path"/variants.py "$aligned" results_04072021/variants.csv results_04072021/pangolinClades.csv results_04072021/nextclade.tsv "$path"/mutationsTable.xlsx QC/report.txt
+python "$path"/MutTable.py "$aligned" results_new/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
+python "$path"/translated_table.py "$aligned" results_new/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
+python "$path"/variants.py "$aligned" results_new/variants.csv results_new/pangolinClades.csv results_new/nextclade.tsv "$path"/mutationsTable.xlsx QC/report.txt
 
 echo "finished minipipeline (:"
