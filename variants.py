@@ -189,7 +189,8 @@ for sample, sample_mutlist in samples_mutations.items():
     try:
         coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
     except:  # calculate coverage
-        coverage = str(calculate_coverage(alignment[sample].seq))
+        # coverage = str(calculate_coverage(alignment[sample].seq))
+        coverage = ''
     # get pangolin info from table
     try:
         pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
