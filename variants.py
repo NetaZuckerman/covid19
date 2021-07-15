@@ -91,7 +91,6 @@ with open("mutations.log", 'w') as log:
             table_mut = row.loc['Mutation']  # mutation  according to table
             gene = row.loc['protein']
             mutation_name = str(row.loc['variant'])
-            z=3
             if alt == table_mut:  # mutation exists in sequence
                 samples_mutations[sample].append(mutation_name)
             elif alt == 'N':  # if position not covered in sequence
@@ -166,7 +165,9 @@ for sample, sample_mutlist in samples_mutations.items():
             # suspect <lineage>: (%)(x/y); noN(x/#covered_mutations); SNP(#); SNP_silent(#) :
             suspect_info = \
                 f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
-                f'noN: {covered_percentage}% ({mutations_found_number}/{no_n_number})'  # TODO check accuracy
+                f'noN: {covered_percentage}% ({mutations_found_number}/{no_n_number})'
+    else:  # variant has 100% mutations
+        suspect_info = known_variant + "100%"
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
