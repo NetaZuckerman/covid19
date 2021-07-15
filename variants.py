@@ -2,12 +2,24 @@ from Bio import SeqIO
 import csv
 import pandas as pd
 from sys import argv
-import os
 
 """
 create variants table - for each sample in fasta multiple alignment file a covid variant is decided if found.
 including pangolin and nextclades variants as well. 
 """
+
+
+def calculate_coverage(fasta_seq):
+    """
+    calculate percentage of coverage of fasta sequence. % of no Ns # TODO: include '-'?
+    :param ref_length: length of coverage sequence
+    :param fasta_seq: fasta sequence to calculate coverage as SeqIO
+    :return: % coverage of fasta sequence
+    """
+    ref_length = len(fasta_seq)
+    nCount = fasta_seq.upper().count('N')
+    return (nCount/ref_length) * 100
+
 
 # get user input
 alignment_file = argv[1]
@@ -15,7 +27,8 @@ output_file = argv[2]
 pangolin_file = argv[3]
 clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
-qc_report_path = argv[6]
+if len(argv) > 6:  # TODO remove QC path from minipipeline
+    qc_report_path = argv[6]
 
 try:
     qc = pd.read_csv(qc_report_path, sep='\t')
@@ -167,7 +180,7 @@ for sample, sample_mutlist in samples_mutations.items():
                 f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
                 f'noN: {covered_percentage}% ({mutations_found_number}/{no_n_number})'
     else:  # variant has 100% mutations
-        suspect_info = known_variant + "100%"
+        suspect_info = known_variant + " (100%)"
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
@@ -176,8 +189,8 @@ for sample, sample_mutlist in samples_mutations.items():
     # get coverage of sample from qc report.txt
     try:
         coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
-    except:
-        coverage = ''
+    except:  # calculate coverage
+        coverage = str(calculate_coverage(alignment[sample].seq))
     # get pangolin info from table
     try:
         pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
