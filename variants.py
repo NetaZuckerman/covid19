@@ -18,7 +18,7 @@ def calculate_coverage(fasta_seq):
     """
     ref_length = len(fasta_seq)
     nCount = fasta_seq.upper().count('N')
-    return (nCount/ref_length) * 100
+    return ((ref_length - nCount)/ref_length) * 100
 
 
 # get user input
@@ -189,8 +189,8 @@ for sample, sample_mutlist in samples_mutations.items():
     try:
         coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
     except:  # calculate coverage
-        # coverage = str(calculate_coverage(alignment[sample].seq))
-        coverage = ''
+        coverage = str(calculate_coverage(alignment[sample].seq))
+        # coverage = ''
     # get pangolin info from table
     try:
         pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
