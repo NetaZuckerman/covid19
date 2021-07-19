@@ -137,12 +137,13 @@ for sample, sample_mutlist in samples_mutations.items():
                 temp_mutes.append(mut)
         if not temp:  # all mutations of that lineage exists in sample -> known variant=lineage name
             known_variant = lin
-        elif len(linmuts) != len(temp):  # some of lineage's mutations exist but not all
-            # calculate percentage of lineage mutations found:
-            lin_percentages[lin] = round(len(set(temp_mutes)) / len(set(linmuts)) * 100, 2)
-            # also keep as fraction x/y
-            lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts)))  # tuple:
-            # (#lin_mutation_sample, #tot_lin_mutations)
+
+        # elif len(linmuts) != len(temp):  # some of lineage's mutations exist but not all
+        # calculate percentage of lineage mutations found:
+        lin_percentages[lin] = round(len(set(temp_mutes)) / len(set(linmuts)) * 100, 2)
+        # also keep as fraction x/y
+        lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts)))  # tuple:
+        # (#lin_mutation_sample, #tot_lin_mutations)
 
     if not known_variant:  # did not find variant that has 100% mutations in sample
         max_percentage = 0
