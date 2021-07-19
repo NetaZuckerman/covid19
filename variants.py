@@ -171,15 +171,23 @@ for sample, sample_mutlist in samples_mutations.items():
             mutations_found = set([x for x in mutations_by_lineage[var] if x in sample_mutlist])
             mutations_found_number = len(mutations_found)
             covered_percentage = round(float((mutations_found_number) / no_n_number)*100, 2)
-            # get number of SNPs and SNP_silent
-            # for mutation in sample_mutlist:
+            # TODO get number of SNPs and SNP_silent
 
             # suspect <lineage>: (%)(x/y); noN(x/#covered_mutations); SNP(#); SNP_silent(#) :
             suspect_info = \
                 f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
                 f'noN: {covered_percentage}% ({mutations_found_number}/{no_n_number})'
+
     else:  # variant has 100% mutations
-        suspect_info = known_variant + " (100%)"
+        ns_list = [x for x in samples_not_covered[sample] if x not in sample_mutlist]  # partially covered = covered
+        lin_no_n = [x for x in mutations_by_lineage[known_variant] if x not in ns_list]
+        no_n_number = len(set(lin_no_n))  # get number of covered mutation
+        mutations_found = set([x for x in mutations_by_lineage[known_variant] if x in sample_mutlist])
+        mutations_found_number = len(mutations_found)
+        covered_percentage = round(float((mutations_found_number) / no_n_number) * 100, 2)
+        suspect_info = f"{known_variant}: {lin_percentages[known_variant]}% " \
+                       f"{lin_number[known_variant][0]}/{lin_number[known_variant][1]}; " \
+                       f"noN: {covered_percentage}% ({mutations_found_number}/{no_n_number})"
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
