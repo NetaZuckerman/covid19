@@ -254,3 +254,5 @@ with open(output_file, 'w') as outfile:
     writer.writeheader()
     for line in final_table:
         writer.writerow(line)
+
+# write a report of all the variants (that are not 0%) with percentages for each sample
