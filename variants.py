@@ -125,6 +125,7 @@ for sample, sample_mutlist in samples_mutations.items():
     lin_percentages = {}
     lin_number = {}
     lin_not_covered = {}
+    extra_subs = []
     # iterate over mutations of each lineage, check how much of the lineage's mutations are covered by sample -
     # to decide on variant
     for lin, linmuts in mutations_by_lineage.items():
