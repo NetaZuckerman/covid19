@@ -78,6 +78,7 @@ for sample in clades_df['sample']:  # change appearance from nextclade format to
     aasubs = clades_df[clades_df['sample'] == sample].aaSubstitutions.values.tolist()
     aadels = clades_df[clades_df['sample'] == sample].aaDeletions.values.tolist()
     insertions = clades_df[clades_df['sample'] == sample].insertions.values.tolist()
+    # ';' instead of ',' as sep. for Ari's tables -> important
     aa_substitution_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aasubs[0].split(',')] \
         if (aasubs and aasubs != ['']) else ''
     aa_deletions_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aadels[0].split(',')] \
@@ -187,8 +188,14 @@ for sample, sample_mutlist in samples_mutations.items():
         mutations_found_number = len(mutations_found)
         covered_percentage = round(float((mutations_found_number) / no_n_number) * 100, 2)
         suspect_info = f"{known_variant}: {lin_percentages[known_variant]}% " \
-                       f"{lin_number[known_variant][0]}/{lin_number[known_variant][1]}; " \
+                       f"({lin_number[known_variant][0]}/{lin_number[known_variant][1]}); " \
                        f"noN: {covered_percentage}% ({mutations_found_number}/{no_n_number})"
+
+    if known_variant:  # there is a variant at least X% covered
+        # then list extra mutations (= mutations that exist in nextclade list but not part of the variant)
+        subs_list = [x.split('(')[0] for x in aa_substitution_dict[sample]]  # TODO - CHECK
+        # TODO check protein as well (not just the name)
+        extra_subs = [x for x in subs_list if x not in mutations_by_lineage[known_variant]]
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
@@ -214,7 +221,6 @@ for sample, sample_mutlist in samples_mutations.items():
     # get nextclade info from table
     nextclade = clades_df[clades_df['sample'] == sample].clade
 
-
     not_covered_list = []
     for mut in samples_not_covered[sample]:
         protein_values = mutTable[mutTable.variant == mut].protein.values.tolist()
@@ -239,6 +245,7 @@ for sample, sample_mutlist in samples_mutations.items():
                                                              in aa_deletions_dict else 'NA'),
         "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
         "mutations not covered": not_covered_list,
+        "non variant mutations": ';'.join(extra_subs) if extra_subs else '',  # mutations that are not part of variant list incase there is a known variant
         "% coverage": coverage,
         "pangolin clade": pangolin_clade,
         "pangolin scorpio": pangolin_scorpio,
@@ -248,7 +255,7 @@ for sample, sample_mutlist in samples_mutations.items():
 
 with open(output_file, 'w') as outfile:
     fieldnames = ["Sample", "Variant", "suspect", "suspected variant", "AA substitutions",
-                  "AA deletions", "Insertions", "mutations not covered", "% coverage", "pangolin clade",
+                  "AA deletions", "Insertions", "mutations not covered", "non variant mutations","% coverage", "pangolin clade",
                   "pangolin scorpio", "nextstrain clade"]
     writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
     writer.writeheader()
