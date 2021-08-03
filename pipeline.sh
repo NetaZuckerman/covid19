@@ -15,9 +15,6 @@ conda activate CoronaPipeline
 
 path=`dirname "${0}"`
 
-# TODO: keep errors in log file to review later
-# TODO: add more documentations
-
 function initialize_globals() {
   dirs_flag=false
   threads=32
@@ -160,7 +157,7 @@ function map_to_ref() {
     r2=${r1/R1/R2}
     output=${r1/_R1/}
     output=${output/_paired/}
-    if [[ $file == *.gz ]]; then
+    if [[ $r1 == *.gz ]]; then
       output=`basename ${output/.fastq.gz/}`
     else
       output=`basename "$output" .fastq`
