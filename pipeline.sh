@@ -158,7 +158,7 @@ function map_to_ref() {
     output=${r1/_R1/}
     output=${output/_paired/}
     if [[ $r1 == *.gz ]]; then
-      output=`basename ${output/.fastq.gz/}`
+      output=`basename "$output" .fastq.gz`
     else
       output=`basename "$output" .fastq`
     fi
