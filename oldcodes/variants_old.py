@@ -2,7 +2,6 @@ from Bio import SeqIO
 import csv
 import pandas as pd
 from sys import argv
-import operator
 
 """
 create variants table - for each sample in fasta multiple alignment file a covid variant is decided if found.
@@ -19,7 +18,7 @@ def calculate_coverage(fasta_seq):
     """
     ref_length = len(fasta_seq)
     nCount = fasta_seq.upper().count('N')
-    return ((ref_length - nCount)/ref_length) * 100
+    return ((ref_length - nCount) / ref_length) * 100
 
 
 # get user input
@@ -51,7 +50,6 @@ excel_mutTable = pd.read_excel(excel_path, sheet_name=None, engine='openpyxl')
 for name in excel_mutTable:
     excel_mutTable[name]['lineage'] = name  # add a lineage column to all variant's tables
     excel_mutTable[name]['variant'] = excel_mutTable[name]['variant'].astype(str)
-
 
 mutTable = pd.concat(excel_mutTable.values(), ignore_index=True)
 mutTable['Mutation type'] = mutTable['Mutation type'].str.lower()
@@ -112,7 +110,6 @@ with open("mutations.log", 'w') as log:
             elif alt != ref:  # alt is not the expected mut. and is covered in sequencing (not N)
                 unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
 
-
 unique_lineages = excel_mutTable.keys()  # get list of all unique lineages (= names of sheets of excel table)
 mutations_by_lineage = {key: excel_mutTable[key].variant.tolist() for key in
                         excel_mutTable}  # mutations table with only lineage: mutation name
@@ -124,9 +121,7 @@ for sample, sample_mutlist in samples_mutations.items():
     notes = ''
     suspect_info = ''
     lin_percentages = {}
-    lin_percentages_noN = {}
     lin_number = {}
-    lin_number_noN = {}
     lin_not_covered = {}
     extra_subs = []
     # iterate over mutations of each lineage, check how much of the lineage's mutations are covered by sample -
@@ -146,35 +141,54 @@ for sample, sample_mutlist in samples_mutations.items():
         # elif len(linmuts) != len(temp):  # some of lineage's mutations exist but not all
         # calculate percentage of lineage mutations found:
         lin_percentages[lin] = round(len(set(temp_mutes)) / len(set(linmuts)) * 100, 2)
-        no_N_mutations = [x for x in linmuts if (x not in samples_not_covered[sample]) or (x in temp_mutes)]
-        lin_percentages_noN[lin] = round(len(set(temp_mutes)) / len(set(no_N_mutations)) * 100, 2) if no_N_mutations else 0.0
         # also keep as fraction x/y
         lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts)))  # tuple:
         # (#lin_mutation_sample, #tot_lin_mutations)
-        lin_number_noN[lin] = (len(set(temp_mutes)), len(set(no_N_mutations))) if no_N_mutations else (0, 0)
 
     if not known_variant:  # did not find variant that has 100% mutations in sample
-        var = max(lin_percentages_noN.items(), key=operator.itemgetter(1))[0]
-
-        val = lin_percentages[var]
-        val_noN = lin_percentages_noN[var]
-        fraction = f'({int(lin_number[var][0])}/{int(lin_number[var][1])})'
-        fraction_noN = f'({int(lin_number_noN[var][0])}/{int(lin_number_noN[var][1])})'
-
-        over_60 = True if val >= 60 else False
-        known_variant = var if over_60 else known_variant
+        max_percentage = 0
+        var = ''
+        over_60 = False
+        val = 0
+        fraction = 0
+        for key, tup in lin_number.items():  # pick variant that has highest muations % but at least 60 %
+            # val = round((tup[0] / tup[1])*100, 2)
+            val = lin_percentages[key]
+            frac = f'({int(tup[0])}/{int(tup[1])})'  # keep as fraction to print to table
+            if val >= 60:  # 60% -> known variant
+                over_60 = True
+            if val > max_percentage:  # make sure to choose best match and not the first over 60%
+                max_percentage = val
+                var = key
+                fraction = frac
+        if over_60:  # found >60% mutations of lineage
+            known_variant = var
 
         if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage --> suspect variant
+            # list of covered lineage mutations in sample:
+            ns_list = [x for x in samples_not_covered[sample] if x not in sample_mutlist]  # partially covered = covered
+            lin_no_n = [x for x in mutations_by_lineage[var] if x not in ns_list]
+            no_n_number = len(set(lin_no_n))  # get number of covered mutation
+            mutations_found = set([x for x in mutations_by_lineage[var] if x in sample_mutlist])
+            mutations_found_number = len(mutations_found)
+            covered_percentage = round(float((mutations_found_number) / no_n_number) * 100, 2)
+            # TODO get number of SNPs and SNP_silent
+
             # suspect <lineage>: (%)(x/y); noN(x/#covered_mutations); SNP(#); SNP_silent(#) :
             suspect_info = \
                 f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
-                f'noN: {val_noN}% {fraction_noN}'
+                f'noN: {covered_percentage}% ({mutations_found_number}/{no_n_number})'
 
     else:  # variant has 100% mutations
+        ns_list = [x for x in samples_not_covered[sample] if x not in sample_mutlist]  # partially covered = covered
+        lin_no_n = [x for x in mutations_by_lineage[known_variant] if x not in ns_list]
+        no_n_number = len(set(lin_no_n))  # get number of covered mutation
+        mutations_found = set([x for x in mutations_by_lineage[known_variant] if x in sample_mutlist])
+        mutations_found_number = len(mutations_found)
+        covered_percentage = round(float((mutations_found_number) / no_n_number) * 100, 2)
         suspect_info = f"{known_variant}: {lin_percentages[known_variant]}% " \
                        f"({lin_number[known_variant][0]}/{lin_number[known_variant][1]}); " \
-                       f"noN: {lin_percentages_noN[known_variant]}% ({lin_number_noN[known_variant][0]}/" \
-                       f"{lin_number_noN[known_variant][1]})"
+                       f"noN: {covered_percentage}% ({mutations_found_number}/{no_n_number})"
 
     if known_variant:  # there is a variant at least X% covered
         # then list extra mutations (= mutations that exist in nextclade list but not part of the variant)
@@ -227,10 +241,11 @@ for sample, sample_mutlist in samples_mutations.items():
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
                                                                       sample in aa_substitution_dict else 'NA',
         "AA deletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
-                                                             in aa_deletions_dict else 'NA'),
+                                                              in aa_deletions_dict else 'NA'),
         "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
         "mutations not covered": not_covered_list,
-        "non variant mutations": ';'.join(extra_subs) if extra_subs else '',  # mutations that are not part of variant list incase there is a known variant
+        "non variant mutations": ';'.join(extra_subs) if extra_subs else '',
+        # mutations that are not part of variant list incase there is a known variant
         "% coverage": coverage,
         "pangolin clade": pangolin_clade,
         "pangolin scorpio": pangolin_scorpio,
@@ -240,7 +255,8 @@ for sample, sample_mutlist in samples_mutations.items():
 
 with open(output_file, 'w') as outfile:
     fieldnames = ["Sample", "Variant", "suspect", "suspected variant", "AA substitutions",
-                  "AA deletions", "Insertions", "mutations not covered", "non variant mutations","% coverage", "pangolin clade",
+                  "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
+                  "pangolin clade",
                   "pangolin scorpio", "nextstrain clade"]
     writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
     writer.writeheader()
