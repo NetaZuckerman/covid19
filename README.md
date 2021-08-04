@@ -201,7 +201,14 @@ Align with augur (mafft based) and save output in alignment/ directory: \
     total number of reads in sample: `samtools view -c BAM/sample_name.bam` \
     depth of each position in sample: `samtools depth BAM/sample_name.mapped.sorted.bam`  \
 Check out pipeline.sh code for specifics.
-   
+
+
+## Minipipeline
+### Script for analysis of fasta files (instead of fastq)
+As in the regular pipeline, make sure to set the CoronaPipeline conda environment. No need to actiavte it 
+before the run. \
+`bash /path/to/minipipeline.sh -i fasta_path.fa -r covid_refseq.fasta`
+
 ---------------
 Dana Bar-Ilan. 
-updated: 2021-03-16
+updated: 04.08.2021
