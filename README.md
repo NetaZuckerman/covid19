@@ -2,7 +2,10 @@
 ### CoronaPipeline conda environment
 * In orders to install all dependencies using conda, run: \
     `conda env create -f <your/covid19/path>/env/CoronaPipeline.yml`
-* We use pangolin environment, so make sure pangolin + its environment is also installed. https://github.com/stevenlovegrove/Pangolin
+* Make sure to install pangolins conda environment as well as nextstrain, we use pangolin and nextclade (V0) in out script.
+for pangolin see https://cov-lineages.org/resources/pangolin/installation.html
+for nextclade (V0): https://www.npmjs.com/package/@nextstrain/nextclade
+* Make sure you have samtools V 1.10 or above installed.
 ## Suggested Workflow Using QC.py and pipeline.sh
 1. Create project's directories - Optional. \
 `python3 QC.py --dirs` \
