@@ -28,14 +28,17 @@ output_file = argv[2]
 pangolin_file = argv[3]
 clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
-qc_report_path = argv[6]
+if len(argv) > 6:
+    qc_report_path = argv[6]
+    try:
+        qc = pd.read_csv(qc_report_path, sep='\t')
+        qc['sample'] = qc['sample'].apply(str)
+    except FileNotFoundError:
+        print("QC File does not exist")
+        qc = pd.DataFrame()
+else:
+    qc_report_path = ''
 
-try:
-    qc = pd.read_csv(qc_report_path, sep='\t')
-    qc['sample'] = qc['sample'].apply(str)
-except FileNotFoundError:
-    print("QC File does not exist")
-    qc = pd.DataFrame()
 # load pangolin + nextclade outputs, mutations table.
 try:
     pangolinTable = pd.read_csv(pangolin_file)
@@ -187,11 +190,12 @@ for sample, sample_mutlist in samples_mutations.items():
         suspect_info = 'suspect'
 
     # get coverage of sample from qc report.txt
-    try:
+    if qc_report_path:
         coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
-    except:  # calculate coverage
+    else:
         coverage = str(calculate_coverage(alignment[sample].seq))
         # coverage = ''
+
     # get pangolin info from table
     try:
         pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
