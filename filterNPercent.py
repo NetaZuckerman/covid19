@@ -23,7 +23,8 @@ with open(outfile, 'w') as out:
         sequence = record.seq
         nCount = sequence.upper().count('N')
         length = len(sequence)
-        if (nCount/length)*100 < int(threshold):  # if N percentage is higher/equals threshold, add to output file.
+        # if N percentage is higher/equals threshold, add to output file.
+        if length > 0 and (nCount/length)*100 < int(threshold):
             SeqIO.write(record, out, 'fasta')
 
 fasta.close()
