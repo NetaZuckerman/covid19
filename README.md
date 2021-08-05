@@ -21,9 +21,9 @@ Check out the [directories hierarchy](#directories-hierarchy).
 `conda activate CoronaPipeline`\
 `python3 QC.py --reports -i fastq/raw/`
 
-If trimming is not necessary skip to step 6. 
+if trimming is not necessary skip to step 6. 
 
-3. Create template csv file for convenient trimming. See details at Template. \
+3. Create a template csv file for convenient trimming. See details at Template. \
 `python3 QC.py --template -i fastq/raw/ ` \
 Take a look at _template.csv_ produced as output and fix some trimming parameters according to fastqc/multiqc reports.
 Scroll down to read more about the csv file.  
@@ -116,44 +116,21 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 # Additional Info: pipeline.sh
 ### Usage:
  `bash pipeline.sh [-h | -r [REFSEQ_PATH] [-i WD] [-o OUTPUT_PATH]`
-### options:
-#### -h | --help
-Prints the usage message and exits.
-
-#### -d|--create_dirs  : Create project's directories
-Create all the project directories in the current directory and exit. \
-The directories: fastq/raw, fastq/trimmed, QC/fastqc, BAM, CNS, alignment, Trees, results
-`bash pipeline.sh -d` OR `bash pipeline.sh --crate_dirs`
-Check out the [directories hierarchy graph](#directories-hierarchy)
 
 ### Run pipeline on samples to get consensus sequences and additional data:
 #### -i /input/path : provide input path  (required)
-`/input/path` - the path to fastq files. may be trimmed or not. If the files are trimmed by QC.py, add --trimmed_fq 
-flag. See example in the Trimmed data section below. 
+`/input/path` - the path to fastq files.
 
 #### -r|--refseq <refseq/path/> : provide refseq path (required)
 Don't worry about indexing the fasta file, it happens automatically.
 
 
-#### -t|--trimmed_fq (optional) : add this flag if fastq files are trimmed
-Run the pipeline with trimmed data (by QC.py).
-
 ### If you are still confused, here are some examples
 To get the usage menu: \
 `bash pipeline.sh -h` OR `bash pipeline.sh --help`
 
-To run the whole pipeline on _trimmed_ fastq files found in _/input/path_ and refseq found in _references/refseq.fasta_:\
-`bash pipeline.sh -i /input/path/ --refseq references/refseq.fasta --trimmed_fq` \
-OR with abbreviated flags: \
-`bash pipeline.sh -i /input/path/ -r references/refseq.fasta -t`
-
 ### Results:
-The consensus sequences are found in CNS/, and further info in results/report.txt
-
-### Directories Hierarchy:
-If you choose to use ` bash pipeline.sh -d` to create directories, the hierarchy is as follows:
-
-![alt text](https://github.com/ShebaVirals/covid19/blob/master/Directories_Hierarchy.png?raw=true)
+The consensus sequences are found in CNS/ and CNS_5/, and further info in results/
 
 ### Pipeline's Basic Steps
 `conda activate CoronaPipeline`
@@ -189,7 +166,7 @@ Align with augur (mafft based) and save output in alignment/ directory: \
 7. Classify mutations with pangolin: \
 `conda deactivate` \
 `conda activate pangolin` \
-   `pangolin alignment/all_aligned.fasta --outfile results/pangolinClades.csv` \
+   `pangolin alignment/all_not_aligned.fasta --outfile results/pangolinClades.csv` \
    `conda deactivate`
 
 8. Check for mutations and variants: \
