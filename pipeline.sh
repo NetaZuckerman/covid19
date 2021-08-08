@@ -97,6 +97,10 @@ function check_flags() {
     echo please provide reference sequence --refseq! >&2
     exit 1
   fi
+
+  if [[ "$input_path" != */ ]]; then
+    input_path="$input_path"/
+  fi
 }
 
 
