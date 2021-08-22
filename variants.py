@@ -22,6 +22,18 @@ def calculate_coverage(fasta_seq):
     return ((ref_length - nCount)/ref_length) * 100
 
 
+def remove_prefix(text, prefix):
+    """
+    remove prefix from string
+    :param text: string to remove prefix from
+    :param prefix: prefix to remove
+    :return: new string wihtout prefix
+    """
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text
+
+
 # get user input
 alignment_file = argv[1]
 output_file = argv[2]
@@ -227,7 +239,7 @@ for sample, sample_mutlist in samples_mutations.items():
         "Sample": sample,
         "Variant": pangolin_clade if not QCfail else "QC fail",
         "suspect": None,
-        "suspected variant": known_variant if known_variant else '',
+        "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect ') if suspect_info else '',
         "suspect info": suspect_info,  # TODO add more info
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
                                                                       sample in aa_substitution_dict else 'NA',
