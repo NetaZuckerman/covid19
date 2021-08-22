@@ -227,7 +227,8 @@ for sample, sample_mutlist in samples_mutations.items():
         "Sample": sample,
         "Variant": pangolin_clade if not QCfail else "QC fail",
         "suspect": None,
-        "suspected variant": suspect_info,  # TODO add more info
+        "suspected variant": known_variant if known_variant else '',
+        "suspect info": suspect_info,  # TODO add more info
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
                                                                       sample in aa_substitution_dict else 'NA',
         "AA deletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
@@ -243,9 +244,9 @@ for sample, sample_mutlist in samples_mutations.items():
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
-    fieldnames = ["Sample", "Variant", "suspect", "suspected variant", "AA substitutions",
-                  "AA deletions", "Insertions", "mutations not covered", "non variant mutations","% coverage", "pangolin clade",
-                  "pangolin scorpio", "nextstrain clade"]
+    fieldnames = ["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
+                  "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
+                  "pangolin clade", "pangolin scorpio", "nextstrain clade"]
     writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:
