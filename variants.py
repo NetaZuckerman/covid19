@@ -239,7 +239,7 @@ for sample, sample_mutlist in samples_mutations.items():
         "Sample": sample,
         "Variant": pangolin_clade if not QCfail else "QC fail",
         "suspect": None,
-        "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect ') if suspect_info else '',
+        "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect').lstrip(' ') if suspect_info else '',
         "suspect info": suspect_info,  # TODO add more info
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
                                                                       sample in aa_substitution_dict else 'NA',
