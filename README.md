@@ -1,6 +1,6 @@
 # covid19
 ### CoronaPipeline conda environment
-* In orders to install all dependencies using conda, run: \
+* In order to install all dependencies using conda, run: \
     `conda env create -f <your/covid19/path>/env/CoronaPipeline.yml`
 * Make sure to install pangolins conda environment as well as nextstrain, we use pangolin and nextclade (V0) in out script.
 for pangolin see https://cov-lineages.org/resources/pangolin/installation.html
