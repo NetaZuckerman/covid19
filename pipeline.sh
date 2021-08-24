@@ -199,6 +199,7 @@ function depth() {
     done
 }
 
+
 function consensus() {
   mkdir -p CNS CNS_5
   for file in BAM/*.mapped.sorted.bam; do
