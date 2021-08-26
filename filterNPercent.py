@@ -1,6 +1,10 @@
 from Bio import SeqIO
 from sys import argv
 
+"""
+filter multifasta to good quality samples
+keep only fasta files >= X% coverage. default=50%
+"""
 # user input: 1. multi-fasta file  2. output multi-fasta file path
 fasta_path = argv[1]
 outfile = argv[2]
