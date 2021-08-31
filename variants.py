@@ -2,6 +2,7 @@ from Bio import SeqIO
 import csv
 import pandas as pd
 from sys import argv
+from pathlib import Path
 import operator
 
 """
@@ -9,7 +10,19 @@ create variants table - for each sample in fasta multiple alignment file a covid
 including pangolin and nextclades variants as well. 
 """
 
+def format_rows(var):
+    fraction = f'({int(lin_number[var][0])}/{int(lin_number[var][1])})'
+    fraction_noN = f'({int(lin_number_noN[var][0])}/{int(lin_number_noN[var][1])})'
+    row = f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
+          f'noN: {lin_percentages_noN[var]}% {fraction_noN}'
+    return row
 
+def sort_variants_per_sample(sortby):
+    s = pd.Series(sortby)
+    s = s.sort_values(ascending=False)
+    s = s.index.map(format_rows).tolist()
+    return s
+    
 def calculate_coverage(fasta_seq):
     """
     calculate percentage of coverage of fasta sequence. % of no Ns # TODO: include '-'?
@@ -133,6 +146,7 @@ mutations_by_lineage = {key: excel_mutTable[key].variant.tolist() for key in
                         excel_mutTable}  # mutations table with only lineage: mutation name
 
 final_table = []
+ranked_variants_dict = dict()
 # iterate over all samples mutations and determine variants
 for sample, sample_mutlist in samples_mutations.items():
     known_variant = ""
@@ -167,6 +181,9 @@ for sample, sample_mutlist in samples_mutations.items():
         lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts)))  # tuple:
         # (#lin_mutation_sample, #tot_lin_mutations)
         lin_number_noN[lin] = (len(set(temp_mutes)), len(set(no_N_mutations))) if no_N_mutations else (0, 0)
+        
+    
+    ranked_variants_dict[sample] = sort_variants_per_sample(lin_percentages_noN)
 
     if not known_variant:  # did not find variant that has 100% mutations in sample
         var = max(lin_percentages_noN.items(), key=operator.itemgetter(1))[0]
@@ -264,4 +281,9 @@ with open(output_file, 'w') as outfile:
     for line in final_table:
         writer.writerow(line)
 
+
+output_path = Path(output_file).parent
+ranked_variants_file = output_path / 'ranked_variants.csv'
+ranked_variants_df = pd.DataFrame(ranked_variants_dict)
+ranked_variants_df.to_csv(ranked_variants_file)
 # write a report of all the variants (that are not 0%) with percentages for each sample
