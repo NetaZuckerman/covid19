@@ -153,7 +153,11 @@ mutations_by_lineage = {key: excel_mutTable[key].variant.tolist() for key in
 final_table = []
 ranked_variants_dict = dict()
 # iterate over all samples mutations and determine variants
+n = len(samples_mutations)
+c = 0
 for sample, sample_mutlist in samples_mutations.items():
+    c += 1
+    print(c/n)
     known_variant = ""
     notes = ''
     suspect_info = ''
