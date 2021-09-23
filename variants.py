@@ -2,7 +2,6 @@ from Bio import SeqIO
 import csv
 import pandas as pd
 from sys import argv
-from scipy.stats import binom
 from pathlib import Path
 import operator
 from datetime import datetime
@@ -16,31 +15,15 @@ def format_rows(var):
     fraction = f'({int(lin_number[var][0])}/{int(lin_number[var][1])})'
     fraction_noN = f'({int(lin_number_noN[var][0])}/{int(lin_number_noN[var][1])})'
     row = f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
-          f'noN: {lin_percentages_noN[var]}% {fraction_noN} ;' \
-          f'p={lin_binomial[var]}'
+          f'noN: {lin_percentages_noN[var]}% {fraction_noN}'
     return row
 
-def sort_variants_per_sample(sortby, ascending=False):
+def sort_variants_per_sample(sortby):
     s = pd.Series(sortby)
-    s = s.sort_values(ascending=ascending)
+    s = s.sort_values(ascending=False)
     s = s.index.map(format_rows).tolist()
     return s
-
-def format_line(variant):
-    suspect_info = f"{variant}: {lin_percentages[variant]}% " \
-                       f"({lin_number[variant][0]}/{lin_number[variant][1]}); " \
-                       f"noN: {lin_percentages_noN[variant]}% ({lin_number_noN[variant][0]}/" \
-                       f"{lin_number_noN[variant][1]})"
-    return suspect_info
     
-def determine_variant():
-    max_count = max(list(map(lambda x: x[0], lin_number_noN.values())))
-    candidates = [var for var, count in lin_number_noN.items() if count[0] == max_count]
-    candidates_freq = {candidate : lin_percentages_noN[candidate] for candidate in candidates}
-    variant = max(candidates_freq.items(), key=operator.itemgetter(1))[0]
-    suspect_info = format_line(variant)
-    return suspect_info
-
 def calculate_coverage(fasta_seq):
     """
     calculate percentage of coverage of fasta sequence. % of no Ns # TODO: include '-'?
@@ -176,7 +159,6 @@ for sample, sample_mutlist in samples_mutations.items():
     suspect_info = ''
     lin_percentages = {}
     lin_percentages_noN = {}
-    lin_binomial = {}
     lin_number = {}
     lin_number_noN = {}
     lin_not_covered = {}
@@ -204,13 +186,9 @@ for sample, sample_mutlist in samples_mutations.items():
         lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts)))  # tuple:
         # (#lin_mutation_sample, #tot_lin_mutations)
         lin_number_noN[lin] = (len(set(temp_mutes)), len(set(no_N_mutations))) if no_N_mutations else (0, 0)
-        lin_binomial[lin] = binom.pmf(
-            k=lin_number_noN[lin][0],
-            n=lin_number_noN[lin][1],
-            p=0.25)
         
     
-    ranked_variants_dict[sample] = sort_variants_per_sample(lin_binomial, ascending=True)
+    ranked_variants_dict[sample] = sort_variants_per_sample(lin_percentages_noN)
 
     if not known_variant:  # did not find variant that has 100% mutations in sample
         var = max(lin_percentages_noN.items(), key=operator.itemgetter(1))[0]
@@ -244,9 +222,6 @@ for sample, sample_mutlist in samples_mutations.items():
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
         suspect_info = 'suspect'
-        
-    suspect_info = determine_variant() 
-    
 
     # get coverage of sample from qc report.txt
     if qc_report_path:
