@@ -56,7 +56,7 @@ clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
 output_path = Path(output_file).parent
 outfile = datetime.now().strftime('%Y%m%d') + '_variants.csv'
-outfile = output_file / outfile
+outfile = output_path / outfile
 
 if len(argv) > 6:
     qc_report_path = argv[6]
