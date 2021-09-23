@@ -5,6 +5,7 @@ from sys import argv
 from scipy.stats import binom
 from pathlib import Path
 import operator
+from datetime import datetime
 
 """
 create variants table - for each sample in fasta multiple alignment file a covid variant is decided if found.
@@ -70,6 +71,10 @@ output_file = argv[2]
 pangolin_file = argv[3]
 clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
+output_path = Path(output_file).parent
+outfile = datetime.now().strftime('%Y%m%d') + '_variants.csv'
+outfile = output_file / outfile
+
 if len(argv) > 6:
     qc_report_path = argv[6]
     try:
@@ -307,7 +312,7 @@ with open(output_file, 'w') as outfile:
         writer.writerow(line)
 
 
-output_path = Path(output_file).parent
+
 ranked_variants_file = output_path / 'ranked_variants.csv'
 ranked_variants_df = pd.DataFrame(ranked_variants_dict)
 ranked_variants_df.to_csv(ranked_variants_file)
