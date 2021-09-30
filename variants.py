@@ -74,8 +74,8 @@ pangolin_file = argv[3]
 clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
 output_path = Path(output_file).parent
-outfile = datetime.now().strftime('%Y%m%d') + '_variants.csv'
-outfile = output_path / outfile
+out_fname = datetime.now().strftime('%Y%m%d') + '_variants.csv'
+output_file = output_path / out_fname
 
 if len(argv) > 6:
     qc_report_path = argv[6]
@@ -176,7 +176,7 @@ n = len(samples_mutations)
 c = 0
 for sample, sample_mutlist in samples_mutations.items():
     c += 1
-    print(c/n)
+    # print(c/n)
     known_variant = ""
     notes = ''
     suspect_info = ''
