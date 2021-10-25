@@ -36,7 +36,7 @@ def format_line(variant):
 
 def determine_variant():
     max_count = max(list(map(lambda x: x[0], lin_number_noN.values())))
-    candidates = [var for var, count in lin_number_noN.items() if count[0] == max_count]
+    candidates = [var for var, count in lin_number_noN.items() if count[0] >= max_count-1]
     candidates_freq = {candidate : lin_percentages_noN[candidate] for candidate in candidates}
     variant = max(candidates_freq.items(), key=operator.itemgetter(1))[0]
     suspect_info = format_line(variant)
