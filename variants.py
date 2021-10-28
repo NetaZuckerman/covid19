@@ -77,6 +77,8 @@ output_path = Path(output_file).parent
 out_fname = datetime.now().strftime('%Y%m%d') + '_variants.csv'
 output_file = output_path / out_fname
 
+red_flags_df = pd.read_csv('red_flags.csv')
+
 if len(argv) > 6:
     qc_report_path = argv[6]
     try:
@@ -119,10 +121,11 @@ alignment.pop('NC_045512.2', None)
 alignment.pop('REF_NC_045512.2', None)
 
 # prepare nextclade dataframe
-clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'insertions']]
+clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'insertions', 'substitutions']]
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
 clades_df['sample'] = clades_df['sample'].apply(str)
 clades_df = clades_df.fillna('')
+
 # create dict of aasubstitutions and aadeletions. key=sample id, value=list of substitutions. to keep for final table.
 aa_substitution_dict = {}
 aa_deletions_dict = {}
@@ -131,6 +134,7 @@ for sample in clades_df['sample']:  # change appearance from nextclade format to
     aasubs = clades_df[clades_df['sample'] == sample].aaSubstitutions.values.tolist()
     aadels = clades_df[clades_df['sample'] == sample].aaDeletions.values.tolist()
     insertions = clades_df[clades_df['sample'] == sample].insertions.values.tolist()
+    
     # ';' instead of ',' as sep. for Ari's tables -> important
     aa_substitution_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aasubs[0].split(',')] \
         if (aasubs and aasubs != ['']) else ''
@@ -287,12 +291,21 @@ for sample, sample_mutlist in samples_mutations.items():
 
     not_covered_list = ";".join(set(not_covered_list)) if not_covered_list else ''
 
+    nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
+
+
+    
+    red_flags = nt_substitutions.loc[nt_substitutions.isin(red_flags_df['SNP'])]
+    red_flags_str = ';'.join(red_flags)
+
     line = {
         "Sample": sample,
         "Variant": pangolin_clade if not QCfail else "QC fail",
         "suspect": None,
         "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect').lstrip(' ') if suspect_info else '',
         "suspect info": suspect_info,  # TODO add more info
+        'nt substitutions' : ';'.join(nt_substitutions.values[0]),
+        'red_flags' : red_flags_str,
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
                                                                       sample in aa_substitution_dict else 'NA',
         "AA deletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
@@ -308,7 +321,7 @@ for sample, sample_mutlist in samples_mutations.items():
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
-    fieldnames = ["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
+    fieldnames = ["Sample", "Variant", "suspect", "suspected variant", 'nt substitutions', 'red_flags', "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
                   "pangolin clade", "pangolin scorpio", "nextstrain clade"]
     writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
