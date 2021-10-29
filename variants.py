@@ -73,11 +73,12 @@ output_file = argv[2]
 pangolin_file = argv[3]
 clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
+red_flags_path = excel_path.replace('mutationsTable.xlsx', 'red_flags.csv')
 output_path = Path(output_file).parent
 out_fname = datetime.now().strftime('%Y%m%d') + '_variants.csv'
 output_file = output_path / out_fname
 
-red_flags_df = pd.read_csv('red_flags.csv')
+red_flags_df = pd.read_csv(red_flags_path)
 
 if len(argv) > 6:
     qc_report_path = argv[6]
