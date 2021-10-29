@@ -292,12 +292,12 @@ for sample, sample_mutlist in samples_mutations.items():
 
     not_covered_list = ";".join(set(not_covered_list)) if not_covered_list else ''
 
-    nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
+    # nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
 
 
     
-    red_flags = nt_substitutions.loc[nt_substitutions.isin(red_flags_df['SNP'])]
-    red_flags_str = ';'.join(red_flags)
+    # red_flags = nt_substitutions.loc[nt_substitutions.isin(red_flags_df['SNP'])]
+    # red_flags_str = ';'.join(red_flags)
 
     line = {
         "Sample": sample,
@@ -305,8 +305,8 @@ for sample, sample_mutlist in samples_mutations.items():
         "suspect": None,
         "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect').lstrip(' ') if suspect_info else '',
         "suspect info": suspect_info,  # TODO add more info
-        'nt substitutions' : ';'.join(nt_substitutions.values[0]),
-        'red_flags' : red_flags_str,
+        # 'nt substitutions' : ';'.join(nt_substitutions.values[0]),
+        # 'red_flags' : red_flags_str,
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
                                                                       sample in aa_substitution_dict else 'NA',
         "AA deletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
