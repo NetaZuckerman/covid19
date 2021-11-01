@@ -67,12 +67,25 @@ def remove_prefix(text, prefix):
     return text
 
 
-# get user input
-alignment_file = argv[1]
-output_file = argv[2]
-pangolin_file = argv[3]
-clades_path = argv[4]  # nextclade tsv
-excel_path = argv[5]  # mutations table path
+
+DEBUG = False
+if DEBUG:
+    debug_path = Path('/home/omera/Code/sandbox/ar/L46')
+    alignment_file = debug_path / 'alignment' / 'all_aligned.fasta'
+    output_file = debug_path / 'results' / 'variants_debug.csv'
+    pangolin_file = debug_path / 'results' / 'pangolinClades.csv'
+    clades_path = debug_path / 'results' / 'nextclade.tsv'
+    excel_path = '/home/omera/Code/covid19/mutationsTable.xlsx'
+    
+else:
+    # get user input
+    alignment_file = argv[1]
+    output_file = argv[2]
+    pangolin_file = argv[3]
+    clades_path = argv[4]  # nextclade tsv
+    excel_path = argv[5]  # mutations table path
+    
+    
 red_flags_path = excel_path.replace('mutationsTable.xlsx', 'red_flags.csv')
 output_path = Path(output_file).parent
 out_fname = datetime.now().strftime('%Y%m%d') + '_variants.csv'
@@ -291,13 +304,13 @@ for sample, sample_mutlist in samples_mutations.items():
             not_covered_list.append(mut + "()")
 
     not_covered_list = ";".join(set(not_covered_list)) if not_covered_list else ''
-
-    # nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
+    
+    nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
 
 
     
-    # red_flags = nt_substitutions.loc[nt_substitutions.isin(red_flags_df['SNP'])]
-    # red_flags_str = ';'.join(red_flags)
+    red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions.values[0]), 'SNP']
+    red_flags_str = ';'.join(red_flags)
 
     line = {
         "Sample": sample,
@@ -305,8 +318,8 @@ for sample, sample_mutlist in samples_mutations.items():
         "suspect": None,
         "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect').lstrip(' ') if suspect_info else '',
         "suspect info": suspect_info,  # TODO add more info
-        # 'nt substitutions' : ';'.join(nt_substitutions.values[0]),
-        # 'red_flags' : red_flags_str,
+        'nt substitutions' : ';'.join(nt_substitutions.values[0]),
+        'red_flags' : red_flags_str,
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
                                                                       sample in aa_substitution_dict else 'NA',
         "AA deletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
@@ -322,9 +335,9 @@ for sample, sample_mutlist in samples_mutations.items():
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
-    fieldnames = ["Sample", "Variant", "suspect", "suspected variant", 'nt substitutions', 'red_flags', "suspect info", "AA substitutions",
+    fieldnames = ["Sample", "Variant", "suspect", "suspected variant", 'red_flags', "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
-                  "pangolin clade", "pangolin scorpio", "nextstrain clade"]
+                  "pangolin clade", "pangolin scorpio", "nextstrain clade", 'nt substitutions']
     writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:
