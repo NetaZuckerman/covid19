@@ -70,7 +70,7 @@ def remove_prefix(text, prefix):
 
 DEBUG = False
 if DEBUG:
-    debug_path = Path('/home/omera/Code/sandbox/ar/L46')
+    debug_path = Path('/home/omera/Code/sandbox/ar/128')
     alignment_file = debug_path / 'alignment' / 'all_aligned.fasta'
     output_file = debug_path / 'results' / 'variants_debug.csv'
     pangolin_file = debug_path / 'results' / 'pangolinClades.csv'
@@ -308,9 +308,12 @@ for sample, sample_mutlist in samples_mutations.items():
     nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
 
 
-    
-    red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions.values[0]), 'SNP']
-    red_flags_str = ';'.join(red_flags)
+    if not nt_substitutions.empty:
+        red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions.values[0]), 'SNP']
+        red_flags_str = ';'.join(red_flags)
+        nt_substitutions_str = ';'.join(nt_substitutions.values[0])
+    else:
+        red_flags_str = nt_substitutions_str = ''
 
     line = {
         "Sample": sample,
@@ -318,7 +321,7 @@ for sample, sample_mutlist in samples_mutations.items():
         "suspect": None,
         "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect').lstrip(' ') if suspect_info else '',
         "suspect info": suspect_info,  # TODO add more info
-        'nt substitutions' : ';'.join(nt_substitutions.values[0]),
+        'nt substitutions' : nt_substitutions_str,
         'red_flags' : red_flags_str,
         "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
                                                                       sample in aa_substitution_dict else 'NA',
