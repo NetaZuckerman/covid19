@@ -193,7 +193,8 @@ before the run. \
 ### Usage:
 `bash /path/to/minipipeline.sh -i fasta_path.fa -r covid_refseq.fasta` 
 #### --dontAlign : run the minipipeline with aligned fasta input. (optional)
-`bash minipipeline.sh -i alignment.fasta -r refseq.fa --dontAlign` 
+The first sequence in the alignment must be the reference sequence \
+`bash minipipeline.sh -i alignment.fasta --dontAlign` 
 
 ---------------
 Dana Bar-Ilan. 
