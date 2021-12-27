@@ -125,7 +125,7 @@ NOTE: When adding new arguments to csv, add the argument as it will appear in th
 Don't worry about indexing the fasta file, it happens automatically.
 
 #### --spike (optional)
-run the pipeline for hi-spike sequencing.
+run the pipeline for hi-spike sequencing. \
  `bash pipeline.sh  -r path/to/spike_ref.fa -i path/to/fastq/location -o path/for/output/reports --spike `
 
 ### If you are still confused, here are some examples
@@ -192,7 +192,7 @@ As in the regular pipeline, make sure to set the CoronaPipeline conda environmen
 before the run. \
 ### Usage:
 `bash /path/to/minipipeline.sh -i fasta_path.fa -r covid_refseq.fasta` \
-#### --dontAlign : run the minipipeline with aligned fasta input \
+#### --dontAlign : run the minipipeline with aligned fasta input. (optional)
 
 ---------------
 Dana Bar-Ilan. 
