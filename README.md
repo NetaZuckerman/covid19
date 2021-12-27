@@ -191,7 +191,7 @@ Check out pipeline.sh code for specifics.
 As in the regular pipeline, make sure to set the CoronaPipeline conda environment. No need to actiavte it 
 before the run. \
 ### Usage:
-`bash /path/to/minipipeline.sh -i fasta_path.fa -r covid_refseq.fasta` \
+`bash /path/to/minipipeline.sh -i fasta_path.fa -r covid_refseq.fasta` 
 #### --dontAlign : run the minipipeline with aligned fasta input. (optional)
 `bash minipipeline.sh -i alignment.fasta -r refseq.fa --dontAlign` 
 
