@@ -235,7 +235,7 @@ for sample, sample_mutlist in samples_mutations.items():
             n=lin_number_noN[lin][1],
             p=0.25)
     
-    ranked_variants_dict[sample] = sort_variants_per_sample(lin_percentages_noN, ascending=True)
+    ranked_variants_dict[sample] = sort_variants_per_sample(lin_number_noN, ascending=True)
 
     if not known_variant:  # did not find variant that has 100% mutations in sample
         var = max(lin_percentages_noN.items(), key=operator.itemgetter(1))[0]
