@@ -36,6 +36,7 @@ required: [-h | -d | -i AND -r]
 optional:
 --threads       [int]           number of threads. default: 32
 -s|--single-end                 single end sequencing
+--spike                         spike sequencing only
 
 EOF
 exit 0
@@ -69,6 +70,10 @@ function get_user_input() {
         ;;
       -s|--single-end)
         single_end=true
+        shift
+        ;;
+      --spike)
+        spike=true
         shift
         ;;
       -*|--*=)
@@ -251,6 +256,11 @@ function mafft_alignment() {
 
 
 function muttable() {
+
+    if [ $spike == true ]; then
+       python "$path"/variants_spike.py alignment/all_aligned.fasta results/variants.csv "$path"/mutationsTable.xlsx QC/report.txt
+       echo "worksssssssss"
+    else
     # run pangolin
     conda deactivate
 
@@ -263,9 +273,12 @@ function muttable() {
     conda deactivate
 
     conda activate CoronaPipeline
-    python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx  "$path"/mutationsTable.xlsx
-    python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-    python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx QC/report.txt
+
+          python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx  "$path"/mutationsTable.xlsx
+          python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
+          python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx QC/report.txt
+
+    fi
 }
 
 function over_50() {

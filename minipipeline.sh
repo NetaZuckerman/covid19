@@ -26,6 +26,11 @@ function get_user_input() {
         unaligned="$1"
         shift
         ;;
+        --dontAlign)
+        shift
+        dontAlign=true
+        shift
+        ;;
       -r|--reference-sequence)
         shift
         refseq="$1"
@@ -57,10 +62,19 @@ conda activate nextstrain
 # nextclade (-t: tsv output)
 nextclade -i "$unaligned" -t results/nextclade.tsv > /dev/null 2>&1
 # align multifasta to reference sequence using augur align:
-augur align \
---sequences "$unaligned" \
---reference-sequence "$refseq" \
---output alignment/all_aligned.fasta
+
+
+if  [ -z "$dontAlign" ] ; then
+  augur align \
+  --sequences "$unaligned" \
+  --reference-sequence "$refseq" \
+  --output alignment/all_aligned.fasta
+fi
+
+if  [ "$dontAlign" == true ] ; then
+  echo "dont align on "
+fi
+
 
 conda deactivate
 

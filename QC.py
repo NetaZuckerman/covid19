@@ -6,7 +6,7 @@ import os  # to run os commands
 import fnmatch  # regex
 import pathlib  # only > python 3.5!
 
-trimm_path='/data/software/trimmomatic/Trimmomatic-0.39/trimmomatic-0.39.jar'
+trimm_path='trimmomatic-0.39.jar'
 
 
 class InputError(Exception):
@@ -63,8 +63,8 @@ def crop(numbases, path='fastq/raw/', prefix_out="fastq/trimmed/"):
         out_f = prefix_out + file.rstrip('.fastq.gz')
         out_f_paired = out_f + '.fastq.gz'
         out_f_unpaired = out_f + '_singletons.fastq.gz'
-        out_r = prefix_out + file.rstrip('.fastq.gz')
-        out_r_paired = out_f + '.fastq.gz'
+        out_r = prefix_out + file.replace('R1', 'R2').rstrip('.fastq.gz')
+        out_r_paired = out_r + '.fastq.gz'
         out_r_unpaired = out_r + '_singletons.fastq.gz'
         command += [r1, r2, out_f_paired, out_f_unpaired, out_r_paired, out_r_unpaired, "CROP:"+crop_length]
         print(command)
