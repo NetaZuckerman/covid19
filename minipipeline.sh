@@ -54,28 +54,21 @@ get_user_input "$@"
 # check input:
 echo "checking input.."
 [[ -z "$unaligned" ]] && echo "Please provide multi-fasta sequence (-i|--sequences)" && exit 0
-[[ -z "$refseq" ]] && echo "Please provide reference sequence (-r|--reference-sequence)" && exit 0
+[[ -z "$refseq" ]] && [ -z "$dontAlign" ] && echo "Please provide reference sequence (-r|--reference-sequence)" && exit 0
 echo "all input provided. continuing."
 mkdir -p {alignment,results} # -p: create only if doesnt already exist
 
-conda activate nextstrain
-# nextclade (-t: tsv output)
-nextclade -i "$unaligned" -t results/nextclade.tsv > /dev/null 2>&1
-# align multifasta to reference sequence using augur align:
-
-
 if  [ -z "$dontAlign" ] ; then
+# align multifasta to reference sequence using augur align:
   augur align \
   --sequences "$unaligned" \
   --reference-sequence "$refseq" \
   --output alignment/all_aligned.fasta
 fi
 
-if  [ "$dontAlign" == true ] ; then
-  echo "dont align on "
-fi
-
-
+conda activate nextstrain
+# nextclade (-t: tsv output)
+nextclade -i "$unaligned" -t results/nextclade.tsv > /dev/null 2>&1
 conda deactivate
 
 conda activate pangolin
