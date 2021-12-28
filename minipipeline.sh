@@ -58,6 +58,7 @@ echo "checking input.."
 echo "all input provided. continuing."
 mkdir -p {alignment,results} # -p: create only if doesnt already exist
 
+conda activate nextstrain
 if  [ -z "$dontAlign" ] ; then
 # align multifasta to reference sequence using augur align:
   augur align \
@@ -66,7 +67,7 @@ if  [ -z "$dontAlign" ] ; then
   --output alignment/all_aligned.fasta
 fi
 
-conda activate nextstrain
+
 # nextclade (-t: tsv output)
 nextclade -i "$unaligned" -t results/nextclade.tsv > /dev/null 2>&1
 conda deactivate
