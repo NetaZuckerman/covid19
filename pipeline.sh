@@ -259,7 +259,6 @@ function muttable() {
 
     if [ $spike == true ]; then
        python "$path"/variants_spike.py alignment/all_aligned.fasta results/variants.csv "$path"/mutationsTable.xlsx QC/report.txt
-       echo "worksssssssss"
     else
     # run pangolin
     conda deactivate
