@@ -13,6 +13,10 @@ trap "kill 0" EXIT
 eval "$(conda shell.bash hook)"
 conda activate CoronaPipeline
 
+exec 3>&1 1>>"pipeline.log" 2>&1
+
+
+
 path=`dirname "${0}"`
 
 function initialize_globals() {
@@ -262,16 +266,19 @@ function muttable() {
     else
     # run pangolin
     conda deactivate
-
+    
+    echo "Run Pangolin" 1>&3
     conda activate pangolin
     pangolin alignment/all_not_aligned.fasta --outfile results/pangolinClades.csv
     conda deactivate
 
+  echo "Run Nextclade" 1>&3
     conda activate nextstrain
     nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
     conda deactivate
 
     conda activate CoronaPipeline
+    echo "Variants analysis" 1>&3
 
           python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx  "$path"/mutationsTable.xlsx
           python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
@@ -320,28 +327,34 @@ function results_report() {
 initialize_globals
 get_user_input "$@"
 check_flags
-
+echo "Starting Pipeline" 1>&3
+echo "Mapping reads to reference" 1>&3
 if [ "$single_end" == true ]; then
   single_end_mapping
 else
   # start workflow:
   map_to_ref
 fi
+echo "Filtering mapped reads" 1>&3
 keep_mapped_reads
 sort_index_bam
+echo "Calculating depth" 1>&3
 depth
+echo "Determining consensus sequences" 1>&3
 consensus
 if [ "$single_end" == false ]; then
   change_fasta_header
 fi
-
+echo "Align sequences to the reference sequence" 1>&3
 mafft_alignment
 
 over_50
+echo "Generate report" 1>&3
 results_report
 muttable
 wait
 
 conda deactivate
-echo "pipeline finished! (:"
+echo "pipeline finished! (:" 1>&3
+echo "Pipline log can be found in pipline.log" 1>&3
 
