@@ -20,10 +20,12 @@ def format_rows(var):
           f'p={lin_binomial[var]}'
     return row
 
+#sort the variants by the noN % field. (descending)
 def sort_variants_per_sample(sortby, ascending=False):
     s = pd.Series(sortby)
-    s = s.sort_values(ascending=ascending)
+    s = s.sort_values(ascending=False)
     s = s.index.map(format_rows).tolist()
+
     return s
     
 
@@ -156,31 +158,32 @@ for sample in clades_df['sample']:  # change appearance from nextclade format to
         if (aadels and aadels != ['']) else ''
     insertions_dict[sample] = insertions[0].split(',')
 
-samples_mutations = {id: [] for id in alignment}
+samples_mutations = {id: [] for id in aa_substitution_dict if id != 'REF_NC_045512.2'}
 # samples_s_not_covered = {id: [] for id in alignment}
-samples_not_covered = {id: [] for id in alignment}
-unexpected_mutations = {id: [] for id in alignment}
+samples_not_covered = {id: [] for id in aa_substitution_dict if id != 'REF_NC_045512.2'}
+unexpected_mutations = {id: [] for id in aa_substitution_dict if id != 'REF_NC_045512.2'}
 lineages_list = []
 
 # iterate over all samples in multi-fasta and over all mutations in table, and check value of each mutation
 with open("mutations.log", 'w') as log:
     for sample, record in alignment.items():
-        for (idx, row) in mutTable.iterrows():
-            if pd.isna(row.loc['Position']):
-                log.write(f"NaN: {row}")
-                continue
-            pos = int(row.loc['Position']) - 1  # mutation position
-            alt = record.seq[pos]  # fasta value in position
-            ref = row.loc['Reference']  # reference in position
-            table_mut = row.loc['Mutation']  # mutation  according to table
-            gene = row.loc['protein']
-            mutation_name = str(row.loc['variant'])
-            if alt == table_mut:  # mutation exists in sequence
-                samples_mutations[sample].append(mutation_name)
-            elif alt == 'N':  # if position not covered in sequence
-                samples_not_covered[sample].append(mutation_name)
-            elif alt != ref:  # alt is not the expected mut. and is covered in sequencing (not N)
-                unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
+        if sample in aa_substitution_dict.keys():
+            for (idx, row) in mutTable.iterrows():
+                if pd.isna(row.loc['Position']):
+                    log.write(f"NaN: {row}")
+                    continue
+                pos = int(row.loc['Position']) - 1  # mutation position
+                alt = record.seq[pos]  # fasta value in position
+                ref = row.loc['Reference']  # reference in position
+                table_mut = row.loc['Mutation']  # mutation  according to table
+                gene = row.loc['protein']
+                mutation_name = str(row.loc['variant'])
+                if alt == table_mut:  # mutation exists in sequence
+                    samples_mutations[sample].append(mutation_name)
+                elif alt == 'N':  # if position not covered in sequence
+                    samples_not_covered[sample].append(mutation_name)
+                elif alt != ref:  # alt is not the expected mut. and is covered in sequencing (not N)
+                    unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
 
 
 unique_lineages = excel_mutTable.keys()  # get list of all unique lineages (= names of sheets of excel table)
@@ -233,7 +236,7 @@ for sample, sample_mutlist in samples_mutations.items():
             n=lin_number_noN[lin][1],
             p=0.25)
     
-    ranked_variants_dict[sample] = sort_variants_per_sample(lin_binomial, ascending=True)
+    ranked_variants_dict[sample] = sort_variants_per_sample(lin_number_noN, ascending=True)
 
     if not known_variant:  # did not find variant that has 100% mutations in sample
         var = max(lin_percentages_noN.items(), key=operator.itemgetter(1))[0]
@@ -258,18 +261,18 @@ for sample, sample_mutlist in samples_mutations.items():
                        f"noN: {lin_percentages_noN[known_variant]}% ({lin_number_noN[known_variant][0]}/" \
                        f"{lin_number_noN[known_variant][1]})"
 
-    if known_variant:  # there is a variant at least X% covered
-        # then list extra mutations (= mutations that exist in nextclade list but not part of the variant)
-        subs_list = [x.split('(')[0] for x in aa_substitution_dict[sample]]  # TODO - CHECK
-        # TODO check protein as well (not just the name)
-        extra_subs = [x for x in subs_list if x not in mutations_by_lineage[known_variant]]
+    #if known_variant:  # there is a variant at least X% covered
+     #   non_variant_mut = [value for value in aa_substitution_dict[sample] if value.split("(")[0] not in mutations_by_lineage[known_variant]]
+
 
     if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
         # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
         suspect_info = 'suspect'
 
 
-    suspect_info = determine_variant() 
+    suspect_info = determine_variant()
+    sus_variant_name = suspect_info.split(':')[0] if suspect_info else ''
+
 
     # get coverage of sample from qc report.txt
     if qc_report_path:
@@ -292,6 +295,7 @@ for sample, sample_mutlist in samples_mutations.items():
     # get nextclade info from table
     nextclade = clades_df[clades_df['sample'] == sample].clade
 
+    #add protein value
     not_covered_list = []
     for mut in samples_not_covered[sample]:
         protein_values = mutTable[mutTable.variant == mut].protein.values.tolist()
@@ -308,6 +312,14 @@ for sample, sample_mutlist in samples_mutations.items():
     nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
 
 
+    non_variant_mut = [value for value in aa_substitution_dict[sample] if value.split("(")[0] not in mutations_by_lineage[sus_variant_name]]
+
+    non_variant_mut = [value for value in non_variant_mut if value.split("(")[1] not in ["ORF1a)","ORF1b)"]] #temporery - until the bodek's numecleture will match nextclade's
+    non_variant_mut = ";".join(set(non_variant_mut))
+
+
+
+
     if not nt_substitutions.empty:
         red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions.values[0]), 'SNP']
         red_flags_str = ';'.join(red_flags)
@@ -319,7 +331,7 @@ for sample, sample_mutlist in samples_mutations.items():
         "Sample": sample,
         "Variant": pangolin_clade if not QCfail else "QC fail",
         "suspect": None,
-        "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect').lstrip(' ') if suspect_info else '',
+        "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect').lstrip(' ') if int(suspect_info.split('noN:')[1].split(".")[0]) > 60 else 'QC fail', #if the suspected variant < 60% => QC fail
         "suspect info": suspect_info,  # TODO add more info
         'nt substitutions' : nt_substitutions_str,
         'red_flags' : red_flags_str,
@@ -329,7 +341,7 @@ for sample, sample_mutlist in samples_mutations.items():
                                                              in aa_deletions_dict else 'NA'),
         "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
         "mutations not covered": not_covered_list,
-        "non variant mutations": ';'.join(extra_subs) if extra_subs else '',  # mutations that are not part of variant list incase there is a known variant
+        "non variant mutations": non_variant_mut,  # mutations that are not part of variant list incase there is a known variant
         "% coverage": coverage,
         "pangolin clade": pangolin_clade,
         "pangolin scorpio": pangolin_scorpio,

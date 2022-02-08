@@ -49,6 +49,8 @@ function get_user_input() {
 }
 
 ### MAIN ###
+exec 3>&1 1>>"minipipeline.log" 2>&1
+echo "Starting Minipipeline" 1>&3
 path=$(dirname "${0}")
 get_user_input "$@"
 # check input:
@@ -60,12 +62,13 @@ mkdir -p {alignment,results} # -p: create only if doesnt already exist
 
 conda activate nextstrain
 if  [ -z "$dontAlign" ] ; then
+echo "Align multifasta to reference sequence" 1>&3
 # align multifasta to reference sequence using augur align:
-  augur align \
-  --sequences "$sequences" \
-  --reference-sequence "$refseq" \
-  --output alignment/all_aligned.fasta
-  
+#  augur align \
+#  --sequences "$sequences" \
+#  --reference-sequence "$refseq" \
+#  --output alignment/all_aligned.fasta
+  nextalign -i "$sequences" -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
   aligned="alignment/all_aligned.fasta"
 else 
   aligned=$sequences
@@ -73,17 +76,22 @@ fi
 
 
 # nextclade (-t: tsv output)
+echo "Run Nextclade" 1>&3
 nextclade -i "$sequences" -t results/nextclade.tsv > /dev/null 2>&1
 conda deactivate
 
 conda activate pangolin
+echo "Run Pangolin" 1>&3
 pangolin "$sequences" --outfile results/pangolinClades.csv
 conda deactivate
 
 
 conda activate CoronaPipeline
+echo "Variants analysis" 1>&3
 python "$path"/MutTable.py "$aligned" results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
 python "$path"/translated_table.py "$aligned" results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
 python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx
 
-echo "finished minipipeline (:"
+ 
+echo "Finished minipipeline (:" 1>&3
+echo "Minipipline log can be found in minipipline.log" 1>&3

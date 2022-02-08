@@ -147,23 +147,7 @@ function single_end_mapping() {
   done
 }
 
-# paired end mapping: map reads to reference. straight to bam format.
-function map_to_ref() {
-  # index reference
-  bwa index "$refseq"
-
-  if [ -d BAM/ ]; then # not first run, rm existing files to avoid mix ups
-    rm BAM/* 2> /dev/null #  if file not found it's ok. no need to print error to screen.
-  fi
-  if [ -d CNS/ ]; then
-    rm CNS/* 2> /dev/null
-  fi
-  if [ -d CNS_5/ ]; then
-    rm CNS_5/* 2> /dev/null
-  fi
-  mkdir -p BAM CNS alignment results  # -p: only if directory does not exist. else continue without errors.
-
-  for r1 in "$input_path"*R1*.fastq*; do
+function bwa_mem(){
     if [[ $r1 == *Undetermined*.fastq* || $r1 == *unpaired*.fastq*  || $r1 == *singletons* ]]; then # ignore undetermined and singletons
         continue
     fi
@@ -181,21 +165,48 @@ function map_to_ref() {
     fi
     output=$( echo "$output" | cut -d'_' -f 1 )  # SHORT NAME
     output=BAM/$output.bam
-
     bwa mem -v1 -t"$threads" "$refseq" "$r1" "$r2" | samtools view -@ "$threads" -b - > $output
+}
+# paired end mapping: map reads to reference. straight to bam format.
+function map_to_ref() {
+  # index reference
+  bwa index "$refseq"
+
+  if [ -d BAM/ ]; then # not first run, rm existing files to avoid mix ups
+    rm BAM/* 2> /dev/null #  if file not found it's ok. no need to print error to screen.
+  fi
+  if [ -d CNS/ ]; then
+    rm CNS/* 2> /dev/null
+  fi
+  if [ -d CNS_5/ ]; then
+    rm CNS_5/* 2> /dev/null
+  fi
+  mkdir -p BAM CNS alignment results  # -p: only if directory does not exist. else continue without errors.
+
+  for r1 in "$input_path"*R1*.fastq*; do
+    ((i=i%num_processes)); ((i++==0)) && wait
+    bwa_mem “$r1” &
   done
 }
 
 function keep_mapped_reads() {
   for file in BAM/*.bam; do
-     samtools view -@ "$threads" -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam
+    ((i=i%num_processes)); ((i++==0)) && wait
+    samtools view -@ "$threads" -b -F 260 $file > BAM/`basename $file .bam`.mapped.bam &
   done
 }
 
-function sort_index_bam() {
+function sort_bam(){
   for file in BAM/*.mapped.bam; do
-    samtools sort -@ "$threads" "$file" -o BAM/`basename "$file" .mapped.bam`.mapped.sorted.bam
-    samtools index -@ "$threads" BAM/`basename "$file" .mapped.bam`.mapped.sorted.bam
+    ((i=i%num_processes)); ((i++==0)) && wait
+    samtools sort -@ "$threads" "$file" -o BAM/`basename "$file" .mapped.bam`.mapped.sorted.bam &
+  done
+}
+
+function index_bam() {
+  for file in BAM/*.mapped.bam; do
+    ((i=i%num_processes)); ((i++==0)) && wait
+    samtools index -@ "$threads" BAM/`basename "$file" .mapped.bam`.mapped.sorted.bam &
   done
 }
 
@@ -204,7 +215,8 @@ function depth() {
     mkdir -p QC/depth/
     # create depth files from each mapped sorted and indexed bam file. -a: include all sample's positions including 0 depth.
     for file in BAM/*.mapped.sorted.bam; do
-      samtools depth -a "$file" > QC/depth/`basename "$file" .mapped.sorted.bam`.txt
+      ((i=i%num_processes)); ((i++==0)) && wait
+      samtools depth -a "$file" > QC/depth/`basename "$file" .mapped.sorted.bam`.txt &
     done
 }
 
@@ -213,20 +225,21 @@ function consensus() {
   mkdir -p CNS CNS_5
   for file in BAM/*.mapped.sorted.bam; do
     # ivar instead of bcftools:
-
+    ((i=i%num_processes)); ((i++==0)) && wait
     file_name=`basename "$file" .mapped.sorted.bam`
     if [ "$single_end" == FALSE ]; then  # if paired end leave quality threshold 20
       # CNS1
-      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 1 -p CNS/"$file_name"
+      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 1 -p CNS/"$file_name" &
       # CNS5
-      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 5 -p CNS_5/"$file_name"
+      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 5 -p CNS_5/"$file_name" &
     else  # of single end allow low quality bases (MinIon)
       # CNS1
-      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 1 -p CNS/"$file_name" -q 10
+      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 1 -p CNS/"$file_name" -q 10 &
       # CNS5
-      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 5 -p CNS_5/"$file_name" -q 10
+      samtools mpileup -A "$file" | ivar consensus -t 0.6 -m 5 -p CNS_5/"$file_name" -q 10 &
     fi
   done
+  wait
   # remove qual files:
   rm CNS/*.qual.txt CNS_5/*.qual.txt
 }
@@ -252,10 +265,14 @@ function mafft_alignment() {
   cat CNS_5/*.fa* > alignment/all_not_aligned.fasta
 #  mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout
 #  mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta
-  augur align \
-  --sequences alignment/all_not_aligned.fasta \
-  --reference-sequence "$refseq" \
-  --output alignment/all_aligned.fasta
+#  augur align \
+#  --sequences alignment/all_not_aligned.fasta \
+#  --reference-sequence "$refseq" \
+#  --output alignment/all_aligned.fasta
+  conda activate nextstrain
+  nextalign -i alignment/all_not_aligned.fasta -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
+  conda deactivate
+
 }
 
 
@@ -293,31 +310,37 @@ function over_50() {
   python "$path"/filterNPercent.py alignment/all_aligned.fasta alignment/all_aligned_over50.fasta
 }
 
+function result() {
+
+  sample_name=`basename $file .mapped.sorted.bam`
+  if [[ $sample_name == Sh_* ]]; then
+    sample_name=${sample_name/Sh_/}
+  fi
+
+  if [ "$single_end" == false ]; then
+    sample_name=$( echo "$sample_name" | cut -d'_' -f 1 ) # SHORT NAME
+  fi
+
+  original_bam=${file/.mapped.sorted.bam/.bam} # {var/find/replace}
+  tot_reads=$(samtools view -c "$original_bam") # do not use -@n when capturing output in variable
+  coverage_stats=( $(samtools coverage -H "$file" | cut -f4,5,6) ) # number of mapped reads, covered bases, coverage
+  breadth_cns5=$(cut -f3 QC/depth/`basename $file .mapped.sorted.bam`.txt | awk '$1>5{c++} END{print c+0}')
+  genome_size=$(cat QC/depth/`basename $file .mapped.sorted.bam`.txt | wc -l)
+  coverage_cns5=$(echo "$breadth_cns5/$genome_size"*100 | bc -l)
+  mapped_num=${coverage_stats[0]}
+  percentage_mapped=$(awk -v m="$mapped_num" -v t="$tot_reads" 'BEGIN {print (m/t)*100}')
+  depths=$(awk '{if($3==0){next}; if(min==""){min=max=$3}; if($3>max) {max=$3}; if($3< min) {min=$3}; total+=$3; count+=1} END {print total/count"\t"max"\t"min}' QC/depth/`basename $file .mapped.sorted.bam`.txt)
+  echo -e "${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${coverage_stats[1]}\t${coverage_stats[2]}\t${coverage_cns5}\t${depths}" >> "$report"
+}
+
+
 function results_report() {
   report=QC/report.txt
   # samtools coverage headers: 1#rname  2startpos  3endpos  4numreads  5covbases  6coverage  7meandepth  8meanbaseq  9meanmapq
   echo -e "sample\tmapped%\tmappedreads\ttotreads\tcovbases\tcoverage%\tcoverageCNS_5%\tmeandepth\tmaxdepth\tmindepth" > "$report"
   for file in BAM/*.mapped.sorted.bam; do
-
-    sample_name=`basename $file .mapped.sorted.bam`
-    if [[ $sample_name == Sh_* ]]; then
-      sample_name=${sample_name/Sh_/}
-    fi
-
-    if [ "$single_end" == false ]; then
-      sample_name=$( echo "$sample_name" | cut -d'_' -f 1 ) # SHORT NAME
-    fi
-
-    original_bam=${file/.mapped.sorted.bam/.bam} # {var/find/replace}
-    tot_reads=$(samtools view -c "$original_bam") # do not use -@n when capturing output in variable
-    coverage_stats=( $(samtools coverage -H "$file" | cut -f4,5,6) ) # number of mapped reads, covered bases, coverage
-    breadth_cns5=$(cut -f3 QC/depth/`basename $file .mapped.sorted.bam`.txt | awk '$1>5{c++} END{print c+0}')
-    genome_size=$(cat QC/depth/`basename $file .mapped.sorted.bam`.txt | wc -l)
-    coverage_cns5=$(echo "$breadth_cns5/$genome_size"*100 | bc -l)
-    mapped_num=${coverage_stats[0]}
-    percentage_mapped=$(awk -v m="$mapped_num" -v t="$tot_reads" 'BEGIN {print (m/t)*100}')
-    depths=$(awk '{if($3==0){next}; if(min==""){min=max=$3}; if($3>max) {max=$3}; if($3< min) {min=$3}; total+=$3; count+=1} END {print total/count"\t"max"\t"min}' QC/depth/`basename $file .mapped.sorted.bam`.txt)
-    echo -e "${sample_name}\t${percentage_mapped}\t${mapped_num}\t${tot_reads}\t${coverage_stats[1]}\t${coverage_stats[2]}\t${coverage_cns5}\t${depths}" >> "$report"
+    ((i=i%num_processes)); ((i++==0)) && wait
+    result “$file” &
   done
 }
 
@@ -327,19 +350,36 @@ function results_report() {
 initialize_globals
 get_user_input "$@"
 check_flags
+
+max_num_processes=$(ulimit -u)
+# An arbitrary limiting factor so that there are some free processes
+# in case I want to run something else
+limiting_factor=4
+num_processes=$((max_num_processes/limiting_factor))
+
 echo "Starting Pipeline" 1>&3
+
 echo "Mapping reads to reference" 1>&3
 if [ "$single_end" == true ]; then
   single_end_mapping
 else
   # start workflow:
   map_to_ref
+  wait  
 fi
+
 echo "Filtering mapped reads" 1>&3
 keep_mapped_reads
-sort_index_bam
+wait
+sort_bam
+wait 
+index_bam
+wait
+
 echo "Calculating depth" 1>&3
 depth
+wait
+
 echo "Determining consensus sequences" 1>&3
 consensus
 if [ "$single_end" == false ]; then
@@ -351,10 +391,10 @@ mafft_alignment
 over_50
 echo "Generate report" 1>&3
 results_report
+wait
 muttable
 wait
 
 conda deactivate
 echo "pipeline finished! (:" 1>&3
 echo "Pipline log can be found in pipline.log" 1>&3
-
