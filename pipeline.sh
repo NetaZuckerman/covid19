@@ -35,6 +35,7 @@ path=`dirname "${0}"`
 function initialize_globals() {
   dirs_flag=false
   threads=32
+  num_processes=1
   input_path=""
   single_end=false
 }
