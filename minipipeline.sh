@@ -12,7 +12,7 @@ function usage() {
     cat <<EOF
   usage: $0 [-h] [-i | --suquences] [-r | --reference-sequence]
 
-  -i | --sequences            [unaligned MULTI FASTA]
+  -i | --sequences            [MULTI FASTA]
   -r | --reference-sequence   [FASTA]
 EOF
 exit 0
@@ -23,7 +23,12 @@ function get_user_input() {
     case "$1" in
       -i|--sequences)
         shift
-        unaligned="$1"
+        sequences="$1"
+        shift
+        ;;
+        --dontAlign)
+        shift
+        dontAlign=true
         shift
         ;;
       -r|--reference-sequence)
@@ -44,33 +49,49 @@ function get_user_input() {
 }
 
 ### MAIN ###
+exec 3>&1 1>>"minipipeline.log" 2>&1
+echo "Starting Minipipeline" 1>&3
 path=$(dirname "${0}")
 get_user_input "$@"
 # check input:
 echo "checking input.."
-[[ -z "$unaligned" ]] && echo "Please provide multi-fasta sequence (-i|--sequences)" && exit 0
-[[ -z "$refseq" ]] && echo "Please provide reference sequence (-r|--reference-sequence)" && exit 0
+[[ -z "$sequences" ]] && echo "Please provide multi-fasta sequence (-i|--sequences)" && exit 0
+[[ -z "$refseq" ]] && [ -z "$dontAlign" ] && echo "Please provide reference sequence (-r|--reference-sequence)" && exit 0
 echo "all input provided. continuing."
 mkdir -p {alignment,results} # -p: create only if doesnt already exist
 
 conda activate nextstrain
-# nextclade (-t: tsv output)
-nextclade -i "$unaligned" -t results/nextclade.tsv > /dev/null 2>&1
+if  [ -z "$dontAlign" ] ; then
+echo "Align multifasta to reference sequence" 1>&3
 # align multifasta to reference sequence using augur align:
-augur align \
---sequences "$unaligned" \
---reference-sequence "$refseq" \
---output alignment/all_aligned.fasta
+#  augur align \
+#  --sequences "$sequences" \
+#  --reference-sequence "$refseq" \
+#  --output alignment/all_aligned.fasta
+  nextalign -i "$sequences" -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
+  aligned="alignment/all_aligned.fasta"
+else 
+  aligned=$sequences
+fi
 
+
+# nextclade (-t: tsv output)
+echo "Run Nextclade" 1>&3
+nextclade -i "$sequences" -t results/nextclade.tsv > /dev/null 2>&1
 conda deactivate
 
 conda activate pangolin
-pangolin "$unaligned" --outfile results/pangolinClades.csv
+echo "Run Pangolin" 1>&3
+pangolin "$sequences" --outfile results/pangolinClades.csv
 conda deactivate
 
-conda activate CoronaPipeline
-python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
-python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx
 
-echo "finished minipipeline (:"
+conda activate CoronaPipeline
+echo "Variants analysis" 1>&3
+python "$path"/MutTable.py "$aligned" results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
+python "$path"/translated_table.py "$aligned" results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
+python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx
+
+ 
+echo "Finished minipipeline (:" 1>&3
+echo "Minipipline log can be found in minipipline.log" 1>&3
