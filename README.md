@@ -207,5 +207,5 @@ The first sequence in the alignment must be the reference sequence \
 
 ---------------
 Dana Bar-Ilan. \
-last update: 13.02.2022
+last update: 13.02.2022 \
 last updated by: Hagar Morad
