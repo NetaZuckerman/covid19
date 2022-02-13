@@ -52,7 +52,7 @@ required: [-h | -d | -i AND -r]
 
 optional:
 --threads       [int]           number of threads for each sample. default: 32
--p|--processes       [int]      number of processes (samples) to run in parallel. default: 1
+-p|--processes  [int]      number of processes (samples) to run in parallel. default: 1
 -s|--single-end                 single end sequencing
 --spike                         spike sequencing only
 
