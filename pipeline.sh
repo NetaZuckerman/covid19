@@ -26,8 +26,7 @@ fi
 mkdir -p BAM CNS alignment results  # -p: only if directory does not exist. else continue without errors.
 
 
-touch results/pipeline.log
-exec 3>&1 1>>"results/pipeline.log" 2>&1
+
 
 
 
@@ -52,7 +51,8 @@ required: [-h | -d | -i AND -r]
 -r|--refseq     [refseq/path/]  user defined reference. required: refseq/path/ - path to reference fasta file
 
 optional:
---threads       [int]           number of threads. default: 32
+--threads       [int]           number of threads for each sample. default: 32
+-p|--processes       [int]      number of processes (samples) to run in parallel. default: 1
 -s|--single-end                 single end sequencing
 --spike                         spike sequencing only
 
@@ -359,6 +359,9 @@ function results_report() {
 initialize_globals
 get_user_input "$@"
 check_flags
+
+touch results/pipeline.log
+exec 3>&1 1>>"results/pipeline.log" 2>&1
 
 echo "Starting Pipeline" 1>&3
 echo "Mapping reads to reference" 1>&3
