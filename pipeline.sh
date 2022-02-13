@@ -399,4 +399,4 @@ wait
 
 conda deactivate
 echo "pipeline finished! (:" 1>&3
-echo "Pipline log can be found in pipline.log" 1>&3
+echo "Pipline log can be found in results/pipline.log" 1>&3

@@ -97,4 +97,4 @@ python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClade
 
  
 echo "Finished minipipeline (:" 1>&3
-echo "Minipipline log can be found in minipipline.log" 1>&3
+echo "Minipipline log can be found in results/minipipline.log" 1>&3
