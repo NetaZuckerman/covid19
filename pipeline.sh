@@ -13,6 +13,7 @@ trap "kill 0" EXIT
 eval "$(conda shell.bash hook)"
 conda activate CoronaPipeline
 
+touch results/pipeline.log
 exec 3>&1 1>>"results/pipeline.log" 2>&1
 
 

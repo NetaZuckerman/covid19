@@ -49,7 +49,8 @@ function get_user_input() {
 }
 
 ### MAIN ###
-exec 3>&1 1>>"minipipeline.log" 2>&1
+touch results/minipipeline.log
+exec 3>&1 1>>"results/minipipeline.log" 2>&1
 echo "Starting Minipipeline" 1>&3
 path=$(dirname "${0}")
 get_user_input "$@"
