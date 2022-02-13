@@ -206,6 +206,6 @@ The first sequence in the alignment must be the reference sequence \
 `bash minipipeline.sh -i alignment.fasta --dontAlign` 
 
 ---------------
-Dana Bar-Ilan. 
+Dana Bar-Ilan. \
 last update: 13.02.2022
 last updated by: Hagar Morad
