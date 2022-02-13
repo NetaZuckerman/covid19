@@ -49,9 +49,7 @@ function get_user_input() {
 }
 
 ### MAIN ###
-touch results/minipipeline.log
-exec 3>&1 1>>"results/minipipeline.log" 2>&1
-echo "Starting Minipipeline" 1>&3
+
 path=$(dirname "${0}")
 get_user_input "$@"
 # check input:
@@ -60,6 +58,10 @@ echo "checking input.."
 [[ -z "$refseq" ]] && [ -z "$dontAlign" ] && echo "Please provide reference sequence (-r|--reference-sequence)" && exit 0
 echo "all input provided. continuing."
 mkdir -p {alignment,results} # -p: create only if doesnt already exist
+
+touch results/minipipeline.log
+exec 3>&1 1>>"results/minipipeline.log" 2>&1
+echo "Starting Minipipeline" 1>&3
 
 conda activate nextstrain
 if  [ -z "$dontAlign" ] ; then

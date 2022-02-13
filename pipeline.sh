@@ -13,6 +13,19 @@ trap "kill 0" EXIT
 eval "$(conda shell.bash hook)"
 conda activate CoronaPipeline
 
+
+if [ -d BAM/ ]; then # not first run, rm existing files to avoid mix ups
+  rm BAM/* 2> /dev/null #  if file not found it's ok. no need to print error to screen.
+fi
+if [ -d CNS/ ]; then
+  rm CNS/* 2> /dev/null
+fi
+if [ -d CNS_5/ ]; then
+  rm CNS_5/* 2> /dev/null
+fi
+mkdir -p BAM CNS alignment results  # -p: only if directory does not exist. else continue without errors.
+
+
 touch results/pipeline.log
 exec 3>&1 1>>"results/pipeline.log" 2>&1
 
@@ -178,16 +191,6 @@ function map_to_ref() {
   # index reference
   bwa index "$refseq"
 
-  if [ -d BAM/ ]; then # not first run, rm existing files to avoid mix ups
-    rm BAM/* 2> /dev/null #  if file not found it's ok. no need to print error to screen.
-  fi
-  if [ -d CNS/ ]; then
-    rm CNS/* 2> /dev/null
-  fi
-  if [ -d CNS_5/ ]; then
-    rm CNS_5/* 2> /dev/null
-  fi
-  mkdir -p BAM CNS alignment results  # -p: only if directory does not exist. else continue without errors.
 
   for r1 in "$input_path"*R1*.fastq*; do
     ((i=i%num_processes)); ((i++==0)) && wait
