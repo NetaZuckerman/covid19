@@ -134,7 +134,7 @@ number of processes (samples) to run in parallel. default: 1. \
     
 #### -t|--threads <int> (optional)
 number of threads for each sample. default: 32. \
- `bash pipeline.sh  -r path/to/spike_ref.fa -i path/to/fastq/location -o path/for/output/reports -t 32 `
+ `bash pipeline.sh  -r path/to/spike_ref.fa -i path/to/fastq/location -o path/for/output/reports -threads 32 `
         
 
 ### If you are still confused, here are some examples
