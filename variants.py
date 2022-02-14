@@ -158,10 +158,10 @@ for sample in clades_df['sample']:  # change appearance from nextclade format to
         if (aadels and aadels != ['']) else ''
     insertions_dict[sample] = insertions[0].split(',')
 
-samples_mutations = {id: [] for id in aa_substitution_dict if id != 'REF_NC_045512.2'}
+samples_mutations = {id: [] for id in aa_substitution_dict if id in alignment}
 # samples_s_not_covered = {id: [] for id in alignment}
-samples_not_covered = {id: [] for id in aa_substitution_dict if id != 'REF_NC_045512.2'}
-unexpected_mutations = {id: [] for id in aa_substitution_dict if id != 'REF_NC_045512.2'}
+samples_not_covered = {id: [] for id in aa_substitution_dict if id in alignment}
+unexpected_mutations = {id: [] for id in aa_substitution_dict if id in alignment}
 lineages_list = []
 
 # iterate over all samples in multi-fasta and over all mutations in table, and check value of each mutation
