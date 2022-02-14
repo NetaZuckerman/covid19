@@ -279,7 +279,8 @@ for sample, sample_mutlist in samples_mutations.items():
         coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
     else:
         coverage = str(calculate_coverage(alignment[sample].seq))
-        # coverage = ''
+
+        #coverage = ''
 
     # get pangolin info from table
     try:
@@ -358,6 +359,21 @@ with open(output_file, 'w') as outfile:
     for line in final_table:
         writer.writerow(line)
 
+
+#append low quel
+    low_quel = {id: [] for id in aa_substitution_dict if id not in alignment}
+    for sample in low_quel:
+        if qc_report_path:
+            coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
+        else:
+            coverage = ""
+        line = {
+        "Sample": sample,
+        "% coverage": coverage,
+        "Variant": "QC fail",
+        "suspected variant": "QC fail"
+        }
+        writer.writerow(line)
 
 
 ranked_variants_file = output_path / 'ranked_variants.csv'
