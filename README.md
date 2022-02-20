@@ -130,7 +130,7 @@ run the pipeline for hi-spike sequencing. \
 
 #### -n|--newNextclade (optional)
 use nextclade version 1.3.0. \
- `bash pipeline.sh  -r path/to/ref.fa -i path/to/fastq/location -o path/for/output/reports -n `
+ `bash pipeline.sh  -r path/to/ref.fa -i path/to/fastq/location -o path/for/output/reports --newNextclade `
     
 #### -p|--processes <int> (optional)
 number of processes (samples) to run in parallel. default: 1. \
@@ -138,7 +138,7 @@ number of processes (samples) to run in parallel. default: 1. \
     
 #### -t|--threads <int> (optional)
 number of threads for each sample. default: 32. \
- `bash pipeline.sh  -r path/to/ref.fa -i path/to/fastq/location -o path/for/output/reports -threads 32 `
+ `bash pipeline.sh  -r path/to/ref.fa -i path/to/fastq/location -o path/for/output/reports --threads 32 `
         
 
 ### If you are still confused, here are some examples
