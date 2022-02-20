@@ -127,14 +127,18 @@ Don't worry about indexing the fasta file, it happens automatically.
 #### --spike (optional)
 run the pipeline for hi-spike sequencing. \
  `bash pipeline.sh  -r path/to/spike_ref.fa -i path/to/fastq/location -o path/for/output/reports --spike `
+
+#### -n|--newNextclade (optional)
+use nextclade version 1.3.0. \
+ `bash pipeline.sh  -r path/to/ref.fa -i path/to/fastq/location -o path/for/output/reports -n `
     
 #### -p|--processes <int> (optional)
 number of processes (samples) to run in parallel. default: 1. \
- `bash pipeline.sh  -r path/to/spike_ref.fa -i path/to/fastq/location -o path/for/output/reports -p 5 `
+ `bash pipeline.sh  -r path/to/ref.fa -i path/to/fastq/location -o path/for/output/reports -p 5 `
     
 #### -t|--threads <int> (optional)
 number of threads for each sample. default: 32. \
- `bash pipeline.sh  -r path/to/spike_ref.fa -i path/to/fastq/location -o path/for/output/reports -threads 32 `
+ `bash pipeline.sh  -r path/to/ref.fa -i path/to/fastq/location -o path/for/output/reports -threads 32 `
         
 
 ### If you are still confused, here are some examples
@@ -207,5 +211,5 @@ The first sequence in the alignment must be the reference sequence \
 
 ---------------
 Dana Bar-Ilan. \
-last update: 13.02.2022 \
+last update: 20.02.2022 \
 last updated by: Hagar Morad
