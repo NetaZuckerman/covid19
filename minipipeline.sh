@@ -14,6 +14,10 @@ function usage() {
 
   -i | --sequences            [MULTI FASTA]
   -r | --reference-sequence   [FASTA]
+
+  optional:
+  -n| --newNextclade              use nextclade version 1.3.0
+  --dontAlign                     input aligned fasta and skip alignment stage
 EOF
 exit 0
 }
@@ -26,9 +30,12 @@ function get_user_input() {
         sequences="$1"
         shift
         ;;
-        --dontAlign)
-        shift
+      --dontAlign)
         dontAlign=true
+        shift
+        ;;
+      -n| --newNextclade)
+        newNextclade=true
         shift
         ;;
       -r|--reference-sequence)
@@ -77,10 +84,13 @@ else
   aligned=$sequences
 fi
 
-
-# nextclade (-t: tsv output)
 echo "Run Nextclade" 1>&3
-nextclade -i "$sequences" -t results/nextclade.tsv > /dev/null 2>&1
+conda activate nextstrain
+if [ "$newNextclade" == true ]; then
+  nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset /mnt/data3/code/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
+else 
+  nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
+fi        
 conda deactivate
 
 conda activate pangolin

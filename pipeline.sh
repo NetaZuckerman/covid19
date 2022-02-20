@@ -38,6 +38,8 @@ function initialize_globals() {
   num_processes=1
   input_path=""
   single_end=false
+  newNextclade=false
+  spike=false
 }
 
 # parse input with flags
@@ -55,6 +57,7 @@ optional:
 --threads       [int]           number of threads for each sample. default: 32
 -p|--processes  [int]      number of processes (samples) to run in parallel. default: 1
 -s|--single-end                 single end sequencing
+-n| --newNextclade              use nextclade version 1.3.0
 --spike                         spike sequencing only
 
 EOF
@@ -94,6 +97,10 @@ function get_user_input() {
         ;;
       -s|--single-end)
         single_end=true
+        shift
+        ;;
+      -n| --newNextclade)
+        newNextclade=true
         shift
         ;;
       --spike)
@@ -280,7 +287,7 @@ function mafft_alignment() {
 #  --reference-sequence "$refseq" \
 #  --output alignment/all_aligned.fasta
   conda activate nextstrain
-  nextalign -i alignment/all_not_aligned.fasta -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
+  nextalign -i alignment/all_not_aligned.fasta -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv 
   conda deactivate
 
 }
@@ -288,7 +295,7 @@ function mafft_alignment() {
 
 function muttable() {
 
-    if [ $spike == true ]; then
+    if [ "$spike" == true ]; then
        python "$path"/variants_spike.py alignment/all_aligned.fasta results/variants.csv "$path"/mutationsTable.xlsx QC/report.txt
     else
     # run pangolin
@@ -301,7 +308,11 @@ function muttable() {
 
   echo "Run Nextclade" 1>&3
     conda activate nextstrain
-    nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
+    if [ "$newNextclade" == true ]; then
+      nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset /mnt/data3/code/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
+    else 
+        nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
+    fi
     conda deactivate
 
     conda activate CoronaPipeline
