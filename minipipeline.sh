@@ -87,9 +87,9 @@ fi
 echo "Run Nextclade" 1>&3
 conda activate nextstrain
 if [ "$newNextclade" == true ]; then
-  nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
+  nextclade --input-fasta "$aligned" --input-dataset nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
 else 
-  nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
+  nextclade -i "$aligned" -t results/nextclade.tsv
 fi        
 conda deactivate
 
