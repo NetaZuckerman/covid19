@@ -309,7 +309,7 @@ function muttable() {
   echo "Run Nextclade" 1>&3
     conda activate nextstrain
     if [ "$newNextclade" == true ]; then
-      nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset /mnt/data3/code/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
+      nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
     else 
         nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
     fi
@@ -319,7 +319,7 @@ function muttable() {
     echo "Variants analysis" 1>&3
 
           python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx  "$path"/mutationsTable.xlsx
-          python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
+          #python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
           python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx QC/report.txt
 
     fi

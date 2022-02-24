@@ -118,17 +118,17 @@ clades_df = pd.read_csv(clades_path, sep='\t')
 
 # excel muttable:
 excel_mutTable = pd.read_excel(excel_path, sheet_name=None, engine='openpyxl')
-for name in excel_mutTable:
-    excel_mutTable[name]['lineage'] = name  # add a lineage column to all variant's tables
-    excel_mutTable[name]['variant'] = excel_mutTable[name]['variant'].astype(str)
+#for name in excel_mutTable:
+#    excel_mutTable[name]['lineage'] = name  # add a lineage column to all variant's tables
+#    excel_mutTable[name]['variant'] = excel_mutTable[name]['variant'].astype(str)
 
 
 mutTable = pd.concat(excel_mutTable.values(), ignore_index=True)
-mutTable['Mutation type'] = mutTable['Mutation type'].str.lower()
-mutTable = mutTable[mutTable['Mutation type'] != 'insertion']
+mutTable['mutation type'] = mutTable['mutation type'].str.lower()
+mutTable = mutTable[mutTable['mutation type'] != 'insertion']
 # prepare mutations table dataframe
-mutTable["Reference"] = mutTable["Reference"].str.upper()  # make sure all upper case for safe comparisons
-mutTable["Mutation"] = mutTable["Mutation"].str.upper()
+mutTable["reference"] = mutTable["reference"].str.upper()  # make sure all upper case for safe comparisons
+mutTable["mutation"] = mutTable["mutation"].str.upper()
 mutTable = mutTable.dropna(thresh=3)
 
 # prepare multiple alignment dictionary (key: sample name, val: SeqIO record)
@@ -169,13 +169,13 @@ with open("mutations.log", 'w') as log:
     for sample, record in alignment.items():
         if sample in aa_substitution_dict.keys():
             for (idx, row) in mutTable.iterrows():
-                if pd.isna(row.loc['Position']):
+                if pd.isna(row.loc['position']):
                     log.write(f"NaN: {row}")
                     continue
-                pos = int(row.loc['Position']) - 1  # mutation position
+                pos = int(row.loc['position']) - 1  # mutation position
                 alt = record.seq[pos]  # fasta value in position
-                ref = row.loc['Reference']  # reference in position
-                table_mut = row.loc['Mutation']  # mutation  according to table
+                ref = row.loc['reference']  # reference in position
+                table_mut = row.loc['mutation']  # mutation  according to table
                 gene = row.loc['protein']
                 mutation_name = str(row.loc['variant'])
                 if alt == table_mut:  # mutation exists in sequence
@@ -186,10 +186,7 @@ with open("mutations.log", 'w') as log:
                     unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
 
 
-unique_lineages = excel_mutTable.keys()  # get list of all unique lineages (= names of sheets of excel table)
-mutations_by_lineage = {key: excel_mutTable[key].variant.tolist() for key in
-                        excel_mutTable}  # mutations table with only lineage: mutation name
-
+mutations_by_lineage = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
 final_table = []
 ranked_variants_dict = dict()
 # iterate over all samples mutations and determine variants
