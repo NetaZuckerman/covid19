@@ -30,8 +30,8 @@ for name in excel_table:
     excel_table[name]['lineage'] = name  # add lineage column to all tables before joining them
 
 df = pd.concat(excel_table.values(), ignore_index=True)
-df = df[['Position', 'Reference', 'Mutation', 'protein',
-                     'variant', 'Mutation type', 'lineage', 'annotation']]  # select subset of columns
+df = df[['position', 'reference', 'mutation', 'protein',
+                     'variant', 'mutation type', 'lineage', 'annotation']]  # select subset of columns
 # compress identical mutations into one line and concat lineage names in the lineage column:
 # df = df.groupby(  # to create compressed table:
 #     ['Position', 'Reference', 'Mutation', 'protein', 'variant', 'Mutation type', 'annotation'], as_index=False).agg(
@@ -49,20 +49,20 @@ for file, seqrecord in fastadict.items():
     seq = seqrecord.seq
     samples.append(file)  # keep sample names in list
     mutpositions = []
-    for pos in df["Position"]:  # for each mutations position get the value from fasta record (-1 bcs index starts from 0)
+    for pos in df["position"]:  # for each mutations position get the value from fasta record (-1 bcs index starts from 0)
         if pd.isna(pos):
             continue
         x = seq[int(pos)-1]
         mutpositions.append(x)
     df[file] = mutpositions  # add sample as column
 
-df = df[df['Mutation type'].str.lower() != 'insertion']  # ignore insertions # ignore case to avoid mistakes
+df = df[df['mutation type'].str.lower() != 'insertion']  # ignore insertions # ignore case to avoid mistakes
 varcol = df.apply(lambda row: row[9:].unique(), axis=1)  # add var columns- show which values in row (from col9 forward
 # because 9 first columns are the muations table)
 df.insert(6, "var", varcol)
 df = df.sort_values(by=["lineage", "protein"], ascending=[True, False])  # sort by lineage and gene
-df = df.rename(columns={'Position': 'nuc pos', 'Mutation type': 'type', 'protein': 'gene',
-                        'variant': 'name', 'Reference': 'REF', 'Mutation': 'mut'})
+df = df.rename(columns={'position': 'nuc pos', 'mutation type': 'type', 'protein': 'gene',
+                        'variant': 'name', 'reference': 'REF', 'mutation': 'mut'})
 
 # change order of columns
 sorted_cols = ['nuc pos', 'type', 'gene', 'var', 'name', 'lineage', 'annotation', 'REF', 'mut'] # re-order columns
