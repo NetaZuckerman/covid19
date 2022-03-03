@@ -56,7 +56,7 @@ function get_user_input() {
 }
 
 ### MAIN ###
-
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 path=$(dirname "${0}")
 get_user_input "$@"
 # check input:
@@ -87,7 +87,7 @@ fi
 echo "Run Nextclade" 1>&3
 conda activate nextstrain
 if [ "$newNextclade" == true ]; then
-  nextclade --input-fasta "$aligned"  --input-dataset nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
+  nextclade --input-fasta "$aligned"  --input-dataset $SCRIPT_DIR/nextclade --output-dir $SCRIPT_DIR/nextclade/ --output-tsv results/nextclade.tsv
 else 
   nextclade -i "$aligned" -t results/nextclade.tsv
 fi        
