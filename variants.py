@@ -68,7 +68,40 @@ def remove_prefix(text, prefix):
         return text[len(prefix):]
     return text
 
+def recombinant_suspect(nt_substitutions_list, suspect_info):
+    if not suspect_info.startswith(("BA.1", "BA.2", "B.1.617.2 signature d")) : 
+        return ""
+    else:
+        ba1_muts = [value for value in unique_muts[unique_muts["lineage"] == "BA.1"].substitution.tolist() if value in nt_substitutions_list]
+        ba2_muts = [value for value in unique_muts[unique_muts["lineage"] == "BA.2"].substitution.tolist() if value in nt_substitutions_list]
+        deltaD_muts = [value for value in unique_muts[unique_muts["lineage"] == "B.1.617.2 signature d"].substitution.tolist() if value in nt_substitutions_list]
+        
+        suspect_rec_muts = unique_muts[unique_muts.substitution.isin([*ba1_muts, *ba2_muts ,*deltaD_muts])].sort_values(by=['position']).reset_index()
+        swap = 0 #count the swaps between variants
+        mut_counter = 0 #count the mutations of the current variant
+        brkpnt =[] #list of swaps position
+        for index, row in suspect_rec_muts.iterrows():
+            if index == 0:
+                var = row['lineage']
+            mut_counter += 1
+            temp = var
+            var = row['lineage']
+            if var != temp:
+                swap += 1
+                brkpnt.append(str(suspect_rec_muts.iloc[index-1]["position"]) + "-" + str(suspect_rec_muts.iloc[index]["position"]))  #position of variant swap
 
+        rec = {
+            "Sample": sample,
+            "swaps": swap,
+            "BA.1 mutations": ';'.join(ba1_muts),
+            "BA.2 mutations": ';'.join(ba2_muts),
+            "deltaD mutations": ';'.join(deltaD_muts),
+            "breakpoints": ';'.join(brkpnt)
+            }
+        recombinants.append(rec)
+        if swap == 1 and ( (len(ba1_muts)>2 and len(ba2_muts)>2) or (len(ba1_muts)>2 and len(deltaD_muts)>2) or (len(deltaD_muts)>2 and len(ba2_muts)>2) ):
+            return "X"
+        return ""
 
 DEBUG = False
 if DEBUG:
@@ -94,6 +127,9 @@ out_fname = datetime.now().strftime('%Y%m%d') + '_variants.csv'
 output_file = output_path / out_fname
 
 red_flags_df = pd.read_csv(red_flags_path)
+
+unique_muts = pd.read_excel(excel_path.replace("mutationsTable.xlsx","unique_BA.1_BA.2_DeltaD_muts.xlsx"), engine='openpyxl')
+
 
 if len(argv) > 6:
     qc_report_path = argv[6]
@@ -182,7 +218,9 @@ with open("mutations.log", 'w') as log:
 
 
 mutations_by_lineage = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
+
 final_table = []
+recombinants = []
 ranked_variants_dict = dict()
 # iterate over all samples mutations and determine variants
 n = len(samples_mutations)
@@ -302,21 +340,19 @@ for sample, sample_mutlist in samples_mutations.items():
 
     not_covered_list = ";".join(set(not_covered_list)) if not_covered_list else ''
     
+    
     nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
-
-
+    nt_substitutions_list = ';'.join(nt_substitutions.values[0]).split(";")
+    
     non_variant_mut = [value for value in aa_substitution_dict[sample] if value.split("(")[0] not in mutations_by_lineage[sus_variant_name]]
-
     non_variant_mut = [value for value in non_variant_mut if value.split("(")[1] not in ["ORF1a)","ORF1b)"]] #temporery - until the bodek's numecleture will match nextclade's
     non_variant_mut = ";".join(set(non_variant_mut))
+    
 
-
-
-
-    if not nt_substitutions.empty:
-        red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions.values[0]), 'SNP']
+    if nt_substitutions_list:
+        red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions), 'SNP']
         red_flags_str = ';'.join(red_flags)
-        nt_substitutions_str = ';'.join(nt_substitutions.values[0])
+        nt_substitutions_str = ';'.join(nt_substitutions_list)
     else:
         red_flags_str = nt_substitutions_str = ''
 
@@ -338,14 +374,16 @@ for sample, sample_mutlist in samples_mutations.items():
         "% coverage": coverage,
         "pangolin clade": pangolin_clade,
         "pangolin scorpio": pangolin_scorpio,
-        "nextstrain clade": nextclade.values[0] if not nextclade.empty else ''
+        "nextstrain clade": nextclade.values[0] if not nextclade.empty else '',
+        "recombinant suspect": recombinant_suspect(nt_substitutions_list, suspect_info) 
+
     }
     final_table.append(line)
 
 with open(output_file, 'w') as outfile:
     fieldnames = ["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
-                  "pangolin clade", "pangolin scorpio", "nextstrain clade", 'nt substitutions', 'red_flags']
+                  "pangolin clade", "pangolin scorpio", "nextstrain clade", 'nt substitutions', 'red_flags',"recombinant suspect"]
     writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
     writer.writeheader()
     for line in final_table:
@@ -372,3 +410,13 @@ ranked_variants_file = output_path / 'ranked_variants.csv'
 ranked_variants_df = pd.DataFrame(ranked_variants_dict)
 ranked_variants_df.to_csv(ranked_variants_file)
 # write a report of all the variants (that are not 0%) with percentages for each sample
+
+
+#recombinants file
+with open("results/recombinants.csv", 'w') as recombinant_file:
+    names = [ "Sample", "swaps","BA.1 mutations", "BA.2 mutations", "deltaD mutations","breakpoints"]
+    writer = csv.DictWriter(recombinant_file, names, lineterminator='\n')
+    writer.writeheader()
+    for rec in recombinants:
+        writer.writerow(rec)
+    

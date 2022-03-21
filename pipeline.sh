@@ -312,7 +312,7 @@ function muttable() {
     conda activate nextstrain
     if [ "$newNextclade" == true ]; then
 
-      nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset $SCRIPT_DIR/nextclade --output-dir $SCRIPT_DIR/nextclade/ --output-tsv results/nextclade.tsv
+      nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset $SCRIPT_DIR/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
     else 
         nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
     fi
