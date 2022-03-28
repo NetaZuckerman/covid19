@@ -1,48 +1,18 @@
 from Bio import SeqIO
-import csv
 import pandas as pd
 from sys import argv
 from pathlib import Path
-from scipy.stats import binom
-import operator
 from datetime import datetime
 
-"""
-create variants table - for each sample in fasta multiple alignment file a covid variant is decided if found.
-including pangolin and nextclades variants as well. 
-"""
 
-def format_rows(var):
-    fraction = f'({int(lin_number[var][0])}/{int(lin_number[var][1])})'
-    fraction_noN = f'({int(lin_number_noN[var][0])}/{int(lin_number_noN[var][1])})'
-    row = f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
-          f'noN: {lin_percentages_noN[var]}% {fraction_noN} ;' \
-          f'p={lin_binomial[var]}'
-    return row
 
-#sort the variants by the noN % field. (descending)
-def sort_variants_per_sample(sortby, ascending=False):
-    s = pd.Series(sortby)
-    s = s.sort_values(ascending=False)
-    s = s.index.map(format_rows).tolist()
-
-    return s
-    
-
-def format_line(variant):
-    suspect_info = f"{variant}: {lin_percentages[variant]}% " \
-                       f"({lin_number[variant][0]}/{lin_number[variant][1]}); " \
-                       f"noN: {lin_percentages_noN[variant]}% ({lin_number_noN[variant][0]}/" \
-                       f"{lin_number_noN[variant][1]})"
-    return suspect_info
-
-def determine_variant():
-    max_count = max(list(map(lambda x: x[0], lin_number_noN.values())))
-    candidates = [var for var, count in lin_number_noN.items() if count[0] >= max_count-1]
-    candidates_freq = {candidate : lin_percentages_noN[candidate] for candidate in candidates}
-    variant = max(candidates_freq.items(), key=operator.itemgetter(1))[0]
-    suspect_info = format_line(variant)
-    return suspect_info
+def format_line(info):
+    '''
+    format the suspected variant info for suspect info column in variants.csv.
+    :return: example - BA.2: 73.85% (48/65); noN: 78.69% (48/61)
+    '''
+    return info["lineage"] + ": "  + str(info["mutation_precentage"]) + "% " + info["mutations_fraction"] + \
+    "; noN: " + str(info["noN_mutation_precentage"]) +info["noN_mutations_fraction"]
 
 
 def calculate_coverage(fasta_seq):
@@ -68,57 +38,109 @@ def remove_prefix(text, prefix):
         return text[len(prefix):]
     return text
 
-def recombinant_suspect(nt_substitutions_list, suspect_info):
-    if not suspect_info.startswith(("BA.1", "BA.2", "B.1.617.2 signature d")) : 
-        return ""
+# get variant name, a list of its mutations and the bodek mutaitions. nucleutide(defualt) or aa. 
+def extra_mutations(sus_mutations, bodek_mutations, aa=None):
+    if aa:
+        return [value for value in sus_mutations if value.split("(")[0] not in bodek_mutations 
+                and value.split("(")[1] not in ["ORF1a)","ORF1b)"]] #temporery - until the bodek's numecleture will match nextclade's
+    return [value for value in sus_mutations if value not in bodek_mutations]
+
+def set(l):
+    '''
+    @override
+    '''
+    return list(dict.fromkeys(l))
+                
+def rank_variants(mutations_list, mutations_not_covered, aa=0):
+    """"
+    generated rank variants table for one sample by comparing the sample's mutations with the mutationTable(Ha-Bodek).
+    @mutations_list - list of the sample's mutation
+    @mutations_noN - covered sample's mutations (no N's)
+    @aa - base the comparison on amino acids or nucleotides(defualt). 
+    @return - suspected_lineage - the variant that had the best match. highest covered (noN) mutations, highest noN mutations presentage.
+    """
+    ranked_variants = pd.DataFrame(columns=["lineage", "mutations_fraction", "mutation_precentage",
+                                            "noN_mutations_fraction","noN_mutation_precentage", "sort_by"])
+    if aa==0:
+        compare_with = mutations_by_lineage_nt
     else:
-        ba1_muts = [value for value in unique_muts[unique_muts["lineage"] == "BA.1"].substitution.tolist() if value in nt_substitutions_list]
-        ba2_muts = [value for value in unique_muts[unique_muts["lineage"] == "BA.2"].substitution.tolist() if value in nt_substitutions_list]
-        deltaD_muts = [value for value in unique_muts[unique_muts["lineage"] == "B.1.617.2 signature d"].substitution.tolist() if value in nt_substitutions_list]
+        compare_with = mutations_by_lineage
+    #create list of the mutations in each variant 
+    for lin, lin_muts in compare_with.items():
+
+        shared_mut = set( [mut for mut in mutations_list if mut.split("(")[0] in lin_muts]  )
+        noN_shared_mut = set( [mut for mut in shared_mut if mut not in mutations_not_covered] ) #keep only covered mutations
+        lin_muts = set(lin_muts)
+        noN_mutations = [x for x in lin_muts if (x not in mutations_not_covered) or (x in shared_mut)]
+        if not shared_mut:
+            continue
+        line_df = {        
+        "lineage" : lin,
+        "mutations_fraction" : "("+str(len(shared_mut)) + "/" + str(len(lin_muts))+")",
+        "mutation_precentage" : round(len(shared_mut) / len(lin_muts) * 100, 2),
+        "noN_mutations_fraction" : "("+str(len(shared_mut)) + "/" + str(len(noN_mutations))+")",
+        "noN_mutation_precentage" : round(len(shared_mut) / len(noN_mutations) * 100, 2) if noN_mutations else 0,
+        "sort_by" : len(noN_shared_mut)
+        }
+        line_df['suspect'] = format_line(line_df)
         
-        suspect_rec_muts = unique_muts[unique_muts.substitution.isin([*ba1_muts, *ba2_muts ,*deltaD_muts])].sort_values(by=['position']).reset_index()
-        swap = 0 #count the swaps between variants
-        mut_counter = 0 #count the mutations of the current variant
-        brkpnt =[] #list of swaps position
-        for index, row in suspect_rec_muts.iterrows():
-            if index == 0:
-                var = row['lineage']
-            mut_counter += 1
-            temp = var
-            var = row['lineage']
-            if var != temp:
-                swap += 1
-                brkpnt.append(str(suspect_rec_muts.iloc[index-1]["position"]) + "-" + str(suspect_rec_muts.iloc[index]["position"]))  #position of variant swap
-
-        rec = {
-            "Sample": sample,
-            "swaps": swap,
-            "BA.1 mutations": ';'.join(ba1_muts),
-            "BA.2 mutations": ';'.join(ba2_muts),
-            "deltaD mutations": ';'.join(deltaD_muts),
-            "breakpoints": ';'.join(brkpnt)
-            }
-        recombinants.append(rec)
-        if swap == 1 and ( (len(ba1_muts)>2 and len(ba2_muts)>2) or (len(ba1_muts)>2 and len(deltaD_muts)>2) or (len(deltaD_muts)>2 and len(ba2_muts)>2) ):
-            return "X"
-        return ""
-
-DEBUG = False
-if DEBUG:
-    debug_path = Path('/home/omera/Code/sandbox/ar/128')
-    alignment_file = debug_path / 'alignment' / 'all_aligned.fasta'
-    output_file = debug_path / 'results' / 'variants_debug.csv'
-    pangolin_file = debug_path / 'results' / 'pangolinClades.csv'
-    clades_path = debug_path / 'results' / 'nextclade.tsv'
-    excel_path = '/home/omera/Code/covid19/mutationsTable.xlsx'
+        ranked_variants = ranked_variants.append(line_df, ignore_index=True) 
     
-else:
-    # get user input
-    alignment_file = argv[1]
-    output_file = argv[2]
-    pangolin_file = argv[3]
-    clades_path = argv[4]  # nextclade tsv
-    excel_path = argv[5]  # mutations table path
+    if len(ranked_variants) == 0:
+        return "",ranked_variants
+    
+    ranked_variants = ranked_variants.sort_values(by=['sort_by'], ascending=False,ignore_index=True)
+    #determine suspect
+    suspected_candidates = ranked_variants[ranked_variants['sort_by'] >= ranked_variants.iloc[0]['sort_by'] - 1]
+    suspected_lineage = suspected_candidates.sort_values(by=['noN_mutation_precentage'], ascending=False,ignore_index=True).iloc[0]['lineage'] 
+
+    return suspected_lineage, ranked_variants
+
+
+def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list):
+    is_suspect = "" #if suspected recombinant is suspected after this function -> suspect = X
+    
+    #get unique mutations of suspected variant and its suspected recombinant (in relative to  each other) - bodek.
+    uniq_var_mut = [value for value in mutations_by_lineage_nt[sus_variant_name] if value not in mutations_by_lineage_nt[suspected_recombinant]]
+    uniq_rec_mut = [value for value in mutations_by_lineage_nt[suspected_recombinant]  if value not in mutations_by_lineage_nt[sus_variant_name]]
+
+    var_muts = [value for value in uniq_var_mut if value in nt_substitutions_list]
+    rec_muts = [value for value in uniq_rec_mut if value in nt_substitutions_list]
+    
+    merged_sorted_muts = mutTable[mutTable.variantname.isin([sus_variant_name,suspected_recombinant])]
+    merged_sorted_muts = merged_sorted_muts[merged_sorted_muts.nucsub.isin([*var_muts, *rec_muts])].sort_values(by=['position']).reset_index()
+    
+    swap = 0 #count the swaps between variants
+    muts_found = []  # mutation that were found already to avoid repeats of following deletions. following deletion have the same "varname" in the BODEK
+    mut_counter = 0 #count the mutations of the current variantdf
+    mut_counter_list = []
+    brkpnt =[] #list of swaps position
+    for index, row in merged_sorted_muts.iterrows():
+        if index == 0:
+            var = row['variantname']
+        if row['varname'] not in muts_found:
+            mut_counter += 1
+            muts_found.append(row['varname'])
+        temp = var
+        var = row['variantname']
+        if var != temp:
+            swap += 1
+            mut_counter_list.append(mut_counter)
+            mut_counter = 0
+            brkpnt.append(str(merged_sorted_muts.iloc[index-1]["position"]) + "-" + str(merged_sorted_muts.iloc[index]["position"]))  #position of variant swap
+        #is_suspect test - suspected recombinant must have 1 or 2 swaps.the variant and the recombinant must have at least 2 mutations in a row.
+        if swap in [1,2] and 1 not in mut_counter_list:
+            is_suspect = "X" 
+    return var_muts, rec_muts, swap, brkpnt, is_suspect
+            
+            
+
+# get user input
+alignment_file = argv[1]
+output_file = argv[2]
+pangolin_file = argv[3]
+clades_path = argv[4]  # nextclade tsv
+excel_path = argv[5]  # mutations table path
     
     
 red_flags_path = excel_path.replace('mutationsTable.xlsx', 'red_flags.csv')
@@ -127,8 +149,6 @@ out_fname = datetime.now().strftime('%Y%m%d') + '_variants.csv'
 output_file = output_path / out_fname
 
 red_flags_df = pd.read_csv(red_flags_path)
-
-unique_muts = pd.read_excel(excel_path.replace("mutationsTable.xlsx","unique_BA.1_BA.2_DeltaD_muts.xlsx"), engine='openpyxl')
 
 
 if len(argv) > 6:
@@ -172,7 +192,6 @@ clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'in
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
 clades_df['sample'] = clades_df['sample'].apply(str)
 clades_df = clades_df.fillna('')
-
 # create dict of aasubstitutions and aadeletions. key=sample id, value=list of substitutions. to keep for final table.
 aa_substitution_dict = {}
 aa_deletions_dict = {}
@@ -189,15 +208,34 @@ for sample in clades_df['sample']:  # change appearance from nextclade format to
         if (aadels and aadels != ['']) else ''
     insertions_dict[sample] = insertions[0].split(',')
 
-samples_mutations = {id: [] for id in aa_substitution_dict if id in alignment}
-# samples_s_not_covered = {id: [] for id in alignment}
-samples_not_covered = {id: [] for id in aa_substitution_dict if id in alignment}
-unexpected_mutations = {id: [] for id in aa_substitution_dict if id in alignment}
-lineages_list = []
+samples_mutations = []
+samples_mutations_nt = []
+samples_not_covered = []
+samples_not_covered_nt = []
+unexpected_mutations = []
 
+mutations_by_lineage = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
+mutations_by_lineage_nt = mutTable.groupby('variantname')['nucsub'].apply(list).to_dict()
+
+
+final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
+                  "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
+                  "pangolin clade", "pangolin scorpio", "nextstrain clade", 'nt substitutions', 'red_flags',"recombinant suspect"])
+chosen_recombinants = pd.DataFrame(columns=["Sample","suspected variant","suspected recombinant","suspected variant mutations",
+                                            "suspected recombinant mutations","swaps","breakpoints"])
+ranked_variants_df = pd.DataFrame(columns=["sample", "suspect"])
+all_sus_rec_df = pd.DataFrame(columns=["sample", "lineage", "mutations_fraction", "mutation_precentage",
+                                            "noN_mutations_fraction","noN_mutation_precentage"])
+
+    
 # iterate over all samples in multi-fasta and over all mutations in table, and check value of each mutation
 with open("mutations.log", 'w') as log:
     for sample, record in alignment.items():
+        samples_mutations = []
+        samples_mutations_nt = []
+        samples_not_covered = []
+        samples_not_covered_nt = []
+        unexpected_mutations = []
         if sample in aa_substitution_dict.keys():
             for (idx, row) in mutTable.iterrows():
                 if pd.isna(row.loc['position']):
@@ -210,213 +248,131 @@ with open("mutations.log", 'w') as log:
                 gene = row.loc['protein']
                 mutation_name = str(row.loc['variant'])
                 if alt == table_mut:  # mutation exists in sequence
-                    samples_mutations[sample].append(mutation_name)
+                    samples_mutations.append(mutation_name)
+                    samples_mutations_nt.append(str(row.loc['nucsub']))
                 elif alt == 'N':  # if position not covered in sequence
-                    samples_not_covered[sample].append(mutation_name)
+                    samples_not_covered.append(mutation_name)
+                    samples_not_covered_nt.append(str(row.loc['nucsub']))
                 elif alt != ref:  # alt is not the expected mut. and is covered in sequencing (not N)
-                    unexpected_mutations[sample].append(mutation_name + "(alt:" + alt + ")")
+                    unexpected_mutations.append(mutation_name + "(alt:" + alt + ")")
 
 
-mutations_by_lineage = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
+            
+            sus_variant_name, rank_variant = rank_variants(samples_mutations, samples_not_covered, 1)
+            if len(rank_variant) > 0:
+                rank_variant['sample'] = sample
+                ranked_variants_df = ranked_variants_df.append(rank_variant)
+                suspect_info = format_line(rank_variant.loc[rank_variant['lineage'] == sus_variant_name].iloc[0])
+            else:
+                suspect_info = ""
+            if not suspect_info and (samples_not_covered or unexpected_mutations):
+            # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
+                suspect_info = 'suspect'
+            
+            # get coverage of sample from qc report.txt
+            if qc_report_path:
+                coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
+            else:
+                coverage = str(calculate_coverage(alignment[sample].seq))
+        
+            # get pangolin info from table
+            try:
+                pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
+                pangolin_status = pangolinTable[pangolinTable['taxon'] == sample].status.values[0]
+                pangolin_scorpio = pangolinTable[pangolinTable['taxon'] == sample].scorpio_call.values[0]
+            except:
+                pangolin_clade = '-'
+                pangolin_status = ''
+                pangolin_scorpio = ''
+            QCfail = True if pangolin_status == 'fail' else False
+        
+            # get nextclade info from table
+            nextclade = clades_df[clades_df['sample'] == sample].clade
+        
+            #add protein value
+            not_covered_list = []
+            for mut in samples_not_covered:
+                protein_values = mutTable[mutTable.variant == mut].protein.values.tolist()
+                if QCfail:  # do not output list of uncovered mutations in case of QCFail. just write QCFail.
+                    # probably most of the mutations will be N's in that case.
+                    break
+                if protein_values:
+                    not_covered_list.append(mut + "(" + protein_values[0] + ")")
+                else:
+                    not_covered_list.append(mut + "()")
+        
+            not_covered_list = ";".join(set(not_covered_list)) if not_covered_list else ''
+            
+            
+            nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
+            nt_substitutions_list = ';'.join(nt_substitutions.values[0]).split(";")
+            
+            non_variant_mut_aa = ";".join(set(extra_mutations(aa_substitution_dict[sample], mutations_by_lineage[sus_variant_name], aa=1))) if not QCfail else ""
+            #non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name]))
+            
+            #new recombinant part
+            sus_recombinant,ranked_recombinant=rank_variants(samples_mutations_nt, samples_not_covered_nt)  
+            is_rec_suspect = ''
+            if len(ranked_recombinant) > 0:
+                ranked_recombinant['sample'] = sample
+                all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
+                var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name , sus_recombinant, nt_substitutions_list)
+                chosen_recombinants = chosen_recombinants.append({"Sample":sample,
+                                                  "suspected variant":sus_variant_name, 
+                                                  "suspected recombinant":sus_recombinant,
+                                                  "suspected variant mutations":var_muts,
+                                                  "suspected recombinant mutations":rec_muts,
+                                                  "swaps":swap,
+                                                  "breakpoints":brkpnt
+                                                  }, ignore_index=True)
+        
+            if nt_substitutions_list:
+                red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions), 'SNP']
+                red_flags_str = ';'.join(red_flags)
+                nt_substitutions_str = ';'.join(nt_substitutions_list)
+            else:
+                red_flags_str = nt_substitutions_str = ''
+        
+            final_table = final_table.append({
+                "Sample": sample,
+                "Variant": pangolin_clade if not QCfail else "QC fail",
+                "suspect": None,
+                "suspected variant": sus_variant_name if suspect_info and not suspect_info=='suspect' 
+                and int(suspect_info.split('noN:')[1].split(".")[0]) > 60 else 'QC fail', #if the suspected variant < 60% => QC fail
+                "suspect info": suspect_info,  # TODO add more info
+                'nt substitutions' : nt_substitutions_str,
+                'red_flags' : red_flags_str,
+                "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
+                                                                              sample in aa_substitution_dict else 'NA',
+                "AA deletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
+                                                                     in aa_deletions_dict else 'NA'),
+                "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
+                "mutations not covered": not_covered_list,
+                "non variant mutations": non_variant_mut_aa,  # mutations that are not part of variant list incase there is a known variant
+                "% coverage": coverage,
+                "pangolin clade": pangolin_clade,
+                "pangolin scorpio": pangolin_scorpio,
+                "nextstrain clade": nextclade.values[0] if not nextclade.empty else '',
+                "recombinant suspect": is_rec_suspect
+                }, ignore_index=True)
 
-final_table = []
-recombinants = []
-ranked_variants_dict = dict()
-# iterate over all samples mutations and determine variants
-n = len(samples_mutations)
-c = 0
-for sample, sample_mutlist in samples_mutations.items():
-    c += 1
-    # print(c/n)
-    known_variant = ""
-    notes = ''
-    suspect_info = ''
-    lin_percentages = {}
-    lin_percentages_noN = {}
-    lin_number = {}
-    lin_number_noN = {}
-    lin_not_covered = {}
-    lin_binomial = {}
-    extra_subs = []
-    # iterate over mutations of each lineage, check how much of the lineage's mutations are covered by sample -
-    # to decide on variant
-    for lin, linmuts in mutations_by_lineage.items():
-        temp = [m for m in linmuts]  # copy of mutations names into temp to use for calculations,
-        # without harming original list
-        temp_mutes = []
-        for mut in sample_mutlist:  # iterate over  table mutations of sample
-            if mut in temp:  # remove mutations of sample from temp list and keep in temp_mutes list.
-                # eventually will check if all mutations are covered (if temp is empty)
-                temp.remove(mut)
-                temp_mutes.append(mut)
-        if not temp:  # all mutations of that lineage exists in sample -> known variant=lineage name
-            known_variant = lin
 
-        # elif len(linmuts) != len(temp):  # some of lineage's mutations exist but not all
-        # calculate percentage of lineage mutations found:
-        lin_percentages[lin] = round(len(set(temp_mutes)) / len(set(linmuts)) * 100, 2)
-        no_N_mutations = [x for x in linmuts if (x not in samples_not_covered[sample]) or (x in temp_mutes)]
-        lin_percentages_noN[lin] = round(len(set(temp_mutes)) / len(set(no_N_mutations)) * 100, 2) if no_N_mutations else 0.0
-        # also keep as fraction x/y
-        lin_number[lin] = (len(set(temp_mutes)), len(set(linmuts)))  # tuple:
-        # (#lin_mutation_sample, #tot_lin_mutations)
-        lin_number_noN[lin] = (len(set(temp_mutes)), len(set(no_N_mutations))) if no_N_mutations else (0, 0)
-        lin_binomial[lin] = binom.pmf(
-            k=lin_number_noN[lin][0],
-            n=lin_number_noN[lin][1],
-            p=0.25)
-    
-    ranked_variants_dict[sample] = sort_variants_per_sample(lin_number_noN, ascending=True)
-
-    if not known_variant:  # did not find variant that has 100% mutations in sample
-        var = max(lin_percentages_noN.items(), key=operator.itemgetter(1))[0]
-
-        val = lin_percentages[var]
-        val_noN = lin_percentages_noN[var]
-        fraction = f'({int(lin_number[var][0])}/{int(lin_number[var][1])})'
-        fraction_noN = f'({int(lin_number_noN[var][0])}/{int(lin_number_noN[var][1])})'
-
-        over_60 = True if val >= 60 else False
-        known_variant = var if over_60 else known_variant
-
-        if var and lin_number[var][0] >= 2:  # At least 2 mutations of lineage --> suspect variant
-            # suspect <lineage>: (%)(x/y); noN(x/#covered_mutations); SNP(#); SNP_silent(#) :
-            suspect_info = \
-                f'suspect {var}: {str(lin_percentages[var])}% {fraction};  ' \
-                f'noN: {val_noN}% {fraction_noN}'
-
-    else:  # variant has 100% mutations
-        suspect_info = f"{known_variant}: {lin_percentages[known_variant]}% " \
-                       f"({lin_number[known_variant][0]}/{lin_number[known_variant][1]}); " \
-                       f"noN: {lin_percentages_noN[known_variant]}% ({lin_number_noN[known_variant][0]}/" \
-                       f"{lin_number_noN[known_variant][1]})"
-
-    #if known_variant:  # there is a variant at least X% covered
-     #   non_variant_mut = [value for value in aa_substitution_dict[sample] if value.split("(")[0] not in mutations_by_lineage[known_variant]]
-
-
-    if not suspect_info and (samples_not_covered[sample] or unexpected_mutations[sample]):
-        # not specific suspect variant but some mutations exist \ not covered in sequencing - write as suspect
-        suspect_info = 'suspect'
-
-
-    suspect_info = determine_variant()
-    sus_variant_name = suspect_info.split(': ')[0] if suspect_info else ''
-
-
-    # get coverage of sample from qc report.txt
+#append low quelity samples
+low_quel = {id: [] for id in aa_substitution_dict if id not in alignment}
+for sample in low_quel:
     if qc_report_path:
         coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
     else:
-        coverage = str(calculate_coverage(alignment[sample].seq))
-
-        #coverage = ''
-
-    # get pangolin info from table
-    try:
-        pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
-        pangolin_status = pangolinTable[pangolinTable['taxon'] == sample].status.values[0]
-        pangolin_scorpio = pangolinTable[pangolinTable['taxon'] == sample].scorpio_call.values[0]
-    except:
-        pangolin_clade = '-'
-        pangolin_status = ''
-        pangolin_scorpio = ''
-    QCfail = True if pangolin_status == 'fail' else False
-
-    # get nextclade info from table
-    nextclade = clades_df[clades_df['sample'] == sample].clade
-
-    #add protein value
-    not_covered_list = []
-    for mut in samples_not_covered[sample]:
-        protein_values = mutTable[mutTable.variant == mut].protein.values.tolist()
-        if QCfail:  # do not output list of uncovered mutations in case of QCFail. just write QCFail.
-            # probably most of the mutations will be N's in that case.
-            break
-        if protein_values:
-            not_covered_list.append(mut + "(" + protein_values[0] + ")")
-        else:
-            not_covered_list.append(mut + "()")
-
-    not_covered_list = ";".join(set(not_covered_list)) if not_covered_list else ''
-    
-    
-    nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
-    nt_substitutions_list = ';'.join(nt_substitutions.values[0]).split(";")
-    
-    non_variant_mut = [value for value in aa_substitution_dict[sample] if value.split("(")[0] not in mutations_by_lineage[sus_variant_name]]
-    non_variant_mut = [value for value in non_variant_mut if value.split("(")[1] not in ["ORF1a)","ORF1b)"]] #temporery - until the bodek's numecleture will match nextclade's
-    non_variant_mut = ";".join(set(non_variant_mut))
-    
-
-    if nt_substitutions_list:
-        red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions), 'SNP']
-        red_flags_str = ';'.join(red_flags)
-        nt_substitutions_str = ';'.join(nt_substitutions_list)
-    else:
-        red_flags_str = nt_substitutions_str = ''
-
-    line = {
-        "Sample": sample,
-        "Variant": pangolin_clade if not QCfail else "QC fail",
-        "suspect": None,
-        "suspected variant": remove_prefix(suspect_info.split(':')[0], 'suspect').lstrip(' ') if int(suspect_info.split('noN:')[1].split(".")[0]) > 60 else 'QC fail', #if the suspected variant < 60% => QC fail
-        "suspect info": suspect_info,  # TODO add more info
-        'nt substitutions' : nt_substitutions_str,
-        'red_flags' : red_flags_str,
-        "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
-                                                                      sample in aa_substitution_dict else 'NA',
-        "AA deletions": ';'.join(aa_deletions_dict[sample] if aa_deletions_dict and sample
-                                                             in aa_deletions_dict else 'NA'),
-        "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
-        "mutations not covered": not_covered_list,
-        "non variant mutations": non_variant_mut,  # mutations that are not part of variant list incase there is a known variant
-        "% coverage": coverage,
-        "pangolin clade": pangolin_clade,
-        "pangolin scorpio": pangolin_scorpio,
-        "nextstrain clade": nextclade.values[0] if not nextclade.empty else '',
-        "recombinant suspect": recombinant_suspect(nt_substitutions_list, suspect_info) 
-
-    }
-    final_table.append(line)
-
-with open(output_file, 'w') as outfile:
-    fieldnames = ["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
-                  "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
-                  "pangolin clade", "pangolin scorpio", "nextstrain clade", 'nt substitutions', 'red_flags',"recombinant suspect"]
-    writer = csv.DictWriter(outfile, fieldnames, lineterminator='\n')
-    writer.writeheader()
-    for line in final_table:
-        writer.writerow(line)
-
-
-#append low quel
-    low_quel = {id: [] for id in aa_substitution_dict if id not in alignment}
-    for sample in low_quel:
-        if qc_report_path:
-            coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
-        else:
-            coverage = ""
-        line = {
+        coverage = ""
+    final_table = final_table.append({
         "Sample": sample,
         "% coverage": coverage,
         "Variant": "QC fail",
         "suspected variant": "QC fail"
-        }
-        writer.writerow(line)
+        }, ignore_index=True)
 
-
-ranked_variants_file = output_path / 'ranked_variants.csv'
-ranked_variants_df = pd.DataFrame(ranked_variants_dict)
-ranked_variants_df.to_csv(ranked_variants_file)
-# write a report of all the variants (that are not 0%) with percentages for each sample
-
-
-#recombinants file
-with open("results/recombinants.csv", 'w') as recombinant_file:
-    names = [ "Sample", "swaps","BA.1 mutations", "BA.2 mutations", "deltaD mutations","breakpoints"]
-    writer = csv.DictWriter(recombinant_file, names, lineterminator='\n')
-    writer.writeheader()
-    for rec in recombinants:
-        writer.writerow(rec)
-    
+final_table.to_csv(output_file,index=False)
+ranked_variants_df[ranked_variants_df.columns[0:2]].to_csv(output_path / 'ranked_variants.csv',index=False)
+# recombinants files
+chosen_recombinants.to_csv("results/suspected_recombinants.csv",index=False)
+all_sus_rec_df.to_csv("results/ranked_suspected_recombinants.csv",index=False)
