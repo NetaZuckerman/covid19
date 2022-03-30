@@ -259,6 +259,8 @@ with open("mutations.log", 'w') as log:
 
             
             sus_variant_name, rank_variant = rank_variants(samples_mutations, samples_not_covered, 1)
+            if not sus_variant_name:
+                QCfail = True
             if len(rank_variant) > 0:
                 rank_variant['sample'] = sample
                 ranked_variants_df = ranked_variants_df.append(rank_variant)
@@ -284,7 +286,7 @@ with open("mutations.log", 'w') as log:
                 pangolin_clade = '-'
                 pangolin_status = ''
                 pangolin_scorpio = ''
-            QCfail = True if pangolin_status == 'fail' else False
+            QCfail = True if pangolin_status == 'fail' or not sus_variant_name else False
         
             # get nextclade info from table
             nextclade = clades_df[clades_df['sample'] == sample].clade
@@ -311,20 +313,21 @@ with open("mutations.log", 'w') as log:
             #non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name]))
             
             #new recombinant part
-            sus_recombinant,ranked_recombinant=rank_variants(samples_mutations_nt, samples_not_covered_nt)  
             is_rec_suspect = ''
-            if len(ranked_recombinant) > 0:
-                ranked_recombinant['sample'] = sample
-                all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
-                var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name , sus_recombinant, nt_substitutions_list)
-                chosen_recombinants = chosen_recombinants.append({"Sample":sample,
-                                                  "suspected variant":sus_variant_name, 
-                                                  "suspected recombinant":sus_recombinant,
-                                                  "suspected variant mutations":var_muts,
-                                                  "suspected recombinant mutations":rec_muts,
-                                                  "swaps":swap,
-                                                  "breakpoints":brkpnt
-                                                  }, ignore_index=True)
+            if not QCfail:
+                sus_recombinant,ranked_recombinant=rank_variants(samples_mutations_nt, samples_not_covered_nt)  
+                if len(ranked_recombinant) > 0:
+                    ranked_recombinant['sample'] = sample
+                    all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
+                    var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name , sus_recombinant, nt_substitutions_list)
+                    chosen_recombinants = chosen_recombinants.append({"Sample":sample,
+                                                      "suspected variant":sus_variant_name, 
+                                                      "suspected recombinant":sus_recombinant,
+                                                      "suspected variant mutations":var_muts,
+                                                      "suspected recombinant mutations":rec_muts,
+                                                      "swaps":swap,
+                                                      "breakpoints":brkpnt
+                                                      }, ignore_index=True)
         
             if nt_substitutions_list:
                 red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions), 'SNP']
