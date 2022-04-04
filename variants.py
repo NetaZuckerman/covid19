@@ -261,7 +261,11 @@ with open("mutations.log", 'w') as log:
 
 
             
+<<<<<<< HEAD
             sus_variant_name, rank_variant = rank_variants(samples_mutations, samples_not_covered, mutations_by_lineage)
+=======
+            sus_variant_name, rank_variant = rank_variants(samples_mutations, samples_not_covered, 1)
+>>>>>>> e7b8186c108414a1cf6965489a8119410f9eb2d5
             if not sus_variant_name:
                 QCfail = True
             if len(rank_variant) > 0:
@@ -319,7 +323,11 @@ with open("mutations.log", 'w') as log:
             #new recombinant part
             is_rec_suspect = ''
             if not QCfail:
+<<<<<<< HEAD
                 sus_recombinant,ranked_recombinant=rank_variants(non_variant_mut_nt, samples_not_covered_nt, mutations_by_lineage_nt_no_X)  
+=======
+                sus_recombinant,ranked_recombinant=rank_variants(samples_mutations_nt, samples_not_covered_nt)  
+>>>>>>> e7b8186c108414a1cf6965489a8119410f9eb2d5
                 if len(ranked_recombinant) > 0:
                     ranked_recombinant['sample'] = sample
                     all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
