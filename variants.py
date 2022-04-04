@@ -12,7 +12,7 @@ def format_line(info):
     :return: example - BA.2: 73.85% (48/65); noN: 78.69% (48/61)
     '''
     return info["lineage"] + ": "  + str(info["mutation_precentage"]) + "% " + info["mutations_fraction"] + \
-    "; noN: " + str(info["noN_mutation_precentage"]) +info["noN_mutations_fraction"]
+    "; noN: " + str(info["noN_mutation_precentage"]) + "% " + info["noN_mutations_fraction"]
 
 
 def calculate_coverage(fasta_seq):
@@ -51,20 +51,17 @@ def set(l):
     '''
     return list(dict.fromkeys(l))
                 
-def rank_variants(mutations_list, mutations_not_covered, aa=0):
+def rank_variants(mutations_list, mutations_not_covered, compare_with):
     """"
     generated rank variants table for one sample by comparing the sample's mutations with the mutationTable(Ha-Bodek).
     @mutations_list - list of the sample's mutation
     @mutations_noN - covered sample's mutations (no N's)
-    @aa - base the comparison on amino acids or nucleotides(defualt). 
+    @aa - base the comparison on a dict of variants(keys) and mutations list(values).
     @return - suspected_lineage - the variant that had the best match. highest covered (noN) mutations, highest noN mutations presentage.
     """
     ranked_variants = pd.DataFrame(columns=["lineage", "mutations_fraction", "mutation_precentage",
                                             "noN_mutations_fraction","noN_mutation_precentage", "sort_by"])
-    if aa==0:
-        compare_with = mutations_by_lineage_nt
-    else:
-        compare_with = mutations_by_lineage
+
     #create list of the mutations in each variant 
     for lin, lin_muts in compare_with.items():
 
@@ -166,6 +163,8 @@ else:
 try:
     pangolinTable = pd.read_csv(pangolin_file)
     pangolinTable['taxon'] = pangolinTable['taxon'].apply(str)
+    if "qc_status" in pangolinTable:
+        pangolinTable = pangolinTable.rename(columns={"qc_status": "status"})
 except FileNotFoundError:
     print("Pangolin File Not Found")
     pangolinTable = pd.DataFrame()
@@ -216,7 +215,11 @@ unexpected_mutations = []
 
 mutations_by_lineage = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
 mutations_by_lineage_nt = mutTable.groupby('variantname')['nucsub'].apply(list).to_dict()
-
+mutations_by_lineage_nt_no_X = mutTable.groupby('variantname')['nucsub'].apply(list).to_dict()
+#exclude all known recombinants from the recombinant test.
+for k in mutations_by_lineage_nt.keys():
+    if k.startswith('X'):
+        del mutations_by_lineage_nt_no_X[k]
 
 final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
@@ -224,7 +227,7 @@ final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected v
 chosen_recombinants = pd.DataFrame(columns=["Sample","suspected variant","suspected recombinant","suspected variant mutations",
                                             "suspected recombinant mutations","swaps","breakpoints"])
 ranked_variants_df = pd.DataFrame(columns=["sample", "suspect"])
-all_sus_rec_df = pd.DataFrame(columns=["sample", "lineage", "mutations_fraction", "mutation_precentage",
+all_sus_rec_df = pd.DataFrame(columns=["sample", "suspect","lineage", "mutations_fraction", "mutation_precentage",
                                             "noN_mutations_fraction","noN_mutation_precentage"])
 
     
@@ -258,7 +261,9 @@ with open("mutations.log", 'w') as log:
 
 
             
-            sus_variant_name, rank_variant = rank_variants(samples_mutations, samples_not_covered, 1)
+            sus_variant_name, rank_variant = rank_variants(samples_mutations, samples_not_covered, mutations_by_lineage)
+            if not sus_variant_name:
+                QCfail = True
             if len(rank_variant) > 0:
                 rank_variant['sample'] = sample
                 ranked_variants_df = ranked_variants_df.append(rank_variant)
@@ -276,6 +281,7 @@ with open("mutations.log", 'w') as log:
                 coverage = str(calculate_coverage(alignment[sample].seq))
         
             # get pangolin info from table
+            
             try:
                 pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
                 pangolin_status = pangolinTable[pangolinTable['taxon'] == sample].status.values[0]
@@ -284,7 +290,7 @@ with open("mutations.log", 'w') as log:
                 pangolin_clade = '-'
                 pangolin_status = ''
                 pangolin_scorpio = ''
-            QCfail = True if pangolin_status == 'fail' else False
+            QCfail = True if pangolin_status == 'fail' or not sus_variant_name else False
         
             # get nextclade info from table
             nextclade = clades_df[clades_df['sample'] == sample].clade
@@ -308,23 +314,24 @@ with open("mutations.log", 'w') as log:
             nt_substitutions_list = ';'.join(nt_substitutions.values[0]).split(";")
             
             non_variant_mut_aa = ";".join(set(extra_mutations(aa_substitution_dict[sample], mutations_by_lineage[sus_variant_name], aa=1))) if not QCfail else ""
-            #non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name]))
+            non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name]))
             
             #new recombinant part
-            sus_recombinant,ranked_recombinant=rank_variants(samples_mutations_nt, samples_not_covered_nt)  
             is_rec_suspect = ''
-            if len(ranked_recombinant) > 0:
-                ranked_recombinant['sample'] = sample
-                all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
-                var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name , sus_recombinant, nt_substitutions_list)
-                chosen_recombinants = chosen_recombinants.append({"Sample":sample,
-                                                  "suspected variant":sus_variant_name, 
-                                                  "suspected recombinant":sus_recombinant,
-                                                  "suspected variant mutations":var_muts,
-                                                  "suspected recombinant mutations":rec_muts,
-                                                  "swaps":swap,
-                                                  "breakpoints":brkpnt
-                                                  }, ignore_index=True)
+            if not QCfail:
+                sus_recombinant,ranked_recombinant=rank_variants(non_variant_mut_nt, samples_not_covered_nt, mutations_by_lineage_nt_no_X)  
+                if len(ranked_recombinant) > 0:
+                    ranked_recombinant['sample'] = sample
+                    all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
+                    var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name , sus_recombinant, nt_substitutions_list)
+                    chosen_recombinants = chosen_recombinants.append({"Sample":sample,
+                                                      "suspected variant":sus_variant_name, 
+                                                      "suspected recombinant":sus_recombinant,
+                                                      "suspected variant mutations":var_muts,
+                                                      "suspected recombinant mutations":rec_muts,
+                                                      "swaps":swap,
+                                                      "breakpoints":brkpnt
+                                                      }, ignore_index=True)
         
             if nt_substitutions_list:
                 red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions), 'SNP']
@@ -375,4 +382,4 @@ final_table.to_csv(output_file,index=False)
 ranked_variants_df[ranked_variants_df.columns[0:2]].to_csv(output_path / 'ranked_variants.csv',index=False)
 # recombinants files
 chosen_recombinants.to_csv("results/suspected_recombinants.csv",index=False)
-all_sus_rec_df.to_csv("results/ranked_suspected_recombinants.csv",index=False)
+all_sus_rec_df[all_sus_rec_df.columns[0:2]].to_csv("results/ranked_suspected_recombinants.csv",index=False)
