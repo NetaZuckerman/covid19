@@ -314,7 +314,7 @@ with open("mutations.log", 'w') as log:
             nt_substitutions_list = ';'.join(nt_substitutions.values[0]).split(";")
             
             non_variant_mut_aa = ";".join(set(extra_mutations(aa_substitution_dict[sample], mutations_by_lineage[sus_variant_name], aa=1))) if not QCfail else ""
-            non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name]))
+            non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name])) if not QCfail else ""
             
             #new recombinant part
             is_rec_suspect = ''
