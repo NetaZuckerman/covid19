@@ -108,14 +108,15 @@ def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list)
     merged_sorted_muts = merged_sorted_muts[merged_sorted_muts.nucsub.isin([*var_muts, *rec_muts])].sort_values(by=['position']).reset_index()
     
     swap = 0 #count the swaps between variants
-    muts_found = []  # mutation that were found already to avoid repeats of following deletions. following deletion have the same "varname" in the BODEK
-    mut_counter = 0 #count the mutations of the current variantdf
+    muts_found = []  # mutation that were found already. to avoid repeats of following deletions. following deletion have the same "varname" in the BODEK
+    mut_counter = -1 #count the mutations of the current variantdf
     mut_counter_list = []
     brkpnt =[] #list of swaps position
     for index, row in merged_sorted_muts.iterrows():
         if index == 0:
             var = row['variantname']
-        if row['varname'] not in muts_found:
+            
+        if row['varname'] not in muts_found :
             mut_counter += 1
             muts_found.append(row['varname'])
         temp = var
@@ -126,8 +127,9 @@ def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list)
             mut_counter = 0
             brkpnt.append(str(merged_sorted_muts.iloc[index-1]["position"]) + "-" + str(merged_sorted_muts.iloc[index]["position"]))  #position of variant swap
         #is_suspect test - suspected recombinant must have 1 or 2 swaps.the variant and the recombinant must have at least 2 mutations in a row.
-        if swap in [1,2] and 1 not in mut_counter_list:
-            is_suspect = "X" 
+    mut_counter_list.append(mut_counter+1)#append the last swap
+    if swap in [1,2] and 1 not in mut_counter_list:
+        is_suspect = "X" 
     return var_muts, rec_muts, swap, brkpnt, is_suspect
             
             
@@ -216,10 +218,19 @@ unexpected_mutations = []
 mutations_by_lineage = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
 mutations_by_lineage_nt = mutTable.groupby('variantname')['nucsub'].apply(list).to_dict()
 mutations_by_lineage_nt_no_X = mutTable.groupby('variantname')['nucsub'].apply(list).to_dict()
-#exclude all known recombinants from the recombinant test.
+mutations_by_lineage_no_X = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
+
+#exclude all known recombinants from the the pipeline - temp!###########
 for k in mutations_by_lineage_nt.keys():
     if k.startswith('X'):
         del mutations_by_lineage_nt_no_X[k]
+for k in mutations_by_lineage.keys():
+    if k.startswith('X'):
+        del mutations_by_lineage_no_X[k]        
+mutations_by_lineage = mutations_by_lineage_no_X
+mutations_by_lineage_nt = mutations_by_lineage_nt_no_X
+
+#######################################################################
 
 final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
