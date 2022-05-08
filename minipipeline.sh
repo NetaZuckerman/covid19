@@ -34,6 +34,10 @@ function get_user_input() {
         dontAlign=true
         shift
         ;;
+      --noRecombinants)
+        noRecombinants=true
+        shift
+        ;;
       -n| --newNextclade)
         newNextclade=true
         shift
@@ -103,7 +107,7 @@ conda activate CoronaPipeline
 echo "Variants analysis" 1>&3
 python "$path"/MutTable.py "$aligned" results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
 #python "$path"/translated_table.py "$aligned" results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx
+python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants"
 
  
 echo "Finished minipipeline (:" 1>&3

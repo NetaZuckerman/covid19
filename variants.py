@@ -140,8 +140,8 @@ output_file = argv[2]
 pangolin_file = argv[3]
 clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
-    
-    
+no_rec = argv[6]
+
 red_flags_path = excel_path.replace('mutationsTable.xlsx', 'red_flags.csv')
 output_path = Path(output_file).parent
 out_fname = datetime.now().strftime('%Y%m%d') + '_variants.csv'
@@ -150,8 +150,8 @@ output_file = output_path / out_fname
 red_flags_df = pd.read_csv(red_flags_path)
 
 
-if len(argv) > 6:
-    qc_report_path = argv[6]
+if len(argv) > 7:
+    qc_report_path = argv[7]
     try:
         qc = pd.read_csv(qc_report_path, sep='\t')
         qc['sample'] = qc['sample'].apply(str)
@@ -328,22 +328,24 @@ with open("mutations.log", 'w') as log:
             non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name])) if not QCfail else ""
             
             #new recombinant part
+            
             is_rec_suspect = ''
-            if not QCfail:
-                sus_recombinant,ranked_recombinant=rank_variants(non_variant_mut_nt, samples_not_covered_nt, mutations_by_lineage_nt_no_X)  
-                if len(ranked_recombinant) > 0:
-                    ranked_recombinant['sample'] = sample
-                    all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
-                    var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name , sus_recombinant, nt_substitutions_list)
-                    chosen_recombinants = chosen_recombinants.append({"Sample":sample,
-                                                      "suspected variant":sus_variant_name, 
-                                                      "suspected recombinant":sus_recombinant,
-                                                      "suspected variant mutations":var_muts,
-                                                      "suspected recombinant mutations":rec_muts,
-                                                      "swaps":swap,
-                                                      "breakpoints":brkpnt
-                                                      }, ignore_index=True)
-        
+            if not no_rec:
+                if not QCfail:
+                    sus_recombinant,ranked_recombinant=rank_variants(non_variant_mut_nt, samples_not_covered_nt, mutations_by_lineage_nt_no_X)  
+                    if len(ranked_recombinant) > 0:
+                        ranked_recombinant['sample'] = sample
+                        all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
+                        var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name , sus_recombinant, nt_substitutions_list)
+                        chosen_recombinants = chosen_recombinants.append({"Sample":sample,
+                                                          "suspected variant":sus_variant_name, 
+                                                          "suspected recombinant":sus_recombinant,
+                                                          "suspected variant mutations":var_muts,
+                                                          "suspected recombinant mutations":rec_muts,
+                                                          "swaps":swap,
+                                                          "breakpoints":brkpnt
+                                                          }, ignore_index=True)
+                
             if nt_substitutions_list:
                 red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions), 'SNP']
                 red_flags_str = ';'.join(red_flags)
@@ -392,5 +394,6 @@ for sample in low_quel:
 final_table.to_csv(output_file,index=False)
 ranked_variants_df[ranked_variants_df.columns[0:2]].to_csv(output_path / 'ranked_variants.csv',index=False)
 # recombinants files
-chosen_recombinants.to_csv("results/suspected_recombinants.csv",index=False)
-all_sus_rec_df[all_sus_rec_df.columns[0:2]].to_csv("results/ranked_suspected_recombinants.csv",index=False)
+if not no_rec:
+    chosen_recombinants.to_csv("results/suspected_recombinants.csv",index=False)
+    all_sus_rec_df[all_sus_rec_df.columns[0:2]].to_csv("results/ranked_suspected_recombinants.csv",index=False)
