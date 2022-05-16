@@ -4,8 +4,6 @@ from sys import argv
 from pathlib import Path
 from datetime import datetime
 
-
-
 def format_line(info):
     '''
     format the suspected variant info for suspect info column in variants.csv.
@@ -27,19 +25,11 @@ def calculate_coverage(fasta_seq):
     return ((ref_length - nCount)/ref_length) * 100
 
 
-def remove_prefix(text, prefix):
-    """
-    remove prefix from string
-    :param text: string to remove prefix from
-    :param prefix: prefix to remove
-    :return: new string wihtout prefix
-    """
-    if text.startswith(prefix):
-        return text[len(prefix):]
-    return text
-
-# get variant name, a list of its mutations and the bodek mutaitions. nucleutide(defualt) or aa. 
 def extra_mutations(sus_mutations, bodek_mutations, aa=None):
+    '''
+    find mutations that the samples had but are not in the suspected variant.
+    works for amino acid and for nucleotide(default) mutations
+    '''
     if aa:
         return [value for value in sus_mutations if value.split("(")[0] not in bodek_mutations 
                 and value.split("(")[1] not in ["ORF1a)","ORF1b)"]] #temporery - until the bodek's numecleture will match nextclade's
@@ -47,47 +37,95 @@ def extra_mutations(sus_mutations, bodek_mutations, aa=None):
 
 def set(l):
     '''
-    @override
+    @overrides
     '''
     return list(dict.fromkeys(l))
-                
-def rank_variants(mutations_list, mutations_not_covered, compare_with):
-    """"
+
+def var_mut_counter(muts):
+    '''
+    get a list of the variant mutations and calculate unique mutations.
+    this function was written to count a consecutive deletions as a single event.
+    '''
+
+    # del_lists is a list that will contain lists of deletions
+    # each list will contain mutations of one deletion event.
+    del_lists = []
+    all_deletions = [x for x in muts if x.endswith("-")]
+    dels = []
+    prev_mut = 0 # initiate
+    for mut in all_deletions:
+        cur_mut = int(mut[1:-1])  # get only the position of the mutation.
+        if not cur_mut == prev_mut + 1:  # meaning its not the same deletion event
+            del_lists.append(dels) if not prev_mut == 0 else None  # dont append the first list - its empty
+            dels = []  # reset list - new deletion event
+            dels.append(mut)  # add first mutation in the new event
+        else:
+            dels.append(mut)
+        prev_mut = cur_mut
+    del_lists.append(dels)
+    muts_sum = len(muts) - len(all_deletions) + len(del_lists)
+    return del_lists, muts_sum
+
+def sample_mut_counter(muts,del_list):
+    '''
+    get a list of the samples' mutations and variant deletions, returns unique mutations.
+    this function was written to count a consecutive deletions as a single event.
+    :param muts: a list of the samples mutations.
+    :param del_list: a list of a variant deletions lists. each deletions list contains mutations of one deletion event.
+    :returns mut_sum: unique mutations calculation of the intersection between the variants' and samples' mutations.
+    '''
+    del_count = 0
+    samples_del = [x for x in muts if x.endswith("-")]
+    for del_event in del_list:  # itetates variants' deletions event
+        shared_del = [x for x in del_event if x in samples_del]  # variant and sample mutations intersection.
+        if len(shared_del) > 0:
+            del_count += 1
+    muts_sum = len(muts) - len(samples_del) + del_count
+    return muts_sum
+
+def rank_variants(mutations_list, mutations_not_covered, compare_with, lin_mut_count, lin_del_list):
+    '''
     generated rank variants table for one sample by comparing the sample's mutations with the mutationTable(Ha-Bodek).
-    @mutations_list - list of the sample's mutation
-    @mutations_noN - covered sample's mutations (no N's)
-    @aa - base the comparison on a dict of variants(keys) and mutations list(values).
-    @return - suspected_lineage - the variant that had the best match. highest covered (noN) mutations, highest noN mutations presentage.
-    """
+    :param mutations_list: list of the sample's mutation
+    :param mutations_not_covered: list of unknown mutations = position is N
+    :param compare_with:
+    :param lin_mut_count: dict {lineage : mutations count}. mutations count(int) is the sum of unique mutations of a variant
+    :param lin_del_list: dict {lineage : deletions lists}. deletions list(list of lists) each list is one deletion event
+    :return: suspected_lineage: the variant that had the best match.
+    highest covered (noN) mutations, highest noN mutations percentage
+    :return: ranked_variant: a DataFrame of all variant and their match to the sample
+    '''
+
     ranked_variants = pd.DataFrame(columns=["lineage", "mutations_fraction", "mutation_precentage",
                                             "noN_mutations_fraction","noN_mutation_precentage", "sort_by"])
 
     #create list of the mutations in each variant 
     for lin, lin_muts in compare_with.items():
 
-        shared_mut = set( [mut for mut in mutations_list if mut.split("(")[0] in lin_muts]  )
+        shared_mut = set( [mut for mut in mutations_list if mut.split("(")[0] in lin_muts] )
         noN_shared_mut = set( [mut for mut in shared_mut if mut not in mutations_not_covered] ) #keep only covered mutations
-        lin_muts = set(lin_muts)
         noN_mutations = [x for x in lin_muts if (x not in mutations_not_covered) or (x in shared_mut)]
         if not shared_mut:
             continue
+        shared_mut_count = sample_mut_counter(shared_mut, lin_del_list[lin])
+        noN_mut_count = sample_mut_counter(noN_mutations, lin_del_list[lin])
         line_df = {        
-        "lineage" : lin,
-        "mutations_fraction" : "("+str(len(shared_mut)) + "/" + str(len(lin_muts))+")",
-        "mutation_precentage" : round(len(shared_mut) / len(lin_muts) * 100, 2),
-        "noN_mutations_fraction" : "("+str(len(shared_mut)) + "/" + str(len(noN_mutations))+")",
-        "noN_mutation_precentage" : round(len(shared_mut) / len(noN_mutations) * 100, 2) if noN_mutations else 0,
-        "sort_by" : len(noN_shared_mut)
+            "lineage" : lin,
+            "mutations_fraction": "("+str(shared_mut_count) + "/" + str(lin_mut_count[lin])+")",
+            "mutation_precentage": round(shared_mut_count / lin_mut_count[lin] * 100, 2),
+            "noN_mutations_fraction": "("+str(shared_mut_count) + "/" + str(noN_mut_count)+")",
+            "noN_mutation_precentage": round(shared_mut_count / noN_mut_count * 100, 2) if noN_mutations else 0,
+            "sort_by": len(noN_shared_mut)
         }
+
         line_df['suspect'] = format_line(line_df)
-        
         ranked_variants = ranked_variants.append(line_df, ignore_index=True) 
     
     if len(ranked_variants) == 0:
-        return "",ranked_variants
+        return "", ranked_variants
     
     ranked_variants = ranked_variants.sort_values(by=['sort_by'], ascending=False,ignore_index=True)
-    #determine suspect
+    # determine suspect
     suspected_candidates = ranked_variants[ranked_variants['sort_by'] >= ranked_variants.iloc[0]['sort_by'] - 1]
     suspected_lineage = suspected_candidates.sort_values(by=['noN_mutation_precentage'], ascending=False,ignore_index=True).iloc[0]['lineage'] 
 
@@ -95,11 +133,28 @@ def rank_variants(mutations_list, mutations_not_covered, compare_with):
 
 
 def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list):
-    is_suspect = "" #if suspected recombinant is suspected after this function -> suspect = X
+    '''
+    recombinant part function. get 2 variants names and the samples' mutations list (nucleotides)
+    and find the recombination details.
+    only consider mutations that are not in both variants.
+    return values will be used for the recombinants files.
+    :param suspected_variant: suspected variant name
+    :param suspected_recombinant: suspected recombinant name
+    :param nt_substitutions_list: a list of the samples mutations.
+    :return var_muts: samples' mutations that are unique for the suspected variant.
+    :return rec_muts: samples' mutations that are unique for the suspected recombinant.
+    :return swap: number of recombination swaps between the two
+    :return brkpnt: list of swaps positions
+    :return is_suspect: (bool) is suspected recombinant has less than 3 swaps and each swaps contains at list 2 mutations
+     => is suspect = X
+    '''
+
+    is_suspect = ""  # if suspected recombinant is suspected after this function -> suspect = X
     
-    #get unique mutations of suspected variant and its suspected recombinant (in relative to  each other) - bodek.
+    # get unique mutations of suspected variant and its suspected recombinant (in relative to each other) - bodek.
     uniq_var_mut = [value for value in mutations_by_lineage_nt[sus_variant_name] if value not in mutations_by_lineage_nt[suspected_recombinant]]
-    uniq_rec_mut = [value for value in mutations_by_lineage_nt[suspected_recombinant]  if value not in mutations_by_lineage_nt[sus_variant_name]]
+    uniq_rec_mut = [value for value in mutations_by_lineage_nt[suspected_recombinant]
+                    if value not in mutations_by_lineage_nt[sus_variant_name]]
 
     var_muts = [value for value in uniq_var_mut if value in nt_substitutions_list]
     rec_muts = [value for value in uniq_rec_mut if value in nt_substitutions_list]
@@ -107,9 +162,10 @@ def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list)
     merged_sorted_muts = mutTable[mutTable.variantname.isin([sus_variant_name,suspected_recombinant])]
     merged_sorted_muts = merged_sorted_muts[merged_sorted_muts.nucsub.isin([*var_muts, *rec_muts])].sort_values(by=['position']).reset_index()
     
-    swap = 0 #count the swaps between variants
-    muts_found = []  # mutation that were found already. to avoid repeats of following deletions. following deletion have the same "varname" in the BODEK
-    mut_counter = -1 #count the mutations of the current variantdf
+    swap = 0  # count the swaps between variants
+    muts_found = []  # mutation that were found already. to avoid repeats of following deletions.
+    # following deletion have the same "varname" in the BODEK
+    mut_counter = -1  # count the mutations of the current variantdf
     mut_counter_list = []
     brkpnt =[] #list of swaps position
     for index, row in merged_sorted_muts.iterrows():
@@ -131,8 +187,6 @@ def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list)
     if swap in [1,2] and 1 not in mut_counter_list:
         is_suspect = "X" 
     return var_muts, rec_muts, swap, brkpnt, is_suspect
-            
-            
 
 # get user input
 alignment_file = argv[1]
@@ -209,16 +263,18 @@ for sample in clades_df['sample']:  # change appearance from nextclade format to
         if (aadels and aadels != ['']) else ''
     insertions_dict[sample] = insertions[0].split(',')
 
-samples_mutations = []
-samples_mutations_nt = []
-samples_not_covered = []
-samples_not_covered_nt = []
-unexpected_mutations = []
-
 mutations_by_lineage = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
 mutations_by_lineage_nt = mutTable.groupby('variantname')['nucsub'].apply(list).to_dict()
 mutations_by_lineage_nt_no_X = mutTable.groupby('variantname')['nucsub'].apply(list).to_dict()
 mutations_by_lineage_no_X = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
+
+# contains the variant mutations sum, consecutive deletions will be considered as one event
+lin_mut_count = {}
+# contains a list of lists of the deletions event. consecutive deletions will be stored in the same list
+lin_del_list = {}
+
+for lin, muts in mutations_by_lineage_nt.items():
+    lin_del_list[lin], lin_mut_count[lin] = var_mut_counter(muts)
 
 #exclude all known recombinants from the the pipeline - temp!###########
 for k in mutations_by_lineage_nt.keys():
@@ -232,6 +288,7 @@ mutations_by_lineage_nt = mutations_by_lineage_nt_no_X
 
 #######################################################################
 
+# DataFrames for csv outputs
 final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
                   "pangolin clade", "pangolin scorpio", "nextstrain clade", 'nt substitutions', 'red_flags',"recombinant suspect"])
@@ -245,7 +302,6 @@ all_sus_rec_df = pd.DataFrame(columns=["sample", "suspect","lineage", "mutations
 # iterate over all samples in multi-fasta and over all mutations in table, and check value of each mutation
 with open("mutations.log", 'w') as log:
     for sample, record in alignment.items():
-        samples_mutations = []
         samples_mutations_nt = []
         samples_not_covered = []
         samples_not_covered_nt = []
@@ -262,7 +318,6 @@ with open("mutations.log", 'w') as log:
                 gene = row.loc['protein']
                 mutation_name = str(row.loc['variant'])
                 if alt == table_mut:  # mutation exists in sequence
-                    samples_mutations.append(mutation_name)
                     samples_mutations_nt.append(str(row.loc['nucsub']))
                 elif alt == 'N':  # if position not covered in sequence
                     samples_not_covered.append(mutation_name)
@@ -272,7 +327,9 @@ with open("mutations.log", 'w') as log:
 
 
             
-            sus_variant_name, rank_variant = rank_variants(samples_mutations, samples_not_covered, mutations_by_lineage)
+            sus_variant_name, rank_variant = rank_variants(samples_mutations_nt, samples_not_covered_nt,
+                                                           mutations_by_lineage_nt, lin_mut_count,
+                                                           lin_del_list)
             if not sus_variant_name:
                 QCfail = True
             if len(rank_variant) > 0:
@@ -326,26 +383,29 @@ with open("mutations.log", 'w') as log:
             
             non_variant_mut_aa = ";".join(set(extra_mutations(aa_substitution_dict[sample], mutations_by_lineage[sus_variant_name], aa=1))) if not QCfail else ""
             non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name])) if not QCfail else ""
-            
-            #new recombinant part
-            
+
+
+            # new recombinant part
             is_rec_suspect = ''
             if not no_rec:
                 if not QCfail:
-                    sus_recombinant,ranked_recombinant=rank_variants(non_variant_mut_nt, samples_not_covered_nt, mutations_by_lineage_nt_no_X)  
+                    sus_recombinant,ranked_recombinant = rank_variants(non_variant_mut_nt, samples_not_covered_nt,
+                                                                       mutations_by_lineage_nt, lin_mut_count,
+                                                                       lin_del_list)
                     if len(ranked_recombinant) > 0:
                         ranked_recombinant['sample'] = sample
                         all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
-                        var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name , sus_recombinant, nt_substitutions_list)
-                        chosen_recombinants = chosen_recombinants.append({"Sample":sample,
-                                                          "suspected variant":sus_variant_name, 
-                                                          "suspected recombinant":sus_recombinant,
-                                                          "suspected variant mutations":var_muts,
-                                                          "suspected recombinant mutations":rec_muts,
-                                                          "swaps":swap,
-                                                          "breakpoints":brkpnt
-                                                          }, ignore_index=True)
-                
+                        var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name, sus_recombinant
+                                                                                       , nt_substitutions_list)
+                        chosen_recombinants = chosen_recombinants.append({"Sample": sample,
+                                                                          "suspected variant": sus_variant_name,
+                                                                          "suspected recombinant": sus_recombinant,
+                                                                          "suspected variant mutations": var_muts,
+                                                                          "suspected recombinant mutations": rec_muts,
+                                                                          "swaps": swap,
+                                                                          "breakpoints": brkpnt
+                                                                          }, ignore_index=True)
+
             if nt_substitutions_list:
                 red_flags = red_flags_df.loc[red_flags_df['SNP'].isin(nt_substitutions), 'SNP']
                 red_flags_str = ';'.join(red_flags)
