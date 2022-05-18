@@ -1,3 +1,5 @@
+import csv
+
 import pandas as pd
 from Bio import SeqIO
 from math import floor
@@ -38,12 +40,11 @@ translate_table = {
 }
 
 def get_gene(position):
+    gene_list = []
     for index, row in regions.iterrows():
-        gene = None
-        if position in range(row["START"],row["END"]):
-            gene = row["GENE"]
-            break
-    return gene, row["START"], row["END"]
+        if position in range(row["start"],row["end"]):
+            gene_list.append([row["region"], row["start"], row["end"]])
+    return gene_list
 
 def get_codon_pos(position, start):
     pos_on_gene = position - start + 1
@@ -62,22 +63,33 @@ def get_codon_pos(position, start):
 def get_codon(seq, codon_pos):
     return seq[codon_pos[0]-1] + seq[codon_pos[1]-1] + seq[codon_pos[2]-1]
 
+def get_aa(gene, start, nt_position):
+    codon_pos, aa_pos = get_codon_pos(nt_position, start)
+    ref_codon = get_codon(reference, codon_pos)
+    seq_codon = get_codon(alignment[row["sample"]], codon_pos)
+    ref_aa = translate_table[ref_codon]
+    seq_aa = translate_table[seq_codon]
+    return gene + ":" + ref_aa + str(aa_pos) + seq_aa if not ref_aa == seq_aa else gene + ":silent"
 
 
 for index, row in df.iterrows():
     nt_position = int(row["mutations"][1:-1])
-    gene, start, end = get_gene(nt_position)
+    gene_list = get_gene(nt_position)
 
-    if gene == None:
-        row["aa_mut"] = "UTR"
-    else:
-        codon_pos, aa_pos = get_codon_pos(nt_position, start)
-        ref_codon = get_codon(reference,codon_pos)
-        seq_codon = get_codon(alignment[row["sample"]], codon_pos)
-        ref_aa = translate_table[ref_codon]
-        seq_aa = translate_table[seq_codon]
+    if len(gene_list) == 0:
+        aa_mut = "UTR"
 
-        row["aa_mut"] = gene + ":" + ref_aa + str(aa_pos) + seq_aa if not ref_aa == seq_aa else gene + ": silent"
+    elif len(gene_list) > 0:
+        gene = gene_list[0][0]
+        start = gene_list[0][1]
+        aa_mut = get_aa(gene, start, nt_position)
+
+    if len(gene_list) == 2 :  # NSPs genes.
+        gene = gene_list[1][0]
+        start = gene_list[1][1]
+        aa_mut = aa_mut + ", " + get_aa(gene, start, nt_position)
+
+    row["aa_mut"] = aa_mut
     new_df = new_df.append(row)
 
 new_df.to_csv(results_file, index=False)
