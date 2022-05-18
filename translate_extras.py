@@ -47,9 +47,10 @@ def get_gene(position):
 
 def get_codon_pos(position, start):
     pos_on_gene = position - start + 1
-    aa_pos_on_gene = floor(pos_on_gene/3)
+    aa_pos_on_gene = floor(pos_on_gene/3) + 1
     mod = pos_on_gene % 3
     if mod == 0:
+        aa_pos_on_gene =- 1
         codon = (position - 2, position - 1, position)
     if mod == 1:
         codon = (position, position + 1, position + 2)
@@ -68,7 +69,7 @@ for index, row in df.iterrows():
     gene, start, end = get_gene(nt_position)
 
     if gene == None:
-        row["aa_mut"] = None
+        row["aa_mut"] = "UTR"
     else:
         codon_pos, aa_pos = get_codon_pos(nt_position, start)
         ref_codon = get_codon(reference,codon_pos)
@@ -76,7 +77,7 @@ for index, row in df.iterrows():
         ref_aa = translate_table[ref_codon]
         seq_aa = translate_table[seq_codon]
 
-        row["aa_mut"] = gene + ":" + ref_aa + str(aa_pos) + seq_aa
-        new_df = new_df.append(row)
+        row["aa_mut"] = gene + ":" + ref_aa + str(aa_pos) + seq_aa if not ref_aa == seq_aa else gene + ": silent"
+    new_df = new_df.append(row)
 
 new_df.to_csv(results_file, index=False)
