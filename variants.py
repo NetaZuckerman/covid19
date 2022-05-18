@@ -1,3 +1,4 @@
+import numpy as np
 from Bio import SeqIO
 import pandas as pd
 from sys import argv
@@ -103,19 +104,19 @@ def rank_variants(mutations_list, mutations_not_covered, compare_with, lin_mut_c
     for lin, lin_muts in compare_with.items():
 
         shared_mut = set( [mut for mut in mutations_list if mut.split("(")[0] in lin_muts] )
-        noN_shared_mut = set( [mut for mut in shared_mut if mut not in mutations_not_covered] ) #keep only covered mutations
         noN_mutations = [x for x in lin_muts if (x not in mutations_not_covered) or (x in shared_mut)]
         if not shared_mut:
             continue
         shared_mut_count = sample_mut_counter(shared_mut, lin_del_list[lin])
         noN_mut_count = sample_mut_counter(noN_mutations, lin_del_list[lin])
+
         line_df = {        
             "lineage" : lin,
             "mutations_fraction": "("+str(shared_mut_count) + "/" + str(lin_mut_count[lin])+")",
             "mutation_precentage": round(shared_mut_count / lin_mut_count[lin] * 100, 2),
             "noN_mutations_fraction": "("+str(shared_mut_count) + "/" + str(noN_mut_count)+")",
             "noN_mutation_precentage": round(shared_mut_count / noN_mut_count * 100, 2) if noN_mutations else 0,
-            "sort_by": len(noN_shared_mut)
+            "sort_by": shared_mut_count
         }
 
         line_df['suspect'] = format_line(line_df)
@@ -132,7 +133,7 @@ def rank_variants(mutations_list, mutations_not_covered, compare_with, lin_mut_c
     return suspected_lineage, ranked_variants
 
 
-def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list):
+def swap_finder(suspected_variant, suspected_recombinant, sample_mut):
     '''
     recombinant part function. get 2 variants names and the samples' mutations list (nucleotides)
     and find the recombination details.
@@ -140,7 +141,7 @@ def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list)
     return values will be used for the recombinants files.
     :param suspected_variant: suspected variant name
     :param suspected_recombinant: suspected recombinant name
-    :param nt_substitutions_list: a list of the samples mutations.
+    :param sample_mut: a list of the samples mutations.
     :return var_muts: samples' mutations that are unique for the suspected variant.
     :return rec_muts: samples' mutations that are unique for the suspected recombinant.
     :return swap: number of recombination swaps between the two
@@ -152,14 +153,15 @@ def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list)
     is_suspect = ""  # if suspected recombinant is suspected after this function -> suspect = X
     
     # get unique mutations of suspected variant and its suspected recombinant (in relative to each other) - bodek.
-    uniq_var_mut = [value for value in mutations_by_lineage_nt[sus_variant_name] if value not in mutations_by_lineage_nt[suspected_recombinant]]
+    uniq_var_mut = [value for value in mutations_by_lineage_nt[suspected_variant]
+                    if value not in mutations_by_lineage_nt[suspected_recombinant]]
     uniq_rec_mut = [value for value in mutations_by_lineage_nt[suspected_recombinant]
-                    if value not in mutations_by_lineage_nt[sus_variant_name]]
+                    if value not in mutations_by_lineage_nt[suspected_variant]]
 
-    var_muts = [value for value in uniq_var_mut if value in nt_substitutions_list]
-    rec_muts = [value for value in uniq_rec_mut if value in nt_substitutions_list]
+    var_muts = [value for value in uniq_var_mut if value in sample_mut]
+    rec_muts = [value for value in uniq_rec_mut if value in sample_mut]
     
-    merged_sorted_muts = mutTable[mutTable.variantname.isin([sus_variant_name,suspected_recombinant])]
+    merged_sorted_muts = mutTable[mutTable.variantname.isin([suspected_variant,suspected_recombinant])]
     merged_sorted_muts = merged_sorted_muts[merged_sorted_muts.nucsub.isin([*var_muts, *rec_muts])].sort_values(by=['position']).reset_index()
     
     swap = 0  # count the swaps between variants
@@ -167,7 +169,7 @@ def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list)
     # following deletion have the same "varname" in the BODEK
     mut_counter = -1  # count the mutations of the current variantdf
     mut_counter_list = []
-    brkpnt =[] #list of swaps position
+    brkpnt =[]  # list of swaps position
     for index, row in merged_sorted_muts.iterrows():
         if index == 0:
             var = row['variantname']
@@ -181,9 +183,11 @@ def swap_finder(suspected_variant, suspected_recombinant, nt_substitutions_list)
             swap += 1
             mut_counter_list.append(mut_counter)
             mut_counter = 0
-            brkpnt.append(str(merged_sorted_muts.iloc[index-1]["position"]) + "-" + str(merged_sorted_muts.iloc[index]["position"]))  #position of variant swap
-        #is_suspect test - suspected recombinant must have 1 or 2 swaps.the variant and the recombinant must have at least 2 mutations in a row.
-    mut_counter_list.append(mut_counter+1)#append the last swap
+            brkpnt.append(str(merged_sorted_muts.iloc[index-1]["position"])
+                          + "-" + str(merged_sorted_muts.iloc[index]["position"]))  # position of variant swap
+        # is_suspect test - suspected recombinant must have 1 or 2 swaps.
+        # the variant and the recombinant must have at least 2 mutations in a row.
+    mut_counter_list.append(mut_counter+1)  # append the last swap
     if swap in [1,2] and 1 not in mut_counter_list:
         is_suspect = "X" 
     return var_muts, rec_muts, swap, brkpnt, is_suspect
@@ -195,6 +199,7 @@ pangolin_file = argv[3]
 clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
 no_rec = argv[6]
+translate_exrta = argv[7]
 
 red_flags_path = excel_path.replace('mutationsTable.xlsx', 'red_flags.csv')
 output_path = Path(output_file).parent
@@ -204,8 +209,8 @@ output_file = output_path / out_fname
 red_flags_df = pd.read_csv(red_flags_path)
 
 
-if len(argv) > 7:
-    qc_report_path = argv[7]
+if len(argv) > 8:
+    qc_report_path = argv[8]
     try:
         qc = pd.read_csv(qc_report_path, sep='\t')
         qc['sample'] = qc['sample'].apply(str)
@@ -291,14 +296,16 @@ mutations_by_lineage_nt = mutations_by_lineage_nt_no_X
 # DataFrames for csv outputs
 final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
-                  "pangolin clade", "pangolin scorpio", "nextstrain clade", 'nt substitutions', 'red_flags',"recombinant suspect"])
-chosen_recombinants = pd.DataFrame(columns=["Sample","suspected variant","suspected recombinant","suspected variant mutations",
+                  "pangolin clade", "pangolin scorpio", "nextstrain clade", 'nt substitutions', 'red_flags', "recombinant suspect"])
+chosen_recombinants = pd.DataFrame(columns=["Sample","suspected variant","suspected recombinant", "suspected variant mutations",
                                             "suspected recombinant mutations","swaps","breakpoints"])
 ranked_variants_df = pd.DataFrame(columns=["sample", "suspect"])
 all_sus_rec_df = pd.DataFrame(columns=["sample", "suspect","lineage", "mutations_fraction", "mutation_precentage",
                                             "noN_mutations_fraction","noN_mutation_precentage"])
 
-    
+if translate_exrta:
+    extra_df = pd.DataFrame(columns=["sample", "mutations"])
+
 # iterate over all samples in multi-fasta and over all mutations in table, and check value of each mutation
 with open("mutations.log", 'w') as log:
     for sample, record in alignment.items():
@@ -384,6 +391,12 @@ with open("mutations.log", 'w') as log:
             non_variant_mut_aa = ";".join(set(extra_mutations(aa_substitution_dict[sample], mutations_by_lineage[sus_variant_name], aa=1))) if not QCfail else ""
             non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name])) if not QCfail else ""
 
+            if translate_exrta:
+                extra = pd.DataFrame()
+                extra["mutations"] = np.array(non_variant_mut_nt)
+                extra["sample"] = sample
+                extra_df = extra_df.append(extra)
+
 
             # new recombinant part
             is_rec_suspect = ''
@@ -419,7 +432,7 @@ with open("mutations.log", 'w') as log:
                 "suspect": None,
                 "suspected variant": sus_variant_name if suspect_info and not suspect_info=='suspect' 
                 and int(suspect_info.split('noN:')[1].split(".")[0]) > 60 else 'QC fail', #if the suspected variant < 60% => QC fail
-                "suspect info": suspect_info,  # TODO add more info
+                "suspect info": suspect_info,
                 'nt substitutions' : nt_substitutions_str,
                 'red_flags' : red_flags_str,
                 "AA substitutions": ';'.join(aa_substitution_dict[sample]) if aa_substitution_dict and
@@ -428,7 +441,8 @@ with open("mutations.log", 'w') as log:
                                                                      in aa_deletions_dict else 'NA'),
                 "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
                 "mutations not covered": not_covered_list,
-                "non variant mutations": non_variant_mut_aa,  # mutations that are not part of variant list incase there is a known variant
+                "non variant mutations_aa": non_variant_mut_aa,  # mutations that are not part of variant list incase there is a known variant
+                # "non variant mutations_nt": ';'.join(non_variant_mut_nt),
                 "% coverage": coverage,
                 "pangolin clade": pangolin_clade,
                 "pangolin scorpio": pangolin_scorpio,
@@ -437,7 +451,7 @@ with open("mutations.log", 'w') as log:
                 }, ignore_index=True)
 
 
-#append low quelity samples
+# append low quelity samples
 low_quel = {id: [] for id in aa_substitution_dict if id not in alignment}
 for sample in low_quel:
     if qc_report_path:
@@ -455,5 +469,7 @@ final_table.to_csv(output_file,index=False)
 ranked_variants_df[ranked_variants_df.columns[0:2]].to_csv(output_path / 'ranked_variants.csv',index=False)
 # recombinants files
 if not no_rec:
-    chosen_recombinants.to_csv("results/suspected_recombinants.csv",index=False)
+    chosen_recombinants.to_csv("results/suspected_recombinants.csv", index=False)
     all_sus_rec_df[all_sus_rec_df.columns[0:2]].to_csv("results/ranked_suspected_recombinants.csv",index=False)
+if translate_exrta:
+    extra_df.to_csv("results/extra_mutations.csv", index=False)

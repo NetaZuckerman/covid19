@@ -105,6 +105,14 @@ function get_user_input() {
         newNextclade=true
         shift
         ;;
+      -q| --quasispecies)
+        q=true
+        shift
+        ;;       
+      -e| --extra)
+        extra=true
+        shift
+        ;; 
       --spike)
         spike=true
         shift
@@ -233,6 +241,12 @@ function index_bam() {
   done
 }
 
+function pileup(){
+  for file in BAM/*.mapped.sorted.bam; do
+    ((i=i%num_processes)); ((i++==0)) && wait
+    samtools mpileup "$file" -f "$refseq" > pileup/`basename "$file" .mapped.sorted.bam`.pileup &
+  done
+}
 
 function depth() {
     mkdir -p QC/depth/
@@ -327,7 +341,11 @@ function muttable() {
 
           python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx  "$path"/mutationsTable.xlsx
           #python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-          python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants" QC/report.txt
+          python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants" "$extra" QC/report.txt
+          if [ -n "$extra" ] ; then
+          echo "Extra mutations report" 1>&3
+            python "$path"/translate_extras.py "$path"/covid19_regions.csv results/extra_mutations.csv "$refseq" "$aligned"
+          fi
 
     fi
 }
@@ -400,6 +418,7 @@ wait
 index_bam
 wait
 
+
 echo "Calculating depth" 1>&3
 depth
 wait
@@ -419,6 +438,14 @@ wait
 muttable
 wait
 
+if [ "$q" == true ]; then
+  echo "Quasispecies analysis" 1>&3
+  mkdir pileup
+  pileup
+  wait
+  python "$path"/quasispecies.py
+fi
+
 conda deactivate
 echo "pipeline finished! (:" 1>&3
-echo "Pipline log can be found in results/pipline.log" 1>&3
+echo "Pipeline log can be found in results/pipeline.log" 1>&3

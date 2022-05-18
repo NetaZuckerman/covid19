@@ -38,8 +38,21 @@ function get_user_input() {
         noRecombinants=true
         shift
         ;;
+      -q| --quasispecies)
+        q=true
+        shift
+        ;;     
+      -p|--processes)
+        shift
+        num_processes="$1"
+        shift
+        ;;      
       -n| --newNextclade)
         newNextclade=true
+        shift
+        ;;
+      -e| --extra)
+        extra=true
         shift
         ;;
       -r|--reference-sequence)
@@ -74,6 +87,13 @@ touch results/minipipeline.log
 exec 3>&1 1>>"results/minipipeline.log" 2>&1
 echo "Starting Minipipeline" 1>&3
 
+function pileup(){
+  for file in BAM/*.mapped.sorted.bam; do
+    ((i=i%num_processes)); ((i++==0)) && wait
+    samtools mpileup "$file" -f "$refseq" > pileup/`basename "$file" .mapped.sorted.bam`.pileup &
+  done
+}
+
 conda activate nextstrain
 if  [ -z "$dontAlign" ] ; then
 echo "Align multifasta to reference sequence" 1>&3
@@ -107,8 +127,17 @@ conda activate CoronaPipeline
 echo "Variants analysis" 1>&3
 python "$path"/MutTable.py "$aligned" results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
 #python "$path"/translated_table.py "$aligned" results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants"
-
- 
+python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants" "$extra"
+if [ -n "$extra" ] ; then
+  echo "Extra mutations report" 1>&3
+  python "$path"/translate_extras.py "$path"/covid19_regions.csv results/extra_mutations.csv "$refseq" "$aligned"
+fi
+if [ "$q" == true ]; then
+  echo "Quasispecies analysis" 1>&3
+  mkdir pileup
+  pileup
+  wait
+  python "$path"/quasispecies.py
+fi
 echo "Finished minipipeline (:" 1>&3
 echo "Minipipline log can be found in results/minipipline.log" 1>&3
