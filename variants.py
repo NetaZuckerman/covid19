@@ -51,11 +51,12 @@ def var_mut_counter(muts):
     # del_lists is a list that will contain lists of deletions
     # each list will contain mutations of one deletion event.
     del_lists = []
-    all_deletions = [x for x in muts if x.endswith("-")]
+    all_deletions = [int(x[1:-1]) for x in muts if x.endswith("-")]
+    all_deletions.sort()
     dels = []
     prev_mut = 0 # initiate
     for mut in all_deletions:
-        cur_mut = int(mut[1:-1])  # get only the position of the mutation.
+        cur_mut = int(mut)#int(mut[1:-1])  # get only the position of the mutation.
         if not cur_mut == prev_mut + 1:  # meaning its not the same deletion event
             del_lists.append(dels) if not prev_mut == 0 else None  # dont append the first list - its empty
             dels = []  # reset list - new deletion event
