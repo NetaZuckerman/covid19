@@ -442,7 +442,7 @@ with open("mutations.log", 'w') as log:
                                                                      in aa_deletions_dict else 'NA'),
                 "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
                 "mutations not covered": not_covered_list,
-                "non variant mutations_aa": non_variant_mut_aa,  # mutations that are not part of variant list incase there is a known variant
+                "non variant mutations": non_variant_mut_aa,  # mutations that are not part of variant list incase there is a known variant
                 # "non variant mutations_nt": ';'.join(non_variant_mut_nt),
                 "% coverage": coverage,
                 "pangolin clade": pangolin_clade,
