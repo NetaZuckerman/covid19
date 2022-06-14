@@ -116,7 +116,7 @@ def rank_variants(mutations_list, mutations_not_covered, compare_with, lin_mut_c
             "mutations_fraction": "("+str(shared_mut_count) + "/" + str(lin_mut_count[lin])+")",
             "mutation_precentage": round(shared_mut_count / lin_mut_count[lin] * 100, 2),
             "noN_mutations_fraction": "("+str(shared_mut_count) + "/" + str(noN_mut_count)+")",
-            "noN_mutation_precentage": round(shared_mut_count / noN_mut_count * 100, 2) if noN_mutations else 0,
+            "noN_mutation_precentage": round(shared_mut_count / noN_mut_count * 100, 2) if noN_mut_count else 0,
             "sort_by": shared_mut_count
         }
 
@@ -200,7 +200,7 @@ pangolin_file = argv[3]
 clades_path = argv[4]  # nextclade tsv
 excel_path = argv[5]  # mutations table path
 no_rec = argv[6]
-translate_exrta = argv[7]
+
 
 red_flags_path = excel_path.replace('mutationsTable.xlsx', 'red_flags.csv')
 output_path = Path(output_file).parent
@@ -210,8 +210,8 @@ output_file = output_path / out_fname
 red_flags_df = pd.read_csv(red_flags_path)
 
 
-if len(argv) > 8:
-    qc_report_path = argv[8]
+if len(argv) > 7:
+    qc_report_path = argv[7]
     try:
         qc = pd.read_csv(qc_report_path, sep='\t')
         qc['sample'] = qc['sample'].apply(str)
@@ -297,15 +297,15 @@ mutations_by_lineage_nt = mutations_by_lineage_nt_no_X
 # DataFrames for csv outputs
 final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
-                  "pangolin clade", "pangolin scorpio", "nextstrain clade", 'nt substitutions', 'red_flags', "recombinant suspect"])
+                  "pangolin clade", "nextstrain clade", 'nt substitutions', 'red_flags', "recombinant suspect"])
 chosen_recombinants = pd.DataFrame(columns=["Sample","suspected variant","suspected recombinant", "suspected variant mutations",
                                             "suspected recombinant mutations","swaps","breakpoints"])
 ranked_variants_df = pd.DataFrame(columns=["sample", "suspect"])
 all_sus_rec_df = pd.DataFrame(columns=["sample", "suspect","lineage", "mutations_fraction", "mutation_precentage",
                                             "noN_mutations_fraction","noN_mutation_precentage"])
 
-if translate_exrta:
-    extra_df = pd.DataFrame(columns=["sample", "mutations"])
+
+extra_df = pd.DataFrame(columns=["sample", "mutations"])
 
 # iterate over all samples in multi-fasta and over all mutations in table, and check value of each mutation
 with open("mutations.log", 'w') as log:
@@ -361,11 +361,9 @@ with open("mutations.log", 'w') as log:
             try:
                 pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
                 pangolin_status = pangolinTable[pangolinTable['taxon'] == sample].status.values[0]
-                pangolin_scorpio = pangolinTable[pangolinTable['taxon'] == sample].scorpio_call.values[0]
             except:
                 pangolin_clade = '-'
                 pangolin_status = ''
-                pangolin_scorpio = ''
             QCfail = True if pangolin_status == 'fail' or not sus_variant_name else False
         
             # get nextclade info from table
@@ -392,11 +390,11 @@ with open("mutations.log", 'w') as log:
             non_variant_mut_aa = ";".join(set(extra_mutations(aa_substitution_dict[sample], mutations_by_lineage[sus_variant_name], aa=1))) if not QCfail else ""
             non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name])) if not QCfail else ""
 
-            if translate_exrta:
-                extra = pd.DataFrame()
-                extra["mutations"] = np.array(non_variant_mut_nt)
-                extra["sample"] = sample
-                extra_df = extra_df.append(extra)
+            
+            extra = pd.DataFrame()
+            extra["mutations"] = np.array(non_variant_mut_nt)
+            extra["sample"] = sample
+            extra_df = extra_df.append(extra)
 
 
             # new recombinant part
@@ -442,11 +440,8 @@ with open("mutations.log", 'w') as log:
                                                                      in aa_deletions_dict else 'NA'),
                 "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
                 "mutations not covered": not_covered_list,
-                "non variant mutations": non_variant_mut_aa,  # mutations that are not part of variant list incase there is a known variant
-                # "non variant mutations_nt": ';'.join(non_variant_mut_nt),
                 "% coverage": coverage,
                 "pangolin clade": pangolin_clade,
-                "pangolin scorpio": pangolin_scorpio,
                 "nextstrain clade": nextclade.values[0] if not nextclade.empty else '',
                 "recombinant suspect": is_rec_suspect
                 }, ignore_index=True)
@@ -468,9 +463,10 @@ for sample in low_quel:
 
 final_table.to_csv(output_file,index=False)
 ranked_variants_df[ranked_variants_df.columns[0:2]].to_csv(output_path / 'ranked_variants.csv',index=False)
+extra_df.to_csv("results/non_variant_mutations.csv", index=False)
 # recombinants files
 if not no_rec:
     chosen_recombinants.to_csv("results/suspected_recombinants.csv", index=False)
     all_sus_rec_df[all_sus_rec_df.columns[0:2]].to_csv("results/ranked_suspected_recombinants.csv",index=False)
-if translate_exrta:
-    extra_df.to_csv("results/extra_mutations.csv", index=False)
+
+

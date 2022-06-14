@@ -1,4 +1,3 @@
-import csv
 
 import pandas as pd
 from Bio import SeqIO
@@ -15,7 +14,7 @@ regions = pd.read_csv (region_file)
 df = pd.read_csv(results_file)
 new_df = pd.DataFrame(columns=["sample", "mutations", "aa_mut"])
 # read sequences
-reference = list(SeqIO.read(ref_file, 'fasta').seq._data)
+reference = list(SeqIO.read(ref_file, 'fasta').seq)
 alignment = SeqIO.to_dict(SeqIO.parse(alignment_file, 'fasta'))
 for sample, record in alignment.items():
         alignment[sample] = list(str(record.seq).upper())
@@ -66,9 +65,9 @@ def get_codon(seq, codon_pos):
 def get_aa(gene, start, nt_position):
     codon_pos, aa_pos = get_codon_pos(nt_position, start)
     ref_codon = get_codon(reference, codon_pos)
-    seq_codon = get_codon(alignment[row["sample"]], codon_pos)
-    ref_aa = translate_table[ref_codon]
-    seq_aa = translate_table[seq_codon]
+    seq_codon = get_codon(alignment[str(row["sample"])], codon_pos)
+    ref_aa = translate_table[ref_codon] 
+    seq_aa = translate_table[seq_codon] if "-" not in seq_codon and "N" not in seq_codon else "X"
     return gene + ":" + ref_aa + str(aa_pos) + seq_aa if not ref_aa == seq_aa else gene + ":silent"
 
 

@@ -51,10 +51,6 @@ function get_user_input() {
         newNextclade=true
         shift
         ;;
-      -e| --extra)
-        extra=true
-        shift
-        ;;
       -r|--reference-sequence)
         shift
         refseq="$1"
@@ -125,13 +121,15 @@ conda deactivate
 
 conda activate CoronaPipeline
 echo "Variants analysis" 1>&3
-python "$path"/MutTable.py "$aligned" results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
 #python "$path"/translated_table.py "$aligned" results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants" "$extra"
-if [ -n "$extra" ] ; then
-  echo "Extra mutations report" 1>&3
-  python "$path"/translate_extras.py "$path"/covid19_regions.csv results/extra_mutations.csv "$refseq" "$aligned"
-fi
+python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants"
+
+echo "Extra mutations report" 1>&3
+python "$path"/translate_extras.py "$path"/covid19_regions.csv results/non_variant_mutations.csv "$refseq" "$aligned"
+
+echo "Nucleotides mutation table report" 1>&3
+python "$path"/MutTable.py "$aligned" results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
+
 if [ "$q" == true ]; then
   echo "Quasispecies analysis" 1>&3
   mkdir pileup

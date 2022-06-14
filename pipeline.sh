@@ -109,10 +109,6 @@ function get_user_input() {
         q=true
         shift
         ;;       
-      -e| --extra)
-        extra=true
-        shift
-        ;; 
       --spike)
         spike=true
         shift
@@ -341,11 +337,10 @@ function muttable() {
 
           python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx  "$path"/mutationsTable.xlsx
           #python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-          python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants" "$extra" QC/report.txt
-          if [ -n "$extra" ] ; then
+          python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants" QC/report.txt
           echo "Extra mutations report" 1>&3
-            python "$path"/translate_extras.py "$path"/covid19_regions.csv results/extra_mutations.csv "$refseq" "$aligned"
-          fi
+          python "$path"/translate_extras.py "$path"/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta
+
 
     fi
 }
