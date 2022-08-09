@@ -30,6 +30,11 @@ function get_user_input() {
         sequences="$1"
         shift
         ;;
+      -r|--reference-sequence)
+        shift
+        refseq="$1"
+        shift
+        ;;        
       --dontAlign)
         dontAlign=true
         shift
@@ -51,11 +56,11 @@ function get_user_input() {
         newNextclade=true
         shift
         ;;
-      -r|--reference-sequence)
+      --invr)
+        invr=true
         shift
-        refseq="$1"
-        shift
-        ;;
+        ;;        
+
       -h|--help)
         usage
         shift
@@ -112,6 +117,11 @@ else
   nextclade -i "$aligned" -t results/nextclade.tsv
 fi        
 conda deactivate
+
+if [ "$invr" == true ]; then
+  echo "INVR" 1>&3
+  python "$path"/invr.py "$path"/covid19_regions.csv "$refseq" "$aligned" results/nextclade.tsv results/invr.csv
+fi
 
 conda activate pangolin
 echo "Run Pangolin" 1>&3
