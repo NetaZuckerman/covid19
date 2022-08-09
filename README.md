@@ -208,6 +208,8 @@ before the run. \
 #### --dontAlign : run the minipipeline with aligned fasta input. (optional)
 The first sequence in the alignment must be the reference sequence \
 `bash minipipeline.sh -i alignment.fasta --dontAlign` 
+#### --invr : generate INVR report containing information about the mutations. (optional)
+`bash minipipeline.sh -i alignment.fasta -r ref.fasta --invr` 
 
 ---------------
 Dana Bar-Ilan. \
