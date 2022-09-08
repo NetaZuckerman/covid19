@@ -1,5 +1,5 @@
 {
-  "comment": "New pango lineages included, pango-designation release v1.8",
+  "comment": "Including new Pango designations to v1.14 and beyond",
   "compatibility": {
     "nextcladeCli": {
       "max": null,
@@ -44,5 +44,5 @@
     "source": "genbank",
     "strainName": "Wuhan-Hu-1/2019"
   },
-  "tag": "2022-04-28T12:00:00Z"
+  "tag": "2022-08-23T12:00:00Z"
 }

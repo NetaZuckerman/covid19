@@ -34,11 +34,13 @@ path=`dirname "${0}"`
 
 function initialize_globals() {
   dirs_flag=false
-  threads=32
+  threads=20
   num_processes=1
   input_path=""
   single_end=false
   newNextclade=false
+  nextclade25=false
+  nextalign25=false
   spike=false
   SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
@@ -105,6 +107,14 @@ function get_user_input() {
         newNextclade=true
         shift
         ;;
+      --nextclade2.5)
+        nextclade25=true
+        shift
+        ;;     
+      --nextalign2.5)
+        nextalign25=true
+        shift
+        ;;     
       -q| --quasispecies)
         q=true
         shift
@@ -296,15 +306,16 @@ function mafft_alignment() {
   # align with MAFFT
   # https://towardsdatascience.com/how-to-perform-sequence-alignment-on-2019-ncov-with-mafft-96c1944da8c6
   cat CNS_5/*.fa* > alignment/all_not_aligned.fasta
-#  mafft --clustalout alignment/all_not_aligned.fasta > alignment/all_aligned.clustalout
-#  mafft alignment/all_not_aligned.fasta > alignment/all_aligned.fasta
-#  augur align \
-#  --sequences alignment/all_not_aligned.fasta \
-#  --reference-sequence "$refseq" \
-#  --output alignment/all_aligned.fasta
+
   conda activate nextstrain
-  nextalign -i alignment/all_not_aligned.fasta -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv 
+  if [ "$nextalign25" == true ]; then
+    nextalign run -r "$refseq" alignment/all_not_aligned.fasta -o alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
+  else 
+    nextalign -i alignment/all_not_aligned.fasta -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv 
+  fi
   conda deactivate
+  
+  
 
 }
 
@@ -325,9 +336,13 @@ function muttable() {
   echo "Run Nextclade" 1>&3
     conda activate nextstrain
     if [ "$newNextclade" == true ]; then
-
+    echo "1" 1>&3
       nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset $SCRIPT_DIR/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
+    elif [ "$nextclade25" == true ]; then
+    echo "2" 1>&3
+      nextclade run --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv alignment/all_not_aligned.fasta
     else 
+    echo "3" 1>&3
         nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
     fi
     conda deactivate

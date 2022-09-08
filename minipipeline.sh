@@ -43,6 +43,14 @@ function get_user_input() {
         noRecombinants=true
         shift
         ;;
+      --nextclade2.5)
+        nextclade25=true
+        shift
+        ;;     
+      --nextalign2.5)
+        nextalign25=true
+        shift
+        ;;     
       -q| --quasispecies)
         q=true
         shift
@@ -98,24 +106,27 @@ function pileup(){
 conda activate nextstrain
 if  [ -z "$dontAlign" ] ; then
 echo "Align multifasta to reference sequence" 1>&3
-# align multifasta to reference sequence using augur align:
-#  augur align \
-#  --sequences "$sequences" \
-#  --reference-sequence "$refseq" \
-#  --output alignment/all_aligned.fasta
-  nextalign -i "$sequences" -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
-  aligned="alignment/all_aligned.fasta"
+    if [ "$nextalign25" == true ]; then
+    nextalign run -r "$refseq" "$sequences" -o alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
+    else 
+    nextalign -i "$sequences" -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
+    fi
+    aligned="alignment/all_aligned.fasta"
 else 
   aligned=$sequences
 fi
 
 echo "Run Nextclade" 1>&3
 conda activate nextstrain
+
 if [ "$newNextclade" == true ]; then
-  nextclade --input-fasta "$aligned"  --input-dataset $SCRIPT_DIR/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
-else 
-  nextclade -i "$aligned" -t results/nextclade.tsv
-fi        
+      nextclade --input-fasta "$aligned"  --input-dataset $SCRIPT_DIR/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
+elif [ "$nextclade25" == true ]; then
+      nextclade run --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv "$aligned"
+    else 
+    nextclade -i "$aligned" -t results/nextclade.tsv
+    fi
+    
 conda deactivate
 
 if [ "$invr" == true ]; then
