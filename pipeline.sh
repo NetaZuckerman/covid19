@@ -336,13 +336,10 @@ function muttable() {
   echo "Run Nextclade" 1>&3
     conda activate nextstrain
     if [ "$newNextclade" == true ]; then
-    echo "1" 1>&3
       nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset $SCRIPT_DIR/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
     elif [ "$nextclade25" == true ]; then
-    echo "2" 1>&3
       nextclade run --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv alignment/all_not_aligned.fasta
     else 
-    echo "3" 1>&3
         nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
     fi
     conda deactivate
