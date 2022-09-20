@@ -40,6 +40,23 @@ translate_table = {
     'TGC': 'C', 'TGT': 'C', 'TGA': '_', 'TGG': 'W',
 }
 
+def open_deletions(del_list):
+    muts = []
+    for deletion in del_list:
+       pos = deletion.split("-")
+       pos_list = list(range(int(pos[0]),int(pos[1])+1))
+       for pos in pos_list:
+           ref_nuc = reference[pos]
+           muts.append(ref_nuc + str(pos) + '-')
+    return muts
+    
+def sort_by_pos(df):
+    for index, row in df.iterrows():
+        df.at[index, "pos"] = int(row["nuc_sub"][1:-1])
+    df = df.sort_values(by=['pos'])
+    
+    return df[["accession_id", "nuc_sub"]]
+
 def get_mut_df(nextclade_path):
     df = pd.DataFrame()    
         
@@ -49,8 +66,10 @@ def get_mut_df(nextclade_path):
     
         temp = pd.DataFrame()
         temp["nuc_sub"] = row["substitutions"].split(',')
+        deletions = pd.DataFrame({"nuc_sub":open_deletions(row["deletions"].split(','))})
+        temp = temp.append(deletions,ignore_index=True)
         temp["accession_id"] = row["seqName"]
-        
+        sorted_temp = sort_by_pos(temp)
         df = df.append(temp)
     return df
     
