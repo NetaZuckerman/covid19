@@ -249,7 +249,7 @@ alignment.pop('NC_045512.2', None)
 alignment.pop('REF_NC_045512.2', None)
 
 # prepare nextclade dataframe
-clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'insertions', 'substitutions']]
+clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'insertions', 'substitutions', 'alignmentStart', 'alignmentEnd']]
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
 clades_df['sample'] = clades_df['sample'].apply(str)
 clades_df = clades_df.fillna('')
@@ -282,7 +282,7 @@ lin_del_list = {}
 for lin, muts in mutations_by_lineage_nt.items():
     lin_del_list[lin], lin_mut_count[lin] = var_mut_counter(muts)
 
-#exclude all known recombinants from the the pipeline - temp!###########
+#exclude all known recombinants from the the pipeline - temp
 for k in mutations_by_lineage_nt.keys():
     if k.startswith('X'):
         del mutations_by_lineage_nt_no_X[k]
@@ -297,7 +297,7 @@ mutations_by_lineage_nt = mutations_by_lineage_nt_no_X
 # DataFrames for csv outputs
 final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
-                  "pangolin clade", "nextstrain clade", 'nt substitutions', 'red_flags', "recombinant suspect"])
+                  "pangolin clade", "nextstrain clade", 'nt substitutions', 'red_flags', "recombinant suspect", "alignmentStart", "alignmentEnd"])
 chosen_recombinants = pd.DataFrame(columns=["Sample","suspected variant","suspected recombinant", "suspected variant mutations",
                                             "suspected recombinant mutations","swaps","breakpoints"])
 ranked_variants_df = pd.DataFrame(columns=["sample", "suspect"])
@@ -424,7 +424,8 @@ with open("mutations.log", 'w') as log:
                 nt_substitutions_str = ';'.join(nt_substitutions_list)
             else:
                 red_flags_str = nt_substitutions_str = ''
-        
+                
+          
             final_table = final_table.append({
                 "Sample": sample,
                 "Variant": pangolin_clade if not QCfail else "QC fail",
@@ -443,7 +444,9 @@ with open("mutations.log", 'w') as log:
                 "% coverage": coverage,
                 "pangolin clade": pangolin_clade,
                 "nextstrain clade": nextclade.values[0] if not nextclade.empty else '',
-                "recombinant suspect": is_rec_suspect
+                "recombinant suspect": is_rec_suspect,
+                "alignmentStart": clades_df[clades_df['sample'] == sample].reset_index().alignmentStart[0],
+                "alignmentEnd": clades_df[clades_df['sample'] == sample].reset_index().alignmentEnd[0]
                 }, ignore_index=True)
 
 
@@ -460,6 +463,13 @@ for sample in low_quel:
         "Variant": "QC fail",
         "suspected variant": "QC fail"
         }, ignore_index=True)
+
+# for matrix
+# cutting the accession_id when there is an 'EPI_ISL' start #$
+for index, row in final_table.iterrows():
+    if 'EPI_ISL' in sample: #$
+                row["Sample"] = ''.join([i for i in sample.split('/')[-1].split('|') if 'EPI_ISL' in i]) #$
+
 
 final_table.to_csv(output_file,index=False)
 ranked_variants_df[ranked_variants_df.columns[0:2]].to_csv(output_path / 'ranked_variants.csv',index=False)

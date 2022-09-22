@@ -18,6 +18,7 @@ new_df = pd.DataFrame(columns=["accession_id","position","referance","mutation",
 # read sequences
 reference = list(SeqIO.read(ref_file, 'fasta').seq)
 alignment = SeqIO.to_dict(SeqIO.parse(alignment_file, 'fasta'))
+
 for sample, record in alignment.items():
         alignment[sample] = list(str(record.seq).upper())
 
@@ -44,7 +45,8 @@ def open_deletions(del_list):
     muts = []
     for deletion in del_list:
        pos = deletion.split("-")
-       pos_list = list(range(int(pos[0]),int(pos[1])+1))
+       pos_list = list(range(int(pos[0]),int(pos[1])+1)) if len(pos) > 1 else pos
+       pos[0] = int(pos[0])
        for pos in pos_list:
            ref_nuc = reference[pos]
            muts.append(ref_nuc + str(pos) + '-')
@@ -68,9 +70,10 @@ def get_mut_df(nextclade_path):
         temp["nuc_sub"] = row["substitutions"].split(',')
         deletions = pd.DataFrame({"nuc_sub":open_deletions(row["deletions"].split(','))})
         temp = temp.append(deletions,ignore_index=True)
+        
         temp["accession_id"] = row["seqName"]
         sorted_temp = sort_by_pos(temp)
-        df = df.append(temp)
+        df = df.append(sorted_temp)
     return df
     
 
@@ -170,4 +173,8 @@ for index, row in df.iterrows():
         
     new_df = new_df.append(row)
 
+# cutting the accession_id when there is an 'EPI_ISL' start #$
+for index, row in new_df.iterrows():    
+    if 'EPI_ISL' in row["accession_id"]: #$
+        row["accession_id"] = ''.join([i for i in row["accession_id"].split('/')[-1].split('|') if 'EPI_ISL' in i]) #$
 new_df.to_csv(output, index=False)
