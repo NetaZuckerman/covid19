@@ -1,4 +1,4 @@
-
+import re
 import pandas as pd
 from Bio import SeqIO
 from math import floor
@@ -68,8 +68,9 @@ def get_mut_df(nextclade_path):
     
         temp = pd.DataFrame()
         temp["nuc_sub"] = row["substitutions"].split(',')
-        deletions = pd.DataFrame({"nuc_sub":open_deletions(row["deletions"].split(','))})
-        temp = temp.append(deletions,ignore_index=True)
+        if not pd.isnull(row["deletions"]):
+            deletions = pd.DataFrame({"nuc_sub":open_deletions(row["deletions"].split(','))}) 
+            temp = temp.append(deletions,ignore_index=True)
         
         temp["accession_id"] = row["seqName"]
         sorted_temp = sort_by_pos(temp)
@@ -110,10 +111,10 @@ def get_aa(gene, start, nt_position):
     ref_aa = translate_table[ref_codon]
     if seq_codon == "---":
         seq_aa = '-'
-    elif "-"  in seq_codon or "N"  in seq_codon:
+    elif "-"  in seq_codon or "N"  in seq_codon or bool(re.compile(r'[^ATCG]').search(seq_codon)):
         seq_aa = 'X'
     else:
-        seq_aa = translate_table[seq_codon]
+        seq_aa = translate_table[seq_codon] 
     return ref_aa + str(aa_pos) + seq_aa 
 
 def mut_type(var): # var is a mutation format ref-position-alt example - A1232I
