@@ -467,8 +467,8 @@ for sample in low_quel:
 # for matrix
 # cutting the accession_id when there is an 'EPI_ISL' start #$
 for index, row in final_table.iterrows():
-    if 'EPI_ISL' in sample: #$
-                row["Sample"] = ''.join([i for i in sample.split('/')[-1].split('|') if 'EPI_ISL' in i]) #$
+    if 'EPI_ISL' in row["Sample"]: #$
+                row["Sample"] = ''.join([i for i in row["Sample"].split('/')[-1].split('|') if 'EPI_ISL' in i]) #$
 
 
 final_table.to_csv(output_file,index=False)
