@@ -271,8 +271,6 @@ for sample in clades_df['sample']:  # change appearance from nextclade format to
 
 mutations_by_lineage = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
 mutations_by_lineage_nt = mutTable.groupby('variantname')['nucsub'].apply(list).to_dict()
-mutations_by_lineage_nt_no_X = mutTable.groupby('variantname')['nucsub'].apply(list).to_dict()
-mutations_by_lineage_no_X = mutTable.groupby('variantname')['variant'].apply(list).to_dict()
 
 # contains the variant mutations sum, consecutive deletions will be considered as one event
 lin_mut_count = {}
@@ -281,16 +279,6 @@ lin_del_list = {}
 
 for lin, muts in mutations_by_lineage_nt.items():
     lin_del_list[lin], lin_mut_count[lin] = var_mut_counter(muts)
-
-#exclude all known recombinants from the the pipeline - temp
-for k in mutations_by_lineage_nt.keys():
-    if k.startswith('X'):
-        del mutations_by_lineage_nt_no_X[k]
-for k in mutations_by_lineage.keys():
-    if k.startswith('X'):
-        del mutations_by_lineage_no_X[k]        
-mutations_by_lineage = mutations_by_lineage_no_X
-mutations_by_lineage_nt = mutations_by_lineage_nt_no_X
 
 #######################################################################
 
