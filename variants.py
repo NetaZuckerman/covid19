@@ -249,7 +249,7 @@ alignment.pop('NC_045512.2', None)
 alignment.pop('REF_NC_045512.2', None)
 
 # prepare nextclade dataframe
-clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'insertions', 'substitutions', 'alignmentStart', 'alignmentEnd']]
+#clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'insertions', 'substitutions', 'alignmentStart', 'alignmentEnd']]
 clades_df = clades_df.rename(columns={'seqName': 'sample'})
 clades_df['sample'] = clades_df['sample'].apply(str)
 clades_df = clades_df.fillna('')
@@ -433,8 +433,6 @@ with open("mutations.log", 'w') as log:
                 "pangolin clade": pangolin_clade,
                 "nextstrain clade": nextclade.values[0] if not nextclade.empty else '',
                 "recombinant suspect": is_rec_suspect,
-                "alignmentStart": clades_df[clades_df['sample'] == sample].reset_index().alignmentStart[0],
-                "alignmentEnd": clades_df[clades_df['sample'] == sample].reset_index().alignmentEnd[0]
                 }, ignore_index=True)
 
 
@@ -458,7 +456,7 @@ for index, row in final_table.iterrows():
     if 'EPI_ISL' in row["Sample"]: #$
                 row["Sample"] = ''.join([i for i in row["Sample"].split('/')[-1].split('|') if 'EPI_ISL' in i]) #$
 
-
+final_table = pd.concat([final_table,clades_df], axis = 1)
 final_table.to_csv(output_file,index=False)
 ranked_variants_df[ranked_variants_df.columns[0:2]].to_csv(output_path / 'ranked_variants.csv',index=False)
 extra_df.to_csv("results/non_variant_mutations.csv", index=False)

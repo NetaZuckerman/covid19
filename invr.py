@@ -41,15 +41,31 @@ translate_table = {
     'TGC': 'C', 'TGT': 'C', 'TGA': '_', 'TGG': 'W',
 }
 
-def open_deletions(del_list):
+def open_mutations(positions, nuc):
+    '''
+    open list of positions to list of mutation example A104N
+    this function was created for Ns and gaps - lists that nextclade generates.
+
+    Parameters
+    ----------
+    pos_list : list of str
+        the list contains positions ranges. for example [100-132, 2442-4256]
+    nuc : char
+        this char will be the sequnces nucleotide in every  positions. 
+
+    Returns
+    -------
+    muts : list
+
+    '''
     muts = []
-    for deletion in del_list:
-       pos = deletion.split("-")
+    for pos in positions:
+       pos = pos.split("-")
        pos_list = list(range(int(pos[0]),int(pos[1])+1)) if len(pos) > 1 else pos
        pos[0] = int(pos[0])
        for pos in pos_list:
            ref_nuc = reference[pos]
-           muts.append(ref_nuc + str(pos) + '-')
+           muts.append(ref_nuc + str(pos) + nuc)
     return muts
     
 def sort_by_pos(df):
@@ -59,6 +75,19 @@ def sort_by_pos(df):
     
     return df[["accession_id", "nuc_sub"]]
 
+
+def open_ambig_muts(muts):
+    mut_list = []
+    for mut in muts:
+        nuc, pos = mut.split(":")
+        pos = pos.split("-")
+        pos_list = list(range(int(pos[0]),int(pos[1])+1)) if len(pos) > 1 else pos
+        for pos in pos_list:
+            ref_nuc = reference[int(pos)]
+            mut_list.append(ref_nuc + str(pos) + nuc)
+            
+    return mut_list
+  
 def get_mut_df(nextclade_path):
     df = pd.DataFrame()    
         
@@ -69,9 +98,14 @@ def get_mut_df(nextclade_path):
         temp = pd.DataFrame()
         temp["nuc_sub"] = row["substitutions"].split(',')
         if not pd.isnull(row["deletions"]):
-            deletions = pd.DataFrame({"nuc_sub":open_deletions(row["deletions"].split(','))}) 
+            deletions = pd.DataFrame({"nuc_sub":open_mutations(row["deletions"].split(','),"-")}) 
             temp = temp.append(deletions,ignore_index=True)
-        
+        if not pd.isnull(row["missing"]): #uncovered nucleotides (N's)
+            uncovered = pd.DataFrame({"nuc_sub":open_mutations(row["missing"].split(','),"N")}) 
+            temp = temp.append(uncovered,ignore_index=True) 
+        if not pd.isnull(row["nonACGTNs"]): #ambigius nuc
+            ambig = pd.DataFrame({"nuc_sub":open_ambig_muts(row["nonACGTNs"].split(','))}) 
+            temp = temp.append(ambig,ignore_index=True) 
         temp["accession_id"] = row["seqName"]
         sorted_temp = sort_by_pos(temp)
         df = df.append(sorted_temp)
