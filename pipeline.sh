@@ -179,7 +179,7 @@ function single_end_mapping() {
     fi
 
     if [[ $file == *.gz ]]; then
-      output=`basename .fastq.gz`
+      output=`basename "$file" .fastq.gz`
     else
       output=`basename "$file" .fastq`
     fi
@@ -190,6 +190,7 @@ function single_end_mapping() {
 
     output=BAM/$output.bam
 
+    
     bwa mem -v1 -t"$threads" "$refseq" "$file" | samtools view -@ "$threads" -b - > $output
   done
 }
@@ -411,6 +412,7 @@ echo "Starting Pipeline" 1>&3
 echo "Mapping reads to reference" 1>&3
 if [ "$single_end" == true ]; then
   single_end_mapping
+  
 else
   # start workflow:
   map_to_ref
@@ -432,9 +434,8 @@ wait
 
 echo "Determining consensus sequences" 1>&3
 consensus
-if [ "$single_end" == false ]; then
-  change_fasta_header
-fi
+change_fasta_header
+
 echo "Align sequences to the reference sequence" 1>&3
 mafft_alignment
 
