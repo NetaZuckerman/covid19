@@ -103,18 +103,6 @@ function get_user_input() {
         single_end=true
         shift
         ;;
-      -n| --newNextclade)
-        newNextclade=true
-        shift
-        ;;
-      --nextclade2.5)
-        nextclade25=true
-        shift
-        ;;     
-      --nextalign2.5)
-        nextalign25=true
-        shift
-        ;;     
       -q| --quasispecies)
         q=true
         shift
@@ -303,26 +291,10 @@ function change_fasta_header() {
   done
 }
 
-function mafft_alignment() {
-  # align with MAFFT
-  # https://towardsdatascience.com/how-to-perform-sequence-alignment-on-2019-ncov-with-mafft-96c1944da8c6
-  cat CNS_5/*.fa* > alignment/all_not_aligned.fasta
-
-  conda activate nextstrain
-  if [ "$nextalign25" == true ]; then
-    nextalign run -r "$refseq" alignment/all_not_aligned.fasta -o alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
-  else 
-    nextalign -i alignment/all_not_aligned.fasta -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv 
-  fi
-  conda deactivate
-  
-  
-
-}
-
-
 function muttable() {
-
+    #generate multi-fasta from consensus sequences
+    cat CNS_5/*.fa* > alignment/all_not_aligned.fasta
+    
     if [ "$spike" == true ]; then
        python "$path"/variants_spike.py alignment/all_aligned.fasta results/variants.csv "$path"/mutationsTable.xlsx QC/report.txt
     else
@@ -334,15 +306,14 @@ function muttable() {
     pangolin alignment/all_not_aligned.fasta --outfile results/pangolinClades.csv
     conda deactivate
 
-  echo "Run Nextclade" 1>&3
+    echo "Run Nextclade" 1>&3
     conda activate nextstrain
-    if [ "$newNextclade" == true ]; then
-      nextclade --input-fasta alignment/all_not_aligned.fasta  --input-dataset $SCRIPT_DIR/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
-    elif [ "$nextclade25" == true ]; then
-      nextclade run --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv alignment/all_not_aligned.fasta
-    else 
-        nextclade -i alignment/all_not_aligned.fasta -t results/nextclade.tsv
-    fi
+
+    nextclade run alignment/all_not_aligned.fasta --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv --output-fasta alignment/all_aligned.fasta
+    
+    
+    
+    
     conda deactivate
 
     conda activate CoronaPipeline

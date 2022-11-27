@@ -42,15 +42,7 @@ function get_user_input() {
       --noRecombinants)
         noRecombinants=true
         shift
-        ;;
-      --nextclade2.5)
-        nextclade25=true
-        shift
-        ;;     
-      --nextalign2.5)
-        nextalign25=true
-        shift
-        ;;     
+        ;;   
       -q| --quasispecies)
         q=true
         shift
@@ -60,10 +52,6 @@ function get_user_input() {
         num_processes="$1"
         shift
         ;;      
-      -n| --newNextclade)
-        newNextclade=true
-        shift
-        ;;
       --invr)
         invr=true
         shift
@@ -103,35 +91,15 @@ function pileup(){
   done
 }
 
-conda activate nextstrain
-if  [ -z "$dontAlign" ] ; then
-echo "Align multifasta to reference sequence" 1>&3
-    if [ "$nextalign25" == true ]; then
-    nextalign run -r "$refseq" "$sequences" -o alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
-    else 
-    nextalign -i "$sequences" -r "$refseq" --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insertions.csv
-    fi
-    aligned="alignment/all_aligned.fasta"
-else 
-  aligned=$sequences
-fi
 
 echo "Run Nextclade" 1>&3
 conda activate nextstrain
-
-if [ "$newNextclade" == true ]; then
-      nextclade --input-fasta "$aligned"  --input-dataset $SCRIPT_DIR/nextclade --output-dir nextclade/ --output-tsv results/nextclade.tsv
-elif [ "$nextclade25" == true ]; then
-      nextclade run --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv "$aligned"
-    else 
-    nextclade -i "$aligned" -t results/nextclade.tsv
-    fi
-    
+nextclade run "$sequences" --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv --output-fasta alignment/all_aligned.fasta
 conda deactivate
 
 if [ "$invr" == true ]; then
   echo "INVR" 1>&3
-  python "$path"/invr.py "$path"/covid19_regions.csv "$refseq" "$aligned" results/nextclade.tsv results/invr.csv
+  python "$path"/invr.py "$path"/covid19_regions.csv "$refseq" alignment/all_aligned.fasta results/nextclade.tsv results/invr.csv
 fi
 
 conda activate pangolin
@@ -142,14 +110,14 @@ conda deactivate
 
 conda activate CoronaPipeline
 echo "Variants analysis" 1>&3
-#python "$path"/translated_table.py "$aligned" results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-python "$path"/variants.py "$aligned" results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants"
+#python "$path"/translated_table.py "alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
+python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants"
 
 echo "Extra mutations report" 1>&3
-python "$path"/translate_extras.py "$path"/covid19_regions.csv results/non_variant_mutations.csv "$refseq" "$aligned"
+python "$path"/translate_extras.py "$path"/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta
 
 echo "Nucleotides mutation table report" 1>&3
-python "$path"/MutTable.py "$aligned" results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
+python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
 
 if [ "$q" == true ]; then
   echo "Quasispecies analysis" 1>&3
