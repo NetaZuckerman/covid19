@@ -196,22 +196,21 @@ def swap_finder(suspected_variant, suspected_recombinant, sample_mut):
 # get user input
 alignment_file = argv[1]
 output_file = argv[2]
-pangolin_file = argv[3]
-clades_path = argv[4]  # nextclade tsv
-excel_path = argv[5]  # mutations table path
-no_rec = argv[6]
+clades_path = argv[3]  # nextclade tsv
+excel_path = argv[4]  # mutations table path
+no_rec = argv[5]
 
 
 red_flags_path = excel_path.replace('mutationsTable.xlsx', 'red_flags.csv')
-output_path = Path(output_file).parent
+output_path = Path(output_file).parent 
 out_fname = datetime.now().strftime('%Y%m%d') + '_variants.csv'
 output_file = output_path / out_fname
 
 red_flags_df = pd.read_csv(red_flags_path)
 
 
-if len(argv) > 7:
-    qc_report_path = argv[7]
+if len(argv) > 6:
+    qc_report_path = argv[6]
     try:
         qc = pd.read_csv(qc_report_path, sep='\t')
         qc['sample'] = qc['sample'].apply(str)
@@ -221,15 +220,6 @@ if len(argv) > 7:
 else:
     qc_report_path = ''
 
-# load pangolin + nextclade outputs, mutations table.
-try:
-    pangolinTable = pd.read_csv(pangolin_file)
-    pangolinTable['taxon'] = pangolinTable['taxon'].apply(str)
-    if "qc_status" in pangolinTable:
-        pangolinTable = pangolinTable.rename(columns={"qc_status": "status"})
-except FileNotFoundError:
-    print("Pangolin File Not Found")
-    pangolinTable = pd.DataFrame()
 
 clades_df = pd.read_csv(clades_path, sep='\t')
 
@@ -250,17 +240,17 @@ alignment.pop('REF_NC_045512.2', None)
 
 # prepare nextclade dataframe
 #clades_df = clades_df[['seqName', 'aaSubstitutions', 'aaDeletions', 'clade', 'insertions', 'substitutions', 'alignmentStart', 'alignmentEnd']]
-clades_df = clades_df.rename(columns={'seqName': 'sample'})
-clades_df['sample'] = clades_df['sample'].apply(str)
+clades_df = clades_df.rename(columns={'seqName': 'Sample'})
+clades_df['Sample'] = clades_df['Sample'].apply(str)
 clades_df = clades_df.fillna('')
 # create dict of aasubstitutions and aadeletions. key=sample id, value=list of substitutions. to keep for final table.
 aa_substitution_dict = {}
 aa_deletions_dict = {}
 insertions_dict = {}
-for sample in clades_df['sample']:  # change appearance from nextclade format to: Mutation(Gene)
-    aasubs = clades_df[clades_df['sample'] == sample].aaSubstitutions.values.tolist()
-    aadels = clades_df[clades_df['sample'] == sample].aaDeletions.values.tolist()
-    insertions = clades_df[clades_df['sample'] == sample].insertions.values.tolist()
+for sample in clades_df['Sample']:  # change appearance from nextclade format to: Mutation(Gene)
+    aasubs = clades_df[clades_df['Sample'] == sample].aaSubstitutions.values.tolist()
+    aadels = clades_df[clades_df['Sample'] == sample].aaDeletions.values.tolist()
+    insertions = clades_df[clades_df['Sample'] == sample].insertions.values.tolist()
     
     # ';' instead of ',' as sep. for Ari's tables -> important
     aa_substitution_dict[sample] = [f"{x.split(':')[1]}({x.split(':')[0]})" for x in aasubs[0].split(',')] \
@@ -285,7 +275,7 @@ for lin, muts in mutations_by_lineage_nt.items():
 # DataFrames for csv outputs
 final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
-                  "pangolin clade", "nextstrain clade", 'nt substitutions', 'red_flags', "recombinant suspect", "alignmentStart", "alignmentEnd"])
+                  'nt substitutions', 'red_flags', "recombinant suspect", "alignmentStart", "alignmentEnd"])
 chosen_recombinants = pd.DataFrame(columns=["Sample","suspected variant","suspected recombinant", "suspected variant mutations",
                                             "suspected recombinant mutations","swaps","breakpoints"])
 ranked_variants_df = pd.DataFrame(columns=["sample", "suspect"])
@@ -344,18 +334,11 @@ with open("mutations.log", 'w') as log:
             else:
                 coverage = str(calculate_coverage(alignment[sample].seq))
         
-            # get pangolin info from table
             
-            try:
-                pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
-                pangolin_status = pangolinTable[pangolinTable['taxon'] == sample].status.values[0]
-            except:
-                pangolin_clade = '-'
-                pangolin_status = ''
-            QCfail = True if pangolin_status == 'fail' or not sus_variant_name else False
+            QCfail = True if not sus_variant_name else False
         
             # get nextclade info from table
-            nextclade = clades_df[clades_df['sample'] == sample].clade
+            nextclade_pango = clades_df[clades_df['Sample'] == sample].Nextclade_pango
         
             #add protein value
             not_covered_list = []
@@ -372,7 +355,7 @@ with open("mutations.log", 'w') as log:
             not_covered_list = ";".join(set(not_covered_list)) if not_covered_list else ''
             
             
-            nt_substitutions = clades_df.loc[clades_df['sample'].eq(sample), 'substitutions'].str.split(',')
+            nt_substitutions = clades_df.loc[clades_df['Sample'].eq(sample), 'substitutions'].str.split(',')
             nt_substitutions_list = ';'.join(nt_substitutions.values[0]).split(";")
             
             non_variant_mut_aa = ";".join(set(extra_mutations(aa_substitution_dict[sample], mutations_by_lineage[sus_variant_name], aa=1))) if not QCfail else ""
@@ -416,7 +399,7 @@ with open("mutations.log", 'w') as log:
           
             final_table = final_table.append({
                 "Sample": sample,
-                "Variant": pangolin_clade if not QCfail else "QC fail",
+                "Variant": nextclade_pango.values[0] if not nextclade_pango.empty or not QCfail else "QC fail",
                 "suspect": None,
                 "suspected variant": sus_variant_name if suspect_info and not suspect_info=='suspect' 
                 and int(suspect_info.split('noN:')[1].split(".")[0]) > 60 else 'QC fail', #if the suspected variant < 60% => QC fail
@@ -430,8 +413,6 @@ with open("mutations.log", 'w') as log:
                 "Insertions": ';'.join(insertions_dict[sample]) if insertions_dict and sample in insertions_dict else 'NA',
                 "mutations not covered": not_covered_list,
                 "% coverage": coverage,
-                "pangolin clade": pangolin_clade,
-                "nextstrain clade": nextclade.values[0] if not nextclade.empty else '',
                 "recombinant suspect": is_rec_suspect,
                 }, ignore_index=True)
 
@@ -456,7 +437,7 @@ for index, row in final_table.iterrows():
     if 'EPI_ISL' in row["Sample"]: #$
                 row["Sample"] = ''.join([i for i in row["Sample"].split('/')[-1].split('|') if 'EPI_ISL' in i]) #$
 
-final_table = pd.concat([final_table,clades_df], axis = 1)
+final_table = pd.concat([final_table,clades_df.iloc[:,1:]], axis = 1).reset_index(drop=True)
 final_table.to_csv(output_file,index=False)
 ranked_variants_df[ranked_variants_df.columns[0:2]].to_csv(output_path / 'ranked_variants.csv',index=False)
 extra_df.to_csv("results/non_variant_mutations.csv", index=False)
