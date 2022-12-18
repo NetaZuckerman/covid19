@@ -5,6 +5,11 @@ from sys import argv
 from pathlib import Path
 from datetime import datetime
 
+import time
+start = time.time()
+
+
+
 def format_line(info):
     '''
     format the suspected variant info for suspect info column in variants.csv.
@@ -111,7 +116,7 @@ def rank_variants(mutations_list, mutations_not_covered, compare_with, lin_mut_c
         shared_mut_count = sample_mut_counter(shared_mut, lin_del_list[lin])
         noN_mut_count = sample_mut_counter(noN_mutations, lin_del_list[lin])
 
-        line_df = {        
+        line = {        
             "lineage" : lin,
             "mutations_fraction": "("+str(shared_mut_count) + "/" + str(lin_mut_count[lin])+")",
             "mutation_precentage": round(shared_mut_count / lin_mut_count[lin] * 100, 2),
@@ -120,8 +125,10 @@ def rank_variants(mutations_list, mutations_not_covered, compare_with, lin_mut_c
             "sort_by": shared_mut_count
         }
 
-        line_df['suspect'] = format_line(line_df)
-        ranked_variants = ranked_variants.append(line_df, ignore_index=True) 
+        line['suspect'] = format_line(line)
+        line_df = pd.DataFrame(data=line, index = [0])
+        #ranked_variants = ranked_variants.append(line_df, ignore_index=True) 
+        ranked_variants = pd.concat([ranked_variants, line_df], axis = 0) 
     
     if len(ranked_variants) == 0:
         return "", ranked_variants
@@ -270,6 +277,9 @@ lin_del_list = {}
 for lin, muts in mutations_by_lineage_nt.items():
     lin_del_list[lin], lin_mut_count[lin] = var_mut_counter(muts)
 
+
+mutTable = mutTable.drop_duplicates(subset='nucsub', keep="first")
+
 #######################################################################
 
 # DataFrames for csv outputs
@@ -320,7 +330,7 @@ with open("mutations.log", 'w') as log:
                 QCfail = True
             if len(rank_variant) > 0:
                 rank_variant['sample'] = sample
-                ranked_variants_df = ranked_variants_df.append(rank_variant)
+                ranked_variants_df = pd.concat([ranked_variants_df,rank_variant], axis = 0)
                 suspect_info = format_line(rank_variant.loc[rank_variant['lineage'] == sus_variant_name].iloc[0])
             else:
                 suspect_info = ""
@@ -365,7 +375,7 @@ with open("mutations.log", 'w') as log:
             extra = pd.DataFrame()
             extra["mutations"] = np.array(non_variant_mut_nt)
             extra["sample"] = sample
-            extra_df = extra_df.append(extra)
+            extra_df = pd.concat([extra_df,extra], axis = 0)
 
 
             # new recombinant part
@@ -396,8 +406,8 @@ with open("mutations.log", 'w') as log:
             else:
                 red_flags_str = nt_substitutions_str = ''
                 
-          
-            final_table = final_table.append({
+            
+            line = pd.DataFrame(data = {
                 "Sample": sample,
                 "Variant": nextclade_pango.values[0] if not nextclade_pango.empty or not QCfail else "QC fail",
                 "suspect": None,
@@ -414,9 +424,11 @@ with open("mutations.log", 'w') as log:
                 "mutations not covered": not_covered_list,
                 "% coverage": coverage,
                 "recombinant suspect": is_rec_suspect,
-                }, ignore_index=True)
+                }, index=[0])
+            final_table = pd.concat([final_table,line], axis = 0)
 
-
+final_table = final_table.reset_index(drop=True)
+        
 # append low quelity samples
 low_quel = {id: [] for id in aa_substitution_dict if id not in alignment}
 for sample in low_quel:
@@ -437,7 +449,10 @@ for index, row in final_table.iterrows():
     if 'EPI_ISL' in row["Sample"]: #$
                 row["Sample"] = ''.join([i for i in row["Sample"].split('/')[-1].split('|') if 'EPI_ISL' in i]) #$
 
+
 final_table = pd.concat([final_table,clades_df.iloc[:,1:]], axis = 1).reset_index(drop=True)
+
+
 final_table.to_csv(output_file,index=False)
 ranked_variants_df[ranked_variants_df.columns[0:2]].to_csv(output_path / 'ranked_variants.csv',index=False)
 extra_df.to_csv("results/non_variant_mutations.csv", index=False)
@@ -446,4 +461,8 @@ if not no_rec:
     chosen_recombinants.to_csv("results/suspected_recombinants.csv", index=False)
     all_sus_rec_df[all_sus_rec_df.columns[0:2]].to_csv("results/ranked_suspected_recombinants.csv",index=False)
 
+
+end = time.time()
+total_time = end - start
+print("variants.py time:\n"+ str(total_time)+ 'sec')
 
