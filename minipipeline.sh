@@ -17,6 +17,7 @@ function usage() {
 
   optional:
   -n| --newNextclade              use nextclade version 1.3.0
+  --dontAlign                     input aligned fasta and skip alignment stage
 EOF
 exit 0
 }
@@ -34,6 +35,10 @@ function get_user_input() {
         refseq="$1"
         shift
         ;;        
+      --dontAlign)
+        dontAlign=true
+        shift
+        ;;
       --noRecombinants)
         noRecombinants=true
         shift
@@ -71,7 +76,7 @@ get_user_input "$@"
 # check input:
 echo "checking input.."
 [[ -z "$sequences" ]] && echo "Please provide multi-fasta sequence (-i|--sequences)" && exit 0
-[[ -z "$refseq" ]] && echo "Please provide reference sequence (-r|--reference-sequence)" && exit 0
+[[ -z "$refseq" ]] && [ -z "$dontAlign" ] && echo "Please provide reference sequence (-r|--reference-sequence)" && exit 0
 echo "all input provided. continuing."
 mkdir -p {alignment,results} # -p: create only if doesnt already exist
 
@@ -89,8 +94,7 @@ function pileup(){
 
 echo "Run Nextclade" 1>&3
 conda activate nextstrain
-nextclade run --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insersions.csv "$sequences"
-#nextclade run "$sequences" --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv --output-fasta alignment/all_aligned.fasta
+nextclade run "$sequences" --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv --output-fasta alignment/all_aligned.fasta
 conda deactivate
 
 if [ "$invr" == true ]; then
@@ -98,10 +102,16 @@ if [ "$invr" == true ]; then
   python "$path"/invr.py "$path"/covid19_regions.csv "$refseq" alignment/all_aligned.fasta results/nextclade.tsv results/invr.csv
 fi
 
+conda activate pangolin
+echo "Run Pangolin" 1>&3
+pangolin "$sequences" --outfile results/pangolinClades.csv
+conda deactivate
+
+
 conda activate CoronaPipeline
 echo "Variants analysis" 1>&3
 #python "$path"/translated_table.py "alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants"
+python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants"
 
 echo "Extra mutations report" 1>&3
 python "$path"/translate_extras.py "$path"/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta

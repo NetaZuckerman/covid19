@@ -203,9 +203,10 @@ def swap_finder(suspected_variant, suspected_recombinant, sample_mut):
 # get user input
 alignment_file = argv[1]
 output_file = argv[2]
-clades_path = argv[3]  # nextclade tsv
-excel_path = argv[4]  # mutations table path
-no_rec = argv[5]
+pangolin_file = argv[3]
+clades_path = argv[4]  # nextclade tsv
+excel_path = argv[5]  # mutations table path
+no_rec = argv[6]
 
 
 red_flags_path = excel_path.replace('mutationsTable.xlsx', 'red_flags.csv')
@@ -216,8 +217,8 @@ output_file = output_path / out_fname
 red_flags_df = pd.read_csv(red_flags_path)
 
 
-if len(argv) > 6:
-    qc_report_path = argv[6]
+if len(argv) > 7:
+    qc_report_path = argv[7]
     try:
         qc = pd.read_csv(qc_report_path, sep='\t')
         qc['sample'] = qc['sample'].apply(str)
@@ -227,6 +228,15 @@ if len(argv) > 6:
 else:
     qc_report_path = ''
 
+# load pangolin + nextclade outputs, mutations table.
+try:
+    pangolinTable = pd.read_csv(pangolin_file)
+    pangolinTable['taxon'] = pangolinTable['taxon'].apply(str)
+    if "qc_status" in pangolinTable:
+        pangolinTable = pangolinTable.rename(columns={"qc_status": "status"})
+except FileNotFoundError:
+    print("Pangolin File Not Found")
+    pangolinTable = pd.DataFrame()
 
 clades_df = pd.read_csv(clades_path, sep='\t')
 
@@ -283,7 +293,7 @@ mutTable = mutTable.drop_duplicates(subset='nucsub', keep="first")
 #######################################################################
 
 # DataFrames for csv outputs
-final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "AA substitutions",
+final_table = pd.DataFrame(columns=["Sample", "Variant", "suspect", "suspected variant", "suspect info", "pango_usher", "pango_nextclade","AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", "non variant mutations", "% coverage",
                   'nt substitutions', 'red_flags', "recombinant suspect", "alignmentStart", "alignmentEnd"])
 chosen_recombinants = pd.DataFrame(columns=["Sample","suspected variant","suspected recombinant", "suspected variant mutations",
@@ -347,6 +357,16 @@ with open("mutations.log", 'w') as log:
             
             QCfail = True if not sus_variant_name else False
         
+            # get pangolin info from table
+    
+            try:
+                pangolin_clade = pangolinTable[pangolinTable['taxon'] == sample].lineage.values[0]
+                pangolin_status = pangolinTable[pangolinTable['taxon'] == sample].status.values[0]
+            except:
+                pangolin_clade = '-'
+                pangolin_status = ''
+            QCfail = True if pangolin_status == 'fail' or not sus_variant_name else False
+
             # get nextclade info from table
             nextclade_pango = clades_df[clades_df['Sample'] == sample].Nextclade_pango
         
@@ -412,7 +432,7 @@ with open("mutations.log", 'w') as log:
                 "Variant": nextclade_pango.values[0] if not nextclade_pango.empty or not QCfail else "QC fail",
                 "suspect": None,
                 "suspected variant": sus_variant_name if suspect_info and not suspect_info=='suspect' 
-                and int(suspect_info.split('noN:')[1].split(".")[0]) > 60 else 'QC fail', #if the suspected variant < 60% => QC fail
+                and int(suspect_info.split('noN:')[1].split(".")[0].split("%")[0]) > 50 else 'QC fail', #if the suspected variant < 60% => QC fail
                 "suspect info": suspect_info,
                 'nt substitutions' : nt_substitutions_str,
                 'red_flags' : red_flags_str,
@@ -424,6 +444,8 @@ with open("mutations.log", 'w') as log:
                 "mutations not covered": not_covered_list,
                 "% coverage": coverage,
                 "recombinant suspect": is_rec_suspect,
+                "pango_usher": pangolin_clade,
+                "pango_nextclade" : nextclade_pango.values[0] if not nextclade_pango.empty or not QCfail else "QC fail"
                 }, index=[0])
             final_table = pd.concat([final_table,line], axis = 0)
 
