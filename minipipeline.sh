@@ -94,7 +94,7 @@ function pileup(){
 
 echo "Run Nextclade" 1>&3
 conda activate nextstrain
-nextclade run "$sequences" --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv --output-fasta alignment/all_aligned.fasta
+nextclade run --input-dataset $SCRIPT_DIR/nextclade --output-tsv results/nextclade.tsv --output-fasta alignment/all_aligned.fasta --output-insertions alignment/insersions.csv "$sequences"
 conda deactivate
 
 if [ "$invr" == true ]; then
