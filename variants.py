@@ -429,7 +429,7 @@ with open("mutations.log", 'w') as log:
             
             line = pd.DataFrame(data = {
                 "Sample": sample,
-                "Variant": nextclade_pango.values[0] if not nextclade_pango.empty or not QCfail else "QC fail",
+                "Variant": pangolin_clade if not QCfail else "QC fail",
                 "suspect": None,
                 "suspected variant": sus_variant_name if suspect_info and not suspect_info=='suspect' 
                 and int(suspect_info.split('noN:')[1].split(".")[0].split("%")[0]) > 50 else 'QC fail', #if the suspected variant < 60% => QC fail
