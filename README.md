@@ -216,6 +216,3 @@ find the output in results/invr.csv .
 `bash minipipeline.sh -i alignment.fasta -r ref.fasta --invr` 
 
 ---------------
-Dana Bar-Ilan. \
-last update: 20.02.2022 \
-last updated by: Hagar Morad
