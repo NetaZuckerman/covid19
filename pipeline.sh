@@ -295,9 +295,6 @@ function muttable() {
     #generate multi-fasta from consensus sequences
     cat CNS_5/*.fa* > alignment/all_not_aligned.fasta
     
-    if [ "$spike" == true ]; then
-       python "$path"/variants_spike.py alignment/all_aligned.fasta results/variants.csv "$path"/mutationsTable.xlsx QC/report.txt
-    else
     # run pangolin
     conda deactivate
     
@@ -318,21 +315,18 @@ function muttable() {
 
     conda activate CoronaPipeline
     echo "Variants analysis" 1>&3
-
-          python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx  "$path"/mutationsTable.xlsx
-          #python "$path"/translated_table.py alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-          python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants" QC/report.txt
+          python "$path"/variants/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/variants/mutationsTable.csv "$noRecombinants" QC/report.txt
           echo "Extra mutations report" 1>&3
-          python "$path"/translate_extras.py "$path"/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta
+          python "$path"/variants/translate_extras.py "$path"/ref/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta
 
 
-    fi
+    
 }
 
 function over_50() {
   # create another multifasta with only sequences of <50% N's.
-  python "$path"/filterNPercent.py alignment/all_not_aligned.fasta alignment/all_not_aligned_over50.fasta
-  python "$path"/filterNPercent.py alignment/all_aligned.fasta alignment/all_aligned_over50.fasta
+  python "$path"/variants/filterNPercent.py alignment/all_not_aligned.fasta alignment/all_not_aligned_over50.fasta
+  python "$path"/variants/filterNPercent.py alignment/all_aligned.fasta alignment/all_aligned_over50.fasta
 }
 
 function result() {
@@ -421,7 +415,7 @@ if [ "$q" == true ]; then
   mkdir pileup
   pileup
   wait
-  python "$path"/quasispecies.py
+  python "$path"/variants/quasispecies.py
 fi
 
 conda deactivate

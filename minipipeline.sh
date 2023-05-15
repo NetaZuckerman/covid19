@@ -99,7 +99,7 @@ conda deactivate
 
 if [ "$invr" == true ]; then
   echo "INVR" 1>&3
-  python "$path"/invr.py "$path"/covid19_regions.csv "$refseq" alignment/all_aligned.fasta results/nextclade.tsv results/invr.csv
+  python "$path"/invr.py "$path"/ref/covid19_regions.csv "$refseq" alignment/all_aligned.fasta results/nextclade.tsv results/invr.csv
 fi
 
 conda activate pangolin
@@ -110,21 +110,17 @@ conda deactivate
 
 conda activate CoronaPipeline
 echo "Variants analysis" 1>&3
-#python "$path"/translated_table.py "alignment/all_aligned.fasta results/AA_muttable.xlsx "$path"/regions.csv "$path"/mutationsTable.xlsx
-python "$path"/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/mutationsTable.xlsx "$noRecombinants"
+python "$path"/variants/variants.py alignment/all_aligned.fasta results/variants.csv results/pangolinClades.csv results/nextclade.tsv "$path"/variants/mutationsTable.csv "$noRecombinants"
 
 echo "Extra mutations report" 1>&3
-python "$path"/translate_extras.py "$path"/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta
-
-echo "Nucleotides mutation table report" 1>&3
-python "$path"/MutTable.py alignment/all_aligned.fasta results/nuc_muttable.xlsx "$path"/mutationsTable.xlsx
+python "$path"/variants/translate_extras.py "$path"/ref/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta
 
 if [ "$q" == true ]; then
   echo "Quasispecies analysis" 1>&3
   mkdir pileup
   pileup
   wait
-  python "$path"/quasispecies.py
+  python "$path"/variants/quasispecies.py
 fi
 echo "Finished minipipeline (:" 1>&3
 echo "Minipipline log can be found in results/minipipline.log" 1>&3
