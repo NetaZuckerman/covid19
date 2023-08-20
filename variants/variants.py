@@ -239,6 +239,8 @@ except FileNotFoundError:
     pangolinTable = pd.DataFrame()
 
 clades_df = pd.read_csv(clades_path, sep='\t')
+red_flag = pd.read_csv(mutTable_path.replace("mutationsTable", "red_flag"))['mutation'].to_list()
+
 
 # excel muttable:
 mutTable = pd.read_csv(mutTable_path)
@@ -292,7 +294,7 @@ uniq_muts = mutTable.drop_duplicates(subset='Nuc_sub', keep="first")
 final_table = pd.DataFrame(columns=["Sample", "variant (catalog)", "suspect","variant (bodek)", "bodek info", 
                                     "dictionary","% coverage","pango_usher", "pango_nextclade","AA substitutions",
                   "AA deletions", "Insertions", "mutations not covered", 
-                  'nt substitutions', "recombinant suspect"])
+                  'nt substitutions', "recombinant suspect", "red_flag"])
 chosen_recombinants = pd.DataFrame(columns=["Sample","suspected variant","suspected recombinant", "suspected variant mutations",
                                             "suspected recombinant mutations","swaps","breakpoints"])
 ranked_variants_df = pd.DataFrame(columns=["sample", "suspect"])
@@ -361,7 +363,11 @@ with open("results/mutations.log", 'w') as log:
             
             non_variant_mut_nt = set(extra_mutations(nt_substitutions_list, mutations_by_lineage_nt[sus_variant_name])) if not QCfail else ""
 
-            
+
+            #red flags            
+            red_flags_list = [x for x in nt_substitutions_list if x in red_flag]
+
+
             extra = pd.DataFrame()
             extra["mutations"] = np.array(non_variant_mut_nt)
             extra["sample"] = sample
@@ -409,7 +415,8 @@ with open("results/mutations.log", 'w') as log:
                 "% coverage": coverage,
                 "recombinant suspect": is_rec_suspect,
                 "pango_usher": pangolin_clade,
-                "pango_nextclade" : nextclade_pango.values[0] if not nextclade_pango.empty or not QCfail else "QC fail"
+                "pango_nextclade" : nextclade_pango.values[0] if not nextclade_pango.empty or not QCfail else "QC fail",
+                "red_flag"  : ';'.join(red_flags_list) if len(red_flags_list) >= 2 else ""
                 }, index=[0])
             final_table = pd.concat([final_table,line], axis = 0)
 
