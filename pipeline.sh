@@ -326,7 +326,7 @@ function muttable() {
           python "$path"/variants/translate_extras.py "$path"/ref/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta
 
     echo "Generate SPRI output" 1>&3
-    python "$path"/variants/spri.py alignment/all_aligned.fasta results/spri.csv
+    python "$path"/variants/spri.py alignment/all_not_aligned.fasta results/spri.csv
     
 }
 
