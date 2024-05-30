@@ -42,6 +42,7 @@ function initialize_globals() {
   nextclade25=false
   nextalign25=false
   spike=false
+  spri=false
   SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 }
@@ -63,6 +64,7 @@ optional:
 -s|--single-end                 single end sequencing
 -n| --newNextclade              use nextclade version 1.3.0
 --spike                         spike sequencing only
+--spri                         generate SPRI output table
 
 EOF
 exit 0
@@ -109,6 +111,10 @@ function get_user_input() {
         ;;       
       --spike)
         spike=true
+        shift
+        ;;
+      --spri)
+        spri=true
         shift
         ;;
       --noRecombinants)
@@ -319,7 +325,8 @@ function muttable() {
           echo "Extra mutations report" 1>&3
           python "$path"/variants/translate_extras.py "$path"/ref/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta
 
-
+    echo "Generate SPRI output" 1>&3
+    python "$path"/variants/spri.py alignment/all_aligned.fasta results/spri.csv
     
 }
 

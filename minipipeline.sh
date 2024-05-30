@@ -52,6 +52,10 @@ function get_user_input() {
         num_processes="$1"
         shift
         ;;      
+      --spri)
+        spri=true
+        shift
+        ;;  
       --invr)
         invr=true
         shift
@@ -115,6 +119,9 @@ python "$path"/variants/variants.py alignment/all_aligned.fasta results/variants
 echo "Extra mutations report" 1>&3
 python "$path"/variants/translate_extras.py "$path"/ref/covid19_regions.csv results/non_variant_mutations.csv "$refseq" alignment/all_aligned.fasta
 
+echo "Generate SPRI output" 1>&3
+python "$path"/variants/spri.py alignment/all_aligned.fasta results/spri.csv
+    
 if [ "$q" == true ]; then
   echo "Quasispecies analysis" 1>&3
   mkdir pileup
