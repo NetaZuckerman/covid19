@@ -4,7 +4,7 @@ import pandas as pd
 from sys import argv
 from pathlib import Path
 from datetime import datetime
-import resist
+# import resist
 
 import time
 start = time.time()
@@ -128,7 +128,6 @@ def rank_variants(mutations_list, mutations_not_covered, compare_with, lin_mut_c
 
         line['suspect'] = format_line(line)
         line_df = pd.DataFrame(data=line, index = [0])
-        #ranked_variants = ranked_variants.append(line_df, ignore_index=True) 
         ranked_variants = pd.concat([ranked_variants, line_df], axis = 0) 
     
     if len(ranked_variants) == 0:
@@ -383,17 +382,21 @@ with open("results/mutations.log", 'w') as log:
                                                                        lin_del_list)
                     if len(ranked_recombinant) > 0:
                         ranked_recombinant['sample'] = sample
-                        all_sus_rec_df = all_sus_rec_df.append(ranked_recombinant)
+                        all_sus_rec_df = pd.concat([all_sus_rec_df, ranked_recombinant], ignore_index=True)
                         var_muts, rec_muts, swap, brkpnt, is_rec_suspect = swap_finder(sus_variant_name, sus_recombinant
                                                                                        , nt_substitutions_list)
-                        chosen_recombinants = chosen_recombinants.append({"Sample": sample,
-                                                                          "suspected variant": sus_variant_name,
-                                                                          "suspected recombinant": sus_recombinant,
-                                                                          "suspected variant mutations": var_muts,
-                                                                          "suspected recombinant mutations": rec_muts,
-                                                                          "swaps": swap,
-                                                                          "breakpoints": brkpnt
-                                                                          }, ignore_index=True)
+                        
+                        chosen_recombinants.loc[len(chosen_recombinants)] = {
+                                                                                "Sample": sample,
+                                                                                "suspected variant": sus_variant_name,
+                                                                                "suspected recombinant": sus_recombinant,
+                                                                                "suspected variant mutations": var_muts,
+                                                                                "suspected recombinant mutations": rec_muts,
+                                                                                "swaps": swap,
+                                                                                "breakpoints": brkpnt
+                                                                            }
+                        
+                        
             sus_dict = mutTable.loc[mutTable['Var_name'] == sus_variant_name, 'Aliases']
             sus_dict = sus_dict.iloc[0] if not sus_dict.empty else ""
             sus_variant_name = sus_variant_name.split(".m")[0] #  Neta wants to remove the mediatore name from the output but not from the analysis.
@@ -429,12 +432,14 @@ for sample in low_quel:
         coverage = qc[qc['sample'] == sample]['coverageCNS_5%'].values[0].round(2)
     else:
         coverage = ""
-    final_table = final_table.append({
-        "Sample": sample,
-        "% coverage": coverage,
-        "Variant": "QC fail",
-        "suspected variant": "QC fail"
-        }, ignore_index=True)
+
+
+    final_table.loc[len(final_table)] = {
+    "Sample": sample,
+    "% coverage": coverage,
+    "Variant": "QC fail",
+    "suspected variant": "QC fail"
+}
 
 # for Matrix(the company):
 # cutting the accession_id when there is an 'EPI_ISL' start #$
@@ -443,9 +448,9 @@ for index, row in final_table.iterrows():
                 row["Sample"] = ''.join([i for i in row["Sample"].split('/')[-1].split('|') if 'EPI_ISL' in i]) #$
 
 
-#add resistant mutations 
-resist = resist.run(final_table, alignment)
-final_table = final_table.merge(resist, how='left', on='Sample')
+# #add resistant mutations 
+# resist = resist.run(final_table, alignment)
+# final_table = final_table.merge(resist, how='left', on='Sample')
 
 #concat nextclade's output for Matrix(the company)
 final_table = final_table.merge(clades_df, on='Sample', how='left')
